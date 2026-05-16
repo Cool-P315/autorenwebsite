@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Martin Pintar — Über den Autor">
+  <title>Über mich — Martin Pintar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="nav nav--always-dark" id="nav">
+    <a href="index.html" class="nav__logo">Martin Pintar</a>
+    <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav__links" role="list">
+      <li><a href="index.html"      class="nav__link">Startseite</a></li>
+      <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
+      <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
+      <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero" data-bg="Über mich">
+    <h1 class="page-hero__title">Über mich</h1>
+    <p class="page-hero__sub">Der Autor</p>
+  </div>
+
+  <main>
+    <div class="about-grid">
+
+      <div class="about-photo fade-in">
+        <img
+          src="assets/images/autor-foto.jpg"
+          alt="Martin Pintar — Autor"
+          class="about-photo__img"
+          width="350"
+          loading="lazy">
+        <p class="about-photo__caption">Martin Pintar</p>
+      </div>
+
+      <div>
+        <p class="about-bio__label fade-in">Biografie</p>
+        <h2 class="about-bio__name fade-in">Martin<br>Pintar</h2>
+
+        <div class="about-bio__text fade-in fade-in-delay-1">
+          <p>Martin Pintar wurde 1980 in Klagenfurt geboren — in einer Stadt, in der das Wasser nicht weit ist und die Berge näher als anderswo. Er wuchs in einer liebevollen Familie auf, absolvierte eine Lehre und wechselte früh in die IT-Branche, wo er als Programmierer arbeitete. Über glückliche Umwege fand er seinen Platz in der Finanzwelt: zunächst im technischen Support, dann zwei Jahrzehnte lang in der Wertpapierabwicklung und im digitalen Banking einer österreichischen Bank.</p>
+          <p>Das Leben hatte andere Pläne. Es stellte ihm Fragen, auf die keine Tabelle eine Antwort hat — und zwang ihn, innezuhalten. In diesen Zeiten des Loslassens und des Weitergehens entdeckte er die Literatur als das, was sie ist: eine Sprache für das, was sich nicht erklären lässt.</p>
+          <p>Heute lebt er mit seiner Frau und seiner Familie in Österreich. Seine Bücher entstehen nicht aus einem Plan, sondern aus einem Gefühl — dem Wunsch, Lesern etwas mitzugeben, das man nicht greifen, aber spüren kann.</p>
+        </div>
+
+        <div class="about-outdoor fade-in fade-in-delay-2">
+          <img
+            src="assets/images/autor-outdoor.jpg"
+            alt="Martin Pintar in den Alpen"
+            class="about-outdoor__img"
+            width="700"
+            loading="lazy">
+        </div>
+
+        <div class="about-books">
+          <p class="about-books__label fade-in">Meine Bücher</p>
+          <ul class="about-books__list" role="list">
+            <li class="about-books__item fade-in">
+              <a href="buecher.html#herbstblatt">Ein Herbstblatt im Wind</a>
+            </li>
+            <li class="about-books__item fade-in fade-in-delay-1">
+              <a href="buecher.html#wind">Der Wind erinnert sich</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__copy">© 2026 Martin Pintar</span>
+    <a href="impressum.html" class="footer__link">Impressum</a>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

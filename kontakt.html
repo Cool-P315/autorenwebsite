@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Martin Pintar — Kontakt">
+  <title>Kontakt — Martin Pintar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="nav nav--always-dark" id="nav">
+    <a href="index.html" class="nav__logo">Martin Pintar</a>
+    <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav__links" role="list">
+      <li><a href="index.html"      class="nav__link">Startseite</a></li>
+      <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
+      <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
+      <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero" data-bg="Kontakt">
+    <h1 class="page-hero__title">Kontakt</h1>
+    <p class="page-hero__sub">Schreib mir</p>
+  </div>
+
+  <main>
+    <div class="contact-wrap">
+
+      <p class="contact-intro fade-in">
+        Ich freue mich über jede Nachricht — ob Lesereindruck, Frage<br>
+        oder einfach ein Wort des Austauschs.
+      </p>
+
+      <form
+        class="form fade-in"
+        action="https://formspree.io/f/mnjradvr"
+        method="POST">
+
+        <input type="hidden" name="_subject" value="Nachricht über martinpintar.at">
+
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input
+            class="form-input"
+            type="text"
+            id="name"
+            name="name"
+            autocomplete="name"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">E-Mail</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Nachricht</label>
+          <textarea
+            class="form-textarea"
+            id="message"
+            name="message"
+            rows="6"
+            required></textarea>
+        </div>
+
+        <div>
+          <button type="submit" class="btn">Absenden</button>
+        </div>
+
+      </form>
+
+      <div class="contact-email fade-in">
+        <p class="contact-email__or">Oder direkt per E-Mail</p>
+        <a href="mailto:martin.pintar@me.com" class="contact-email__link">martin.pintar@me.com</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__copy">© 2026 Martin Pintar</span>
+    <a href="impressum.html" class="footer__link">Impressum</a>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
