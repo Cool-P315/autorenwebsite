@@ -94,14 +94,14 @@ body::after {
   height: 28px;
   border: 1px solid rgba(201, 169, 110, 0.75);
   border-radius: 50%;
-  background: transparent;
-  color: var(--gold);
+  background: #FAF7F2;
+  color: #1A0F0A;
   font-size: 0.88rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: border-color 0.3s, color 0.3s, background 0.3s;
+  transition: border-color 0.3s, background 0.3s;
   flex-shrink: 0;
   padding: 0;
   line-height: 1;
@@ -112,8 +112,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀'; }
 
 .nav__theme-toggle:hover {
   border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(201, 169, 110, 0.1);
+  background: #EDE0CF;
 }
 
 .nav__logo {
@@ -1271,3 +1270,12 @@ html[data-theme="dark"] .modal__title { color: var(--brown-dark); }
 html[data-theme="dark"] .modal__text  { color: var(--brown-dark); }
 html[data-theme="dark"] .book-teaser__cover-wrap::after,
 html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
+
+.modal__prolog-label {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.4rem;
+}
