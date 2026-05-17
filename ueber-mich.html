@@ -2,12 +2,11 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t=localStorage.getItem('mp-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Martin Pintar, geboren 1980 in Klagenfurt, schreibt poetische Prosa über das Leben, das Loslassen und das Weitergehen. Österreichischer Autor, zwei Bücher bei Amazon.">
   <title>Über mich — Martin Pintar</title>
   <link rel="canonical" href="https://martinpintar.at/ueber-mich.html">
-
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_AT">
   <meta property="og:url" content="https://martinpintar.at/ueber-mich.html">
@@ -15,19 +14,10 @@
   <meta property="og:description" content="Martin Pintar, geboren 1980 in Klagenfurt, schreibt poetische Prosa über das Leben, das Loslassen und das Weitergehen. Österreichischer Autor, zwei Bücher bei Amazon.">
   <meta property="og:image" content="https://martinpintar.at/assets/images/autor-foto.jpg">
   <meta property="og:site_name" content="Martin Pintar">
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Über mich — Martin Pintar">
   <meta name="twitter:description" content="Martin Pintar, geboren 1980 in Klagenfurt, schreibt poetische Prosa über das Leben, das Loslassen und das Weitergehen. Österreichischer Autor, zwei Bücher bei Amazon.">
   <meta name="twitter:image" content="https://martinpintar.at/assets/images/autor-foto.jpg">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -37,30 +27,32 @@
     "image": "https://martinpintar.at/assets/images/autor-foto.jpg",
     "jobTitle": "Autor",
     "description": "Österreichischer Autor poetischer Prosa, geboren 1980 in Klagenfurt",
-    "nationality": {
-      "@type": "Country",
-      "name": "Österreich"
-    },
-    "birthPlace": {
-      "@type": "Place",
-      "name": "Klagenfurt, Österreich"
-    }
+    "nationality": { "@type": "Country", "name": "Österreich" },
+    "birthPlace": { "@type": "Place", "name": "Klagenfurt, Österreich" }
   }
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 </head>
 <body>
 
   <nav class="nav nav--always-dark" id="nav">
     <a href="index.html" class="nav__logo">Martin Pintar</a>
-    <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav__links" role="list">
-      <li><a href="index.html"      class="nav__link">Startseite</a></li>
-      <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
-      <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
-      <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
-    </ul>
+    <div class="nav__actions">
+      <ul class="nav__links" role="list">
+        <li><a href="index.html"      class="nav__link">Startseite</a></li>
+        <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
+        <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
+        <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
+      </ul>
+      <button class="nav__theme-toggle" id="theme-toggle" aria-label="Dunkler Modus"></button>
+      <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <div class="page-hero" data-bg="Über mich">

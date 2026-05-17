@@ -2,12 +2,11 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t=localStorage.getItem('mp-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Schreiben Sie Martin Pintar — österreichischer Autor poetischer Prosa. Lesereindruck, Frage oder einfach ein Wort des Austauschs.">
   <title>Kontakt — Martin Pintar</title>
   <link rel="canonical" href="https://martinpintar.at/kontakt.html">
-
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_AT">
   <meta property="og:url" content="https://martinpintar.at/kontakt.html">
@@ -15,13 +14,10 @@
   <meta property="og:description" content="Schreiben Sie Martin Pintar — österreichischer Autor poetischer Prosa. Lesereindruck, Frage oder einfach ein Wort des Austauschs.">
   <meta property="og:image" content="https://martinpintar.at/assets/images/autor-foto.jpg">
   <meta property="og:site_name" content="Martin Pintar">
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Kontakt — Martin Pintar">
   <meta name="twitter:description" content="Schreiben Sie Martin Pintar — österreichischer Autor poetischer Prosa. Lesereindruck, Frage oder einfach ein Wort des Austauschs.">
   <meta name="twitter:image" content="https://martinpintar.at/assets/images/autor-foto.jpg">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -32,15 +28,18 @@
 
   <nav class="nav nav--always-dark" id="nav">
     <a href="index.html" class="nav__logo">Martin Pintar</a>
-    <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav__links" role="list">
-      <li><a href="index.html"      class="nav__link">Startseite</a></li>
-      <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
-      <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
-      <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
-    </ul>
+    <div class="nav__actions">
+      <ul class="nav__links" role="list">
+        <li><a href="index.html"      class="nav__link">Startseite</a></li>
+        <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
+        <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
+        <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
+      </ul>
+      <button class="nav__theme-toggle" id="theme-toggle" aria-label="Dunkler Modus"></button>
+      <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <div class="page-hero" data-bg="Kontakt">
@@ -56,43 +55,22 @@
         oder einfach ein Wort des Austauschs.
       </p>
 
-      <form
-        class="form fade-in"
-        action="https://formspree.io/f/mnjradvr"
-        method="POST">
-
+      <form class="form fade-in" action="https://formspree.io/f/mnjradvr" method="POST">
         <input type="hidden" name="_subject" value="Nachricht über martinpintar.at">
 
         <div class="form-group">
           <label class="form-label" for="name">Name</label>
-          <input
-            class="form-input"
-            type="text"
-            id="name"
-            name="name"
-            autocomplete="name"
-            required>
+          <input class="form-input" type="text" id="name" name="name" autocomplete="name" required>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="email">E-Mail</label>
-          <input
-            class="form-input"
-            type="email"
-            id="email"
-            name="email"
-            autocomplete="email"
-            required>
+          <input class="form-input" type="email" id="email" name="email" autocomplete="email" required>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="message">Nachricht</label>
-          <textarea
-            class="form-textarea"
-            id="message"
-            name="message"
-            rows="6"
-            required></textarea>
+          <textarea class="form-textarea" id="message" name="message" rows="6" required></textarea>
         </div>
 
         <div>
@@ -104,7 +82,6 @@
           zur Weiterleitung Ihrer Nachricht zu. Weitere Informationen finden Sie in der
           <a href="datenschutz.html">Datenschutzerklärung</a>.
         </p>
-
       </form>
 
       <div class="contact-email fade-in">

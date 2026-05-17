@@ -83,6 +83,39 @@ body::after {
   box-shadow:  0 4px 30px rgba(0,0,0,0.4);
 }
 
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav__theme-toggle {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(201, 169, 110, 0.65);
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.nav__theme-toggle::before         { content: '☽'; }
+html[data-theme="dark"] .nav__theme-toggle::before { content: '☀'; }
+
+.nav__theme-toggle:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201, 169, 110, 0.1);
+}
+
 .nav__logo {
   font-family: var(--font-serif);
   font-size:   1.4rem;
@@ -966,6 +999,8 @@ body::after {
   .nav.scrolled,
   .nav.nav--always-dark { padding: 1rem 1.5rem; }
 
+  .nav__actions { gap: 0.75rem; }
+
   .nav__links {
     display: none;
     position: fixed;
@@ -1200,46 +1235,37 @@ body::after {
 }
 
 /* ============================================================
-   DARK MODE (OS-Präferenz, kein Cookie, kein Toggle)
+   DARK MODE (OS-Präferenz oder manueller Toggle via data-theme)
    ============================================================ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --cream:       #1C1208;
-    --cream-alt:   #231810;
-    --brown-dark:  #EDE0CF;
-    --brown-mid:   #AD9A87;
-    --brown-light: #8A7466;
-  }
-
-  body { background-color: var(--cream); color: var(--brown-dark); }
-  body::after { mix-blend-mode: screen; opacity: 0.012; }
-
-  .section--alt { background: var(--cream-alt); }
-  .quote-section blockquote { color: var(--brown-dark); }
-
-  .about-photo__img {
-    box-shadow:
-      8px 8px 0 var(--cream-alt),
-      12px 12px 0 rgba(201,169,110,0.1),
-      16px 16px 35px rgba(0,0,0,0.35);
-  }
-
-  .form-input,
-  .form-textarea {
-    color: var(--brown-dark);
-    border-bottom-color: rgba(237, 224, 208, 0.18);
-  }
-
-  .form-privacy { color: rgba(237, 224, 208, 0.4); }
-
-  /* Hero + Page-Hero haben fixen dunklen Hintergrund — Textfarbe muss hell bleiben */
-  .hero__name       { color: #EDE0CF !important; }
-  .hero__tagline    { color: rgba(237, 224, 208, 0.72) !important; }
-  .page-hero__title { color: #EDE0CF !important; }
-
-  .modal,
-  .modal__header { background: #1e1308; }
-  .modal { box-shadow: 0 40px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(201,169,110,0.12); }
-  .modal__title  { color: var(--brown-dark); }
-  .modal__text   { color: var(--brown-dark); }
+html[data-theme="dark"] {
+  --cream:       #1C1208;
+  --cream-alt:   #231810;
+  --brown-dark:  #EDE0CF;
+  --brown-mid:   #AD9A87;
+  --brown-light: #8A7466;
 }
+
+html[data-theme="dark"] body { background-color: var(--cream); color: var(--brown-dark); }
+html[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.012; }
+html[data-theme="dark"] .section--alt { background: var(--cream-alt); }
+html[data-theme="dark"] .quote-section blockquote { color: var(--brown-dark); }
+html[data-theme="dark"] .about-photo__img {
+  box-shadow:
+    8px 8px 0 var(--cream-alt),
+    12px 12px 0 rgba(201,169,110,0.1),
+    16px 16px 35px rgba(0,0,0,0.35);
+}
+html[data-theme="dark"] .form-input,
+html[data-theme="dark"] .form-textarea {
+  color: var(--brown-dark);
+  border-bottom-color: rgba(237, 224, 208, 0.18);
+}
+html[data-theme="dark"] .form-privacy { color: rgba(237, 224, 208, 0.4); }
+html[data-theme="dark"] .hero__name       { color: #EDE0CF; }
+html[data-theme="dark"] .hero__tagline    { color: rgba(237, 224, 208, 0.72); }
+html[data-theme="dark"] .page-hero__title { color: #EDE0CF; }
+html[data-theme="dark"] .modal,
+html[data-theme="dark"] .modal__header { background: #1e1308; }
+html[data-theme="dark"] .modal { box-shadow: 0 40px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(201,169,110,0.12); }
+html[data-theme="dark"] .modal__title { color: var(--brown-dark); }
+html[data-theme="dark"] .modal__text  { color: var(--brown-dark); }

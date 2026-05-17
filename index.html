@@ -2,12 +2,11 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t=localStorage.getItem('mp-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Martin Pintar ist österreichischer Autor poetischer Prosa. Seine Bücher „Ein Herbstblatt im Wind" und „Der Wind erinnert sich" — jetzt bei Amazon erhältlich.">
   <title>Martin Pintar — Autor</title>
   <link rel="canonical" href="https://martinpintar.at/">
-
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_AT">
   <meta property="og:url" content="https://martinpintar.at/">
@@ -15,13 +14,10 @@
   <meta property="og:description" content="Martin Pintar ist österreichischer Autor poetischer Prosa. Seine Bücher „Ein Herbstblatt im Wind" und „Der Wind erinnert sich" — jetzt bei Amazon erhältlich.">
   <meta property="og:image" content="https://martinpintar.at/assets/images/autor-foto.jpg">
   <meta property="og:site_name" content="Martin Pintar">
-
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Martin Pintar — Autor">
   <meta name="twitter:description" content="Martin Pintar ist österreichischer Autor poetischer Prosa. Seine Bücher „Ein Herbstblatt im Wind" und „Der Wind erinnert sich" — jetzt bei Amazon erhältlich.">
   <meta name="twitter:image" content="https://martinpintar.at/assets/images/autor-foto.jpg">
-
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -36,7 +32,6 @@
     }
   }
   </script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -45,21 +40,22 @@
 </head>
 <body>
 
-  <!-- Navigation -->
   <nav class="nav" id="nav">
     <a href="index.html" class="nav__logo">Martin Pintar</a>
-    <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav__links" role="list">
-      <li><a href="index.html"      class="nav__link">Startseite</a></li>
-      <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
-      <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
-      <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
-    </ul>
+    <div class="nav__actions">
+      <ul class="nav__links" role="list">
+        <li><a href="index.html"      class="nav__link">Startseite</a></li>
+        <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
+        <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
+        <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
+      </ul>
+      <button class="nav__theme-toggle" id="theme-toggle" aria-label="Dunkler Modus"></button>
+      <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
-  <!-- Hero -->
   <section class="hero" aria-label="Willkommen">
     <div class="hero__ghost" aria-hidden="true">Ich war immer da.</div>
     <div class="hero__content">
@@ -74,7 +70,6 @@
     </div>
   </section>
 
-  <!-- Bücher-Teaser -->
   <section class="section">
     <div class="container">
       <p class="section__label fade-in" style="text-align: center;">Meine Bücher</p>
@@ -115,7 +110,6 @@
     </div>
   </section>
 
-  <!-- Zitat -->
   <section class="section section--alt">
     <div class="container">
       <div class="quote-section">
@@ -135,14 +129,12 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <span class="footer__copy">© 2026 Martin Pintar</span>
     <a href="impressum.html" class="footer__link">Impressum</a>
     <a href="datenschutz.html" class="footer__link">Datenschutz</a>
   </footer>
 
-  <!-- Leseprobe Modal: Ein Herbstblatt im Wind -->
   <div class="modal-backdrop" id="modal-herbstblatt" role="dialog" aria-modal="true" aria-labelledby="modal-herbstblatt-title">
     <div class="modal">
       <div class="modal__header">
@@ -165,7 +157,6 @@
     </div>
   </div>
 
-  <!-- Leseprobe Modal: Der Wind erinnert sich -->
   <div class="modal-backdrop" id="modal-wind" role="dialog" aria-modal="true" aria-labelledby="modal-wind-title">
     <div class="modal">
       <div class="modal__header">

@@ -143,3 +143,31 @@ document.querySelectorAll('[data-modal]').forEach(trigger => {
     gcEvent('leseprobe/' + id, 'Leseprobe: ' + id);
   });
 });
+
+// --- Dark Mode Toggle ---
+const themeToggle = document.getElementById('theme-toggle');
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('mp-theme', theme);
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Heller Modus' : 'Dunkler Modus');
+  }
+}
+
+if (themeToggle) {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  themeToggle.setAttribute('aria-label', current === 'dark' ? 'Heller Modus' : 'Dunkler Modus');
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    applyTheme(isDark ? 'light' : 'dark');
+  });
+}
+
+// OS-Präferenz live mitlesen (nur ohne manuelle Speicherung)
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!localStorage.getItem('mp-theme')) {
+    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+  }
+});

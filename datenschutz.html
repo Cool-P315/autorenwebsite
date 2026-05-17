@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t=localStorage.getItem('mp-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
   <title>Datenschutz — Martin Pintar</title>
@@ -15,15 +16,18 @@
 
   <nav class="nav nav--always-dark" id="nav">
     <a href="index.html" class="nav__logo">Martin Pintar</a>
-    <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav__links" role="list">
-      <li><a href="index.html"      class="nav__link">Startseite</a></li>
-      <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
-      <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
-      <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
-    </ul>
+    <div class="nav__actions">
+      <ul class="nav__links" role="list">
+        <li><a href="index.html"      class="nav__link">Startseite</a></li>
+        <li><a href="ueber-mich.html" class="nav__link">Über mich</a></li>
+        <li><a href="buecher.html"    class="nav__link">Bücher</a></li>
+        <li><a href="kontakt.html"    class="nav__link">Kontakt</a></li>
+      </ul>
+      <button class="nav__theme-toggle" id="theme-toggle" aria-label="Dunkler Modus"></button>
+      <button class="nav__toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <div class="page-hero" data-bg="Datenschutz">
@@ -105,6 +109,14 @@
         Rechtsgrundlage: Art.&thinsp;6 Abs.&thinsp;1 lit.&thinsp;f DSGVO
         (berechtigtes Interesse an der Analyse des Nutzungsverhaltens zur Verbesserung
         der Website).
+      </p>
+
+      <h2>Dark-Mode-Einstellung</h2>
+      <p>
+        Diese Website speichert Ihre Anzeige-Präferenz (heller oder dunkler Modus) im
+        lokalen Speicher Ihres Browsers (<em>localStorage</em>). Diese Information verlässt
+        Ihren Browser nicht und wird nicht an Server übertragen. Sie können sie jederzeit
+        über die Browser-Einstellungen löschen.
       </p>
 
       <h2>Cookies</h2>
