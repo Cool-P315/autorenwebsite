@@ -107,8 +107,8 @@ body::after {
   line-height: 1;
 }
 
-.nav__theme-toggle::before         { content: '☽'; }
-html[data-theme="dark"] .nav__theme-toggle::before { content: '☀'; }
+.nav__theme-toggle::before         { content: '🌙'; }
+html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .nav__theme-toggle:hover {
   border-color: var(--gold);
