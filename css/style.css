@@ -94,7 +94,7 @@ body::after {
   height: 28px;
   border: 1px solid rgba(201, 169, 110, 0.75);
   border-radius: 50%;
-  background: #D4D4D4;
+  background: #999999;
   color: #1A0F0A;
   font-size: 1.1rem;
   display: flex;
@@ -112,7 +112,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .nav__theme-toggle:hover {
   border-color: var(--gold);
-  background: #BEBEBE;
+  background: #808080;
 }
 
 .nav__logo {
