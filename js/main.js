@@ -75,3 +75,34 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
   });
 });
+
+// --- GoatCounter Event Tracking ---
+function gcEvent(path, title) {
+  if (typeof window.goatcounter === 'undefined' || !window.goatcounter.count) return;
+  window.goatcounter.count({ path: 'event/' + path, title: title, event: true });
+}
+
+// Amazon-Kaufbuttons
+document.querySelectorAll('.book-entry__links a').forEach(link => {
+  link.addEventListener('click', function () {
+    const book   = this.closest('article')?.querySelector('.book-entry__title')?.textContent.trim() || 'unbekannt';
+    const format = this.textContent.trim();
+    gcEvent('amazon-kauf/' + book + '/' + format, 'Amazon: ' + format + ' — ' + book);
+  });
+});
+
+// Rezensions-Links
+document.querySelectorAll('.book-entry__review-link').forEach(link => {
+  link.addEventListener('click', function () {
+    const book = this.closest('article')?.querySelector('.book-entry__title')?.textContent.trim() || 'unbekannt';
+    gcEvent('rezension/' + book, 'Rezension: ' + book);
+  });
+});
+
+// Kontaktformular absenden
+const contactForm = document.querySelector('.form');
+if (contactForm) {
+  contactForm.addEventListener('submit', function () {
+    gcEvent('kontakt/formular-absenden', 'Kontaktformular abgesendet');
+  });
+}
