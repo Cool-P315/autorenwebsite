@@ -92,10 +92,10 @@ body::after {
 .nav__theme-toggle {
   width: 28px;
   height: 28px;
-  border: 1px solid rgba(201, 169, 110, 0.4);
+  border: 1px solid rgba(201, 169, 110, 0.75);
   border-radius: 50%;
   background: transparent;
-  color: rgba(201, 169, 110, 0.65);
+  color: var(--gold);
   font-size: 0.88rem;
   display: flex;
   align-items: center;
@@ -1269,3 +1269,5 @@ html[data-theme="dark"] .modal__header { background: #1e1308; }
 html[data-theme="dark"] .modal { box-shadow: 0 40px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(201,169,110,0.12); }
 html[data-theme="dark"] .modal__title { color: var(--brown-dark); }
 html[data-theme="dark"] .modal__text  { color: var(--brown-dark); }
+html[data-theme="dark"] .book-teaser__cover-wrap::after,
+html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
