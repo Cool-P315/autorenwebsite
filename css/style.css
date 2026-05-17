@@ -577,15 +577,16 @@ body::after {
 .book-entry__review {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.2);
+  border-top: 1px solid rgba(201, 169, 110, 0.45);
 }
 
 .book-entry__review-prompt {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--brown-light);
-  margin-bottom: 0.4rem;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--brown-mid);
+  margin-bottom: 0.5rem;
 }
 
 .book-entry__review-link {
