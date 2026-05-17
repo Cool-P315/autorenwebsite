@@ -1233,9 +1233,9 @@ body::after {
   .form-privacy { color: rgba(237, 224, 208, 0.4); }
 
   /* Hero + Page-Hero haben fixen dunklen Hintergrund — Textfarbe muss hell bleiben */
-  .hero__name       { color: var(--brown-dark); }
-  .hero__tagline    { color: rgba(237, 224, 208, 0.62); }
-  .page-hero__title { color: var(--brown-dark); }
+  .hero__name       { color: #EDE0CF !important; }
+  .hero__tagline    { color: rgba(237, 224, 208, 0.72) !important; }
+  .page-hero__title { color: #EDE0CF !important; }
 
   .modal,
   .modal__header { background: #1e1308; }
