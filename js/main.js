@@ -106,3 +106,40 @@ if (contactForm) {
     gcEvent('kontakt/formular-absenden', 'Kontaktformular abgesendet');
   });
 }
+
+// --- Leseprobe Modal ---
+const allModals = document.querySelectorAll('.modal-backdrop');
+
+function openModal(id) {
+  const modal = document.getElementById('modal-' + id);
+  if (!modal) return;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modal.setAttribute('tabindex', '-1');
+  modal.focus();
+}
+
+function closeModal(modal) {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+allModals.forEach(modal => {
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(modal); });
+  const btn = modal.querySelector('.modal__close');
+  if (btn) btn.addEventListener('click', () => closeModal(modal));
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    allModals.forEach(m => { if (m.classList.contains('open')) closeModal(m); });
+  }
+});
+
+document.querySelectorAll('[data-modal]').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const id = trigger.dataset.modal;
+    openModal(id);
+    gcEvent('leseprobe/' + id, 'Leseprobe: ' + id);
+  });
+});

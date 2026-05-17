@@ -22,12 +22,6 @@
   <meta name="twitter:description" content="Die Bücher von Martin Pintar: „Ein Herbstblatt im Wind" (Taschenbuch, eBook) und „Der Wind erinnert sich" (Hardcover, eBook). Poetische Prosa — jetzt bei Amazon.">
   <meta name="twitter:image" content="https://martinpintar.at/assets/images/wind-cover.jpg">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-
   <script type="application/ld+json">
   [
     {
@@ -58,6 +52,12 @@
     }
   ]
   </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 </head>
 <body>
 
@@ -83,7 +83,7 @@
 
     <!-- Buch 1: Ein Herbstblatt im Wind -->
     <article id="herbstblatt" class="book-entry fade-in">
-      <div class="book-entry__cover-col">
+      <div class="book-entry__cover-col" data-modal="herbstblatt">
         <img
           src="assets/images/herbstblatt-cover.jpg"
           alt="Ein Herbstblatt im Wind — Buchcover von Martin Pintar"
@@ -125,7 +125,7 @@
 
     <!-- Buch 2: Der Wind erinnert sich -->
     <article id="wind" class="book-entry book-entry--reverse fade-in">
-      <div class="book-entry__cover-col">
+      <div class="book-entry__cover-col" data-modal="wind">
         <img
           src="assets/images/wind-cover.jpg"
           alt="Der Wind erinnert sich — Buchcover von Martin Pintar"
@@ -166,6 +166,52 @@
     <a href="impressum.html" class="footer__link">Impressum</a>
     <a href="datenschutz.html" class="footer__link">Datenschutz</a>
   </footer>
+
+  <!-- Leseprobe Modal: Ein Herbstblatt im Wind -->
+  <div class="modal-backdrop" id="modal-herbstblatt" role="dialog" aria-modal="true" aria-labelledby="modal-herbstblatt-title">
+    <div class="modal">
+      <div class="modal__header">
+        <span class="modal__label">Leseprobe</span>
+        <h2 class="modal__title" id="modal-herbstblatt-title">Ein Herbstblatt im Wind</h2>
+        <button class="modal__close" aria-label="Schließen">Schließen</button>
+      </div>
+      <div class="modal__body">
+        <div class="modal__ornament"><span class="modal__ornament-glyph">❧</span></div>
+        <div class="modal__text">
+          <p>Es war ein Morgen im Oktober, als das erste Blatt sich löste — nicht vom Wind getrieben, sondern aus eigenem Willen, so schien es. Ein langsames, würdevolles Loslassen. Als hätte es auf diesen Moment gewartet, ihn herbeigewünscht, ihn als Geschenk empfangen.</p>
+          <p>Ich stand darunter und sah zu, wie es fiel. Nicht gerade, nicht eilig. Es drehte sich einmal, zweimal, als würde es noch einmal zurückblicken — auf den Ast, der es so lange getragen hatte, auf das Licht, das es durch all die Sommer hindurch gekannt hatte.</p>
+          <p>Vielleicht ist das das Geheimnis des Loslassens: dass es kein Ende ist, sondern eine andere Art des Bleibens.</p>
+        </div>
+        <div class="modal__footer">
+          <span class="modal__end-mark">— Leseprobe endet hier —</span>
+          <a href="https://www.amazon.de/dp/B0GYS3BBGW" class="btn" target="_blank" rel="noopener noreferrer">Buch bei Amazon kaufen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leseprobe Modal: Der Wind erinnert sich -->
+  <div class="modal-backdrop" id="modal-wind" role="dialog" aria-modal="true" aria-labelledby="modal-wind-title">
+    <div class="modal">
+      <div class="modal__header">
+        <span class="modal__label">Leseprobe</span>
+        <h2 class="modal__title" id="modal-wind-title">Der Wind erinnert sich</h2>
+        <button class="modal__close" aria-label="Schließen">Schließen</button>
+      </div>
+      <div class="modal__body">
+        <div class="modal__ornament"><span class="modal__ornament-glyph">✦</span></div>
+        <div class="modal__text">
+          <p>Ich habe keinen Namen. Aber alles, was je gezittert hat, kennt mich.</p>
+          <p>Ich war dabei, als du das erste Mal weintest und nicht wusstest warum. Ich habe deine Hand nicht gehalten — ich bin durch sie hindurchgegangen, leise, wie etwas, das bleibt, ohne zu bleiben. Du hast mich gespürt. Ich weiß es. Du hast aufgehört zu atmen für einen Moment, und in diesem Moment war ich alles.</p>
+          <p>Ich erinnere mich an euch alle. An das Lachen vor dem Haus, das längst abgerissen ist. An das Weinen aus dem Fenster, dessen Name niemand mehr kennt. An die Hand, die eine andere hielt, weil sie Angst hatte loszulassen.</p>
+        </div>
+        <div class="modal__footer">
+          <span class="modal__end-mark">— Leseprobe endet hier —</span>
+          <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Buch bei Amazon kaufen</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="js/main.js"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
