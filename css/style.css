@@ -777,6 +777,16 @@ body::after {
   min-height: 140px;
 }
 
+.form-privacy {
+  margin-top: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: rgba(44, 24, 16, 0.5);
+  line-height: 1.5;
+}
+.form-privacy a { color: var(--gold); text-decoration: none; }
+.form-privacy a:hover { text-decoration: underline; }
+
 .contact-email {
   text-align: center;
   margin-top: 3.5rem;
