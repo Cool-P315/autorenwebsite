@@ -4,14 +4,14 @@
    CUSTOM PROPERTIES
    ============================================================ */
 :root {
-  --cream:       #FAF7F2;
-  --cream-alt:   #F3EDE4;
-  --brown-dark:  #2C1810;
+  --cream:       #FDFAF4;
+  --cream-alt:   #E8D9C0;
+  --brown-dark:  #1C0E08;
   --gold:        #C9A96E;
   --gold-light:  #DFC092;
-  --brown-mid:   #6B5B4E;
+  --brown-mid:   #5A4530;
   --brown-deep:  #1A0F0A;
-  --brown-light: #9B8575;
+  --brown-light: #7A6045;
 
   --font-serif: 'EB Garamond', 'Garamond', Georgia, serif;
   --font-sans:  'Lato', 'Helvetica Neue', sans-serif;
@@ -186,7 +186,6 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   overflow: hidden;
 }
 
-/* Soft gold breathing glow */
 .hero::before {
   content: '';
   position: absolute;
@@ -354,13 +353,13 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   flex: 1;
   height: 1px;
   background: var(--gold);
-  opacity: 0.35;
+  opacity: 0.55;
 }
 
 .ornament__glyph {
   color: var(--gold);
   font-size: 1rem;
-  opacity: 0.65;
+  opacity: 0.75;
   line-height: 1;
   font-style: normal;
 }
@@ -402,7 +401,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--gold);
-  border: 1px solid rgba(201, 169, 110, 0.6);
+  border: 1px solid rgba(201, 169, 110, 0.88);
   padding: 0.7rem 1.9rem;
   transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
@@ -515,8 +514,18 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   padding: 5.5rem 2rem;
 }
 
+/* Alternating background — second entry gets cream-alt as a full-bleed panel */
 .book-entry + .book-entry {
-  border-top: 1px solid rgba(201, 169, 110, 0.18);
+  max-width: 100%;
+  padding-left: calc((100vw - var(--max-width)) / 2 + 2rem);
+  padding-right: calc((100vw - var(--max-width)) / 2 + 2rem);
+  background: var(--cream-alt);
+  border-top: none;
+}
+
+/* Constrain the inner grid to max-width */
+.book-entry + .book-entry > * {
+  max-width: none;
 }
 
 .book-entry--reverse {
@@ -537,12 +546,13 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .book-entry__cover:hover { transform: translateY(-7px); }
 
+/* Format label in gold — clearly visible in both modes */
 .book-entry__format {
   font-family: var(--font-sans);
   font-size: 0.68rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--brown-light);
+  color: var(--gold);
   margin-bottom: 0.75rem;
 }
 
@@ -560,7 +570,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-style: italic;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.38);
 }
 
 .book-entry__desc {
@@ -628,12 +638,12 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--gold);
-  opacity: 0.7;
+  opacity: 1;
   transition: opacity 0.25s;
 }
 
 .book-entry__review-link:hover {
-  opacity: 1;
+  opacity: 0.75;
 }
 
 /* ============================================================
@@ -741,7 +751,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 .about-books {
   margin-top: 3rem;
   padding-top: 2.5rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.18);
+  border-top: 1px solid rgba(201, 169, 110, 0.32);
 }
 
 .about-books__label {
@@ -823,7 +833,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   color: var(--brown-dark);
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(44, 24, 16, 0.22);
+  border-bottom: 1px solid rgba(28, 14, 8, 0.35);
   padding: 0.55rem 0;
   outline: none;
   transition: border-color 0.3s;
@@ -843,7 +853,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   margin-top: 1rem;
   font-family: var(--font-sans);
   font-size: 0.7rem;
-  color: rgba(44, 24, 16, 0.5);
+  color: rgba(28, 14, 8, 0.5);
   line-height: 1.5;
 }
 .form-privacy a { color: var(--gold); text-decoration: none; }
@@ -853,7 +863,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   text-align: center;
   margin-top: 3.5rem;
   padding-top: 3rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.18);
+  border-top: 1px solid rgba(201, 169, 110, 0.32);
 }
 
 .contact-email__or {
@@ -974,6 +984,11 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
     grid-template-columns: 1fr;
     gap: 2.5rem;
     padding: 4rem 2rem;
+  }
+
+  .book-entry + .book-entry {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   .book-entry--reverse .book-entry__cover-col,
@@ -1122,7 +1137,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   top: 0;
   background: var(--cream);
   z-index: 1;
-  border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.28);
 }
 
 .modal__label {
@@ -1181,10 +1196,10 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   flex: 1;
   height: 1px;
   background: var(--gold);
-  opacity: 0.22;
+  opacity: 0.38;
 }
 
-.modal__ornament-glyph { color: var(--gold); opacity: 0.55; font-size: 0.85rem; }
+.modal__ornament-glyph { color: var(--gold); opacity: 0.65; font-size: 0.85rem; }
 
 .modal__text {
   font-family: var(--font-serif);
@@ -1208,7 +1223,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 .modal__footer {
   margin-top: 2.5rem;
   padding-top: 2rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.18);
+  border-top: 1px solid rgba(201, 169, 110, 0.32);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1234,7 +1249,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 }
 
 /* ============================================================
-   DARK MODE (OS-Präferenz oder manueller Toggle via data-theme)
+   DARK MODE
    ============================================================ */
 html[data-theme="dark"] {
   --cream:       #1C1208;
