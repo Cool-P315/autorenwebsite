@@ -944,6 +944,20 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .footer__link:hover { color: var(--gold); }
 
+.footer__links-group {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.footer__amazon-link {
+  display: flex;
+  align-items: center;
+}
+
+.footer__amazon-link svg { display: block; }
+
 /* ============================================================
    ANIMATIONS
    ============================================================ */
