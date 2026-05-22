@@ -1425,9 +1425,11 @@ html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
 }
 
 .share-fallback {
-  display: inline-flex;
   align-items: center;
   gap: 0.75rem;
+}
+.share-fallback:not([hidden]) {
+  display: inline-flex;
 }
 
 .share-copy-btn {
@@ -1457,10 +1459,21 @@ html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
 }
 
 html[data-theme="dark"] .share-btn {
-  color: rgba(237, 224, 207, 0.5);
-  border-color: rgba(237, 224, 207, 0.2);
+  color: rgba(237, 224, 207, 0.75);
+  border-color: rgba(237, 224, 207, 0.3);
 }
 html[data-theme="dark"] .share-btn:hover {
   color: var(--gold);
   border-color: rgba(201, 169, 110, 0.6);
+}
+html[data-theme="dark"] .share-copy-btn {
+  color: var(--gold);
+  border-color: rgba(201, 169, 110, 0.5);
+}
+html[data-theme="dark"] .share-copy-btn:hover {
+  background: var(--gold);
+  color: var(--brown-deep);
+}
+html[data-theme="dark"] .share-copied {
+  color: var(--gold);
 }
