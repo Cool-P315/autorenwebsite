@@ -171,3 +171,53 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
     document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
   }
 });
+
+// --- Web Share API ---
+document.querySelectorAll('.share-btn').forEach(btn => {
+  const url   = btn.dataset.shareUrl;
+  const title = btn.dataset.shareTitle;
+  const text  = btn.dataset.shareText;
+
+  btn.addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+        gcEvent('share/' + title, 'Geteilt: ' + title);
+      } catch (e) {
+        // Abgebrochen vom Nutzer — kein Fehler
+      }
+    } else {
+      // Fallback: Dropdown mit "Link kopieren"
+      const fallbackId = 'share-fallback-' + btn.closest('article')?.id;
+      const fallback   = document.getElementById(fallbackId);
+      if (fallback) {
+        const isHidden = fallback.hidden;
+        document.querySelectorAll('.share-fallback').forEach(f => { f.hidden = true; });
+        fallback.hidden = !isHidden;
+      }
+    }
+  });
+});
+
+document.querySelectorAll('.share-copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const url     = btn.dataset.url;
+    const copied  = btn.nextElementSibling;
+    try {
+      await navigator.clipboard.writeText(url);
+      if (copied) {
+        copied.hidden = false;
+        setTimeout(() => { copied.hidden = true; }, 2000);
+      }
+    } catch (e) {
+      // Clipboard nicht verfügbar — stumm scheitern
+    }
+  });
+});
+
+// Fallback schließen bei Klick außerhalb
+document.addEventListener('click', e => {
+  if (!e.target.closest('.book-entry__share')) {
+    document.querySelectorAll('.share-fallback').forEach(f => { f.hidden = true; });
+  }
+});
