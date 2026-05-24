@@ -147,7 +147,7 @@ body::after {
    ============================================================ */
 .nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: calc(env(safe-area-inset-top, 0px) * -1); left: 0; right: 0;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
@@ -166,6 +166,17 @@ body::after {
   padding:     1.1rem 3rem;
   padding-top: calc(1.1rem + env(safe-area-inset-top, 0px));
   box-shadow:  0 4px 30px rgba(0,0,0,0.4);
+}
+
+/* Füllt die Safe-Area-Zone (Dynamic Island / Notch) mit dem Nav-Hintergrund */
+.nav.scrolled::before,
+.nav.nav--always-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0; right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--brown-deep);
 }
 
 .nav__actions {
