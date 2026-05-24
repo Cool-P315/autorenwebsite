@@ -114,6 +114,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #1A0F0A; /* füllt den Status-Bar-Bereich (Safe Area) auf iOS */
 }
 
 body {
@@ -146,7 +147,7 @@ body::after {
    ============================================================ */
 .nav {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) * -1); left: 0; right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
@@ -163,7 +164,7 @@ body::after {
 .nav.nav--always-dark {
   background:  var(--brown-deep);
   padding:     1.1rem 3rem;
-  padding-top: calc(1.1rem + env(safe-area-inset-top));
+  padding-top: calc(1.1rem + env(safe-area-inset-top, 0px));
   box-shadow:  0 4px 30px rgba(0,0,0,0.4);
 }
 
