@@ -146,13 +146,13 @@ body::after {
    ============================================================ */
 .nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: calc(env(safe-area-inset-top, 0px) * -1); left: 0; right: 0;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.75rem 3rem;
-  padding-top: calc(1.75rem + env(safe-area-inset-top));
+  padding-top: calc(1.75rem + env(safe-area-inset-top, 0px));
   transition:
     background 0.5s var(--ease-smooth),
     padding    0.4s var(--ease-smooth),
