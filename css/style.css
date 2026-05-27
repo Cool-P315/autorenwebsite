@@ -1149,9 +1149,9 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 }
 
 @media (max-width: 768px) {
-  .nav        { padding: 1.25rem 1.5rem; }
+  .nav        { padding: 1.25rem 1.5rem; padding-top: calc(1.25rem + env(safe-area-inset-top, 0px)); }
   .nav.scrolled,
-  .nav.nav--always-dark { padding: 1rem 1.5rem; }
+  .nav.nav--always-dark { padding: 1rem 1.5rem; padding-top: calc(1rem + env(safe-area-inset-top, 0px)); }
 
   .nav__actions { gap: 0.75rem; }
 
