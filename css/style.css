@@ -1086,7 +1086,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 @keyframes nameGlow {
   0%, 100% { text-shadow: none; }
-  50%       { text-shadow: 0 0 28px rgba(201,169,110,0.38), 0 0 55px rgba(201,169,110,0.14); }
+  50%       { text-shadow: 0 0 18px rgba(201,169,110,0.65), 0 0 40px rgba(201,169,110,0.35), 0 0 75px rgba(201,169,110,0.16); }
 }
 
 @keyframes leaf-fall {
