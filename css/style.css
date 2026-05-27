@@ -83,6 +83,12 @@
 }
 
 /* ============================================================
+   TEXT SELECTION
+   ============================================================ */
+::selection      { background: rgba(201, 169, 110, 0.28); }
+::-moz-selection { background: rgba(201, 169, 110, 0.28); }
+
+/* ============================================================
    CUSTOM PROPERTIES
    ============================================================ */
 :root {
@@ -162,7 +168,9 @@ body::after {
 
 .nav.scrolled,
 .nav.nav--always-dark {
-  background:  var(--brown-deep);
+  background:              rgba(26, 15, 10, 0.82);
+  backdrop-filter:         blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
   padding:     1.1rem 3rem;
   padding-top: calc(1.1rem + env(safe-area-inset-top, 0px));
   box-shadow:  0 4px 30px rgba(0,0,0,0.4);
@@ -176,7 +184,7 @@ body::after {
   top: 0;
   left: 0; right: 0;
   height: env(safe-area-inset-top, 0px);
-  background: var(--brown-deep);
+  background: rgba(26, 15, 10, 0.82);
 }
 
 .nav__actions {
@@ -340,7 +348,9 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   line-height: 1;
   letter-spacing: -0.02em;
   opacity: 0;
-  animation: fadeUp 1.2s var(--ease-out) 0.7s forwards;
+  animation:
+    fadeUp   1.2s var(--ease-out) 0.7s forwards,
+    nameGlow 6s   ease-in-out    3.5s infinite;
 }
 
 .hero__divider {
@@ -545,6 +555,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
     4px 4px 0 rgba(26,15,10,0.07);
   transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth);
   transform-origin: center bottom;
+  will-change: transform;
 }
 
 .book-teaser__cover:hover {
@@ -638,6 +649,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
     -6px 6px 20px rgba(26,15,10,0.22),
     -12px 12px 40px rgba(26,15,10,0.11);
   transition: transform 0.5s var(--ease-smooth);
+  will-change: transform;
 }
 
 .book-entry__cover:hover { transform: translateY(-7px); }
@@ -1072,6 +1084,24 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   50%       { transform: scaleY(0.5); opacity: 1;    }
 }
 
+@keyframes nameGlow {
+  0%, 100% { text-shadow: none; }
+  50%       { text-shadow: 0 0 28px rgba(201,169,110,0.38), 0 0 55px rgba(201,169,110,0.14); }
+}
+
+@keyframes leaf-fall {
+  0%   { transform: translate(0,       -5vh)  rotate(0deg);   opacity: 0;    }
+  8%   {                                                        opacity: 0.5;  }
+  25%  { transform: translate(1.8vw,   26vh)  rotate(95deg);                 }
+  50%  { transform: translate(-1.2vw,  55vh)  rotate(185deg); opacity: 0.28; }
+  75%  { transform: translate(2.2vw,   80vh)  rotate(270deg);                }
+  92%  {                                                        opacity: 0.12; }
+  100% { transform: translate(0.6vw,   110vh) rotate(350deg); opacity: 0;    }
+}
+
+@keyframes vt-out { to   { opacity: 0; } }
+@keyframes vt-in  { from { opacity: 0; } }
+
 .fade-in {
   opacity: 0;
   transform: translateY(26px);
@@ -1384,7 +1414,7 @@ html[data-theme="dark"] .form-textarea {
   color: var(--brown-dark);
   border-bottom-color: rgba(237, 224, 208, 0.18);
 }
-html[data-theme="dark"] .form-privacy { color: rgba(237, 224, 208, 0.4); }
+html[data-theme="dark"] .form-privacy { color: rgba(237, 224, 207, 0.4); }
 html[data-theme="dark"] .hero__name       { color: #EDE0CF; }
 html[data-theme="dark"] .hero__tagline    { color: rgba(237, 224, 208, 0.72); }
 html[data-theme="dark"] .page-hero__title { color: #EDE0CF; }
@@ -1490,4 +1520,55 @@ html[data-theme="dark"] .share-copy-btn:hover {
 }
 html[data-theme="dark"] .share-copied {
   color: var(--gold);
+}
+
+/* ============================================================
+   VIEW TRANSITIONS (Chrome 126+, Safari 18+)
+   ============================================================ */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: ease;
+}
+::view-transition-old(root) { animation-name: vt-out; }
+::view-transition-new(root) { animation-name: vt-in;  }
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+   ============================================================ */
+#scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(to right, var(--gold), var(--gold-light));
+  z-index: 1001;
+  transition: width 0.08s linear;
+  pointer-events: none;
+}
+
+/* ============================================================
+   FALLING LEAVES (Hero)
+   ============================================================ */
+.hero__leaf {
+  position: absolute;
+  top: 0;
+  left: var(--leaf-left, 50%);
+  font-size: var(--leaf-size, 0.8rem);
+  color: rgba(201, 169, 110, 0.45);
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  opacity: 0;
+  animation: leaf-fall var(--leaf-duration, 9s) linear var(--leaf-delay, 0s) infinite;
+}
+
+/* ============================================================
+   3D COVER TILT
+   ============================================================ */
+.book-teaser__cover,
+.book-entry__cover {
+  will-change: transform;
 }

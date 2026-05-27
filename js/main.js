@@ -221,3 +221,63 @@ document.addEventListener('click', e => {
     document.querySelectorAll('.share-fallback').forEach(f => { f.hidden = true; });
   }
 });
+
+// ============================================================
+// SCROLL PROGRESS BAR
+// ============================================================
+(function () {
+  const bar = document.createElement('div');
+  bar.id = 'scroll-progress';
+  document.body.prepend(bar);
+
+  function update() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = max > 0 ? (window.scrollY / max * 100) + '%' : '0';
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+// ============================================================
+// FALLING LEAVES (nur Hero-Sektion / Startseite)
+// ============================================================
+(function () {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  const glyphs = ['❧', '✦', '❧', '✦', '·', '❧', '✦', '❧', '·', '✦'];
+  for (let i = 0; i < 10; i++) {
+    const leaf = document.createElement('span');
+    leaf.className = 'hero__leaf';
+    leaf.setAttribute('aria-hidden', 'true');
+    leaf.textContent = glyphs[i];
+    leaf.style.setProperty('--leaf-left',     (4  + Math.random() * 92) + '%');
+    leaf.style.setProperty('--leaf-delay',    (Math.random() * 14)      + 's');
+    leaf.style.setProperty('--leaf-duration', (7  + Math.random() * 9)  + 's');
+    leaf.style.setProperty('--leaf-size',     (0.5 + Math.random() * 0.7) + 'rem');
+    hero.appendChild(leaf);
+  }
+})();
+
+// ============================================================
+// 3D BOOK COVER TILT (nur Desktop / Pointer-Geräte)
+// ============================================================
+if (window.matchMedia('(hover: hover)').matches) {
+  document.querySelectorAll('.book-teaser__cover-wrap, .book-entry__cover-col').forEach(wrap => {
+    const img = wrap.querySelector('img');
+    if (!img) return;
+
+    wrap.addEventListener('mousemove', e => {
+      const r = wrap.getBoundingClientRect();
+      const x = ((e.clientX - r.left)  / r.width  - 0.5) * 2;
+      const y = ((e.clientY - r.top)   / r.height - 0.5) * 2;
+      img.style.transform  = `perspective(700px) rotateY(${x * 9}deg) rotateX(${-y * 6}deg) translateY(-6px) scale(1.02)`;
+      img.style.transition = 'transform 0.1s ease-out';
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+      img.style.transition = 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)';
+      img.style.transform  = '';
+    });
+  });
+}
