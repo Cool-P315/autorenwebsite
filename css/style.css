@@ -153,7 +153,7 @@ body::after {
    ============================================================ */
 .nav {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) * -1); left: 0; right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
