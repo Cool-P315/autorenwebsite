@@ -159,7 +159,6 @@ body::after {
   justify-content: space-between;
   align-items: center;
   padding: 1.75rem 3rem;
-  padding-top: calc(1.75rem + env(safe-area-inset-top, 0px));
   transition:
     background 0.5s var(--ease-smooth),
     padding    0.4s var(--ease-smooth),
@@ -172,20 +171,9 @@ body::after {
   backdrop-filter:         blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   padding:     1.1rem 3rem;
-  padding-top: calc(1.1rem + env(safe-area-inset-top, 0px));
   box-shadow:  0 4px 30px rgba(0,0,0,0.4);
 }
 
-/* Füllt die Safe-Area-Zone (Dynamic Island / Notch) mit dem Nav-Hintergrund */
-.nav.scrolled::before,
-.nav.nav--always-dark::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0; right: 0;
-  height: env(safe-area-inset-top, 0px);
-  background: rgba(26, 15, 10, 0.82);
-}
 
 .nav__actions {
   display: flex;
@@ -1149,9 +1137,9 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 }
 
 @media (max-width: 768px) {
-  .nav        { padding: 1.25rem 1.5rem; padding-top: calc(1.25rem + env(safe-area-inset-top, 0px)); }
+  .nav        { padding: 1.25rem 1.5rem; }
   .nav.scrolled,
-  .nav.nav--always-dark { padding: 1rem 1.5rem; padding-top: calc(1rem + env(safe-area-inset-top, 0px)); }
+  .nav.nav--always-dark { padding: 1rem 1.5rem; }
 
   .nav__actions { gap: 0.75rem; }
 
