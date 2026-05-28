@@ -647,7 +647,26 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.eco-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #5A8A5A;
+  border: 1px solid rgba(90, 138, 90, 0.38);
+  border-radius: 2px;
+  padding: 0.2em 0.55em 0.2em 0.45em;
+  margin-bottom: 1.1rem;
+}
+html[data-theme="dark"] .eco-badge {
+  color: #80B880;
+  border-color: rgba(128, 184, 128, 0.38);
 }
 
 .book-entry__title {
