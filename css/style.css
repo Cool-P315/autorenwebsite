@@ -298,7 +298,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   align-items: center;
   justify-content: center;
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 7.5vw, 7rem);
+  font-size: clamp(4rem, 12vw, 11rem);
   font-style: italic;
   color: var(--gold);
   opacity: 0.055;
