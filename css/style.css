@@ -730,6 +730,34 @@ html[data-theme="dark"] .eco-badge {
   flex-wrap: wrap;
 }
 
+.review-snippet {
+  margin-top: 1.5rem;
+  padding: 0.9rem 1.1rem;
+  border-left: 2px solid rgba(201, 169, 110, 0.38);
+}
+.review-snippet__stars {
+  color: var(--gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.35rem;
+}
+.review-snippet__quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--brown-dark);
+  margin-bottom: 0.4rem;
+}
+.review-snippet__cite {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brown-light);
+}
+
 .book-entry__review {
   margin-top: 2rem;
   padding-top: 1.5rem;
