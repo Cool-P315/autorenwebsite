@@ -608,7 +608,8 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 }
 
 /* Alternating background — second entry gets cream-alt as a full-bleed panel */
-.book-entry + .book-entry {
+.book-entry + .book-entry,
+.book-entry--alt {
   max-width: 100%;
   padding-left: calc((100vw - var(--max-width)) / 2 + 2rem);
   padding-right: calc((100vw - var(--max-width)) / 2 + 2rem);
