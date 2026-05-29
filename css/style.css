@@ -1172,7 +1172,8 @@ html[data-theme="dark"] .eco-badge {
   .book-entry--reverse .book-entry__cover-col,
   .book-entry--reverse .book-entry__text-col { order: unset; }
 
-  .book-entry__cover-col {
+  .book-entry__cover-col,
+  .book-entry + .book-entry > .book-entry__cover-col {
     max-width: 210px;
     margin: 0 auto;
   }
