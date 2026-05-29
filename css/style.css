@@ -1568,7 +1568,7 @@ html[data-theme="dark"] .share-copied {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 280ms;
+  animation-duration: 560ms;
   animation-timing-function: ease;
 }
 ::view-transition-old(root) { animation-name: vt-out; }
