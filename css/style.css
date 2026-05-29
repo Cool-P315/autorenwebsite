@@ -1167,7 +1167,6 @@ html[data-theme="dark"] .eco-badge {
 
   .book-entry--alt {
     background: var(--cream-alt);
-    border-top: 2px solid rgba(201, 169, 110, 0.35);
   }
 
   .book-entry--reverse .book-entry__cover-col,
