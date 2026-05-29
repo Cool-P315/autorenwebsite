@@ -1611,3 +1611,30 @@ html[data-theme="dark"] .share-copied {
 .book-entry__cover {
   will-change: transform;
 }
+
+/* ============================================================
+   EXTRAHIERTE KLASSEN (vormals Inline-Styles)
+   ============================================================ */
+/* Amazon-Autorenseiten-CTA am Seitenende (buecher.html, ueber-mich.html) */
+.amazon-cta { text-align: center; padding: 3rem 2rem 4.5rem; }
+.amazon-cta .section__label { text-align: center; margin-bottom: 1.2rem; }
+
+/* zentriertes Label (index.html „Meine Bücher") */
+.section__label--center { text-align: center; }
+
+/* 404-Fehlerseite */
+.error-quote { max-width: 680px; margin: 6rem auto; text-align: center; padding: 0 2rem; }
+.error-quote__text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  line-height: 1.9;
+  color: var(--brown-dark);
+  margin-bottom: 2rem;
+}
+.error-quote__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
