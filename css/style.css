@@ -1165,6 +1165,11 @@ html[data-theme="dark"] .eco-badge {
     padding-right: 2rem;
   }
 
+  .book-entry--alt {
+    background: var(--cream-alt);
+    border-top: 2px solid rgba(201, 169, 110, 0.35);
+  }
+
   .book-entry--reverse .book-entry__cover-col,
   .book-entry--reverse .book-entry__text-col { order: unset; }
 
