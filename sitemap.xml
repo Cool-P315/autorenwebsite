@@ -2,22 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://martinpintar.at/</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-05-29</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://martinpintar.at/buecher.html</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-05-29</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://martinpintar.at/ueber-mich.html</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-05-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://martinpintar.at/kontakt.html</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-05-29</lastmod>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://martinpintar.at/impressum.html</loc>
+    <lastmod>2026-05-29</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://martinpintar.at/datenschutz.html</loc>
+    <lastmod>2026-05-29</lastmod>
+    <priority>0.3</priority>
   </url>
 </urlset>
