@@ -57,7 +57,7 @@
   ]
   </script>
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=a857bb2">
+  <link rel="stylesheet" href="css/style.css?v=20260607">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -123,10 +123,27 @@
           <a href="https://www.amazon.de/dp/B0GYS3BBGW" class="btn" target="_blank" rel="noopener noreferrer">Taschenbuch bei Amazon</a>
           <a href="https://www.amazon.de/dp/B0GYVGX87T" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
-        <div class="review-snippet">
-          <div class="review-snippet__stars" aria-label="5 von 5 Sternen">★★★★★</div>
-          <p class="review-snippet__quote">„Besonders gefallen hat mir der ruhige, poetische Schreibstil, der lange nach dem Lesen im Kopf bleibt."</p>
-          <cite class="review-snippet__cite">— Christopher Lauinger, Amazon</cite>
+        <div class="review-slider" aria-label="Leserstimmen">
+          <div class="review-slider__track">
+            <div class="review-slider__slide active">
+              <div class="review-snippet">
+                <div class="review-snippet__stars" aria-label="5 von 5 Sternen">★★★★★</div>
+                <p class="review-snippet__quote">„Besonders gefallen hat mir der ruhige, poetische Schreibstil, der lange nach dem Lesen im Kopf bleibt."</p>
+                <cite class="review-snippet__cite">— Christopher Lauinger, Amazon</cite>
+              </div>
+            </div>
+            <div class="review-slider__slide">
+              <div class="review-snippet">
+                <div class="review-snippet__stars" aria-label="5 von 5 Sternen">★★★★★</div>
+                <p class="review-snippet__quote">„Ein sehr einfühlsam geschriebenes Buch über die zyklen des Lebens."</p>
+                <cite class="review-snippet__cite">— Herbert Petschnig, Amazon (Verifizierter Kauf)</cite>
+              </div>
+            </div>
+          </div>
+          <div class="review-slider__nav" aria-label="Rezensionen wechseln">
+            <button class="review-slider__dot active" aria-label="Rezension 1 von 2" aria-selected="true"></button>
+            <button class="review-slider__dot" aria-label="Rezension 2 von 2" aria-selected="false"></button>
+          </div>
         </div>
         <div class="book-entry__review">
           <p class="book-entry__review-prompt">Schon gelesen? Ich freue mich über jede Rezension.</p>

@@ -290,6 +290,24 @@ document.addEventListener('click', e => {
 // ============================================================
 // 3D BOOK COVER TILT (nur Desktop / Pointer-Geräte)
 // ============================================================
+// ============================================================
+// REVIEW SLIDER
+// ============================================================
+document.querySelectorAll('.review-slider').forEach(slider => {
+  const slides = slider.querySelectorAll('.review-slider__slide');
+  const dots   = slider.querySelectorAll('.review-slider__dot');
+
+  function goTo(idx) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === idx);
+      d.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+  }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+});
+
 if (window.matchMedia('(hover: hover)').matches) {
   document.querySelectorAll('.book-teaser__cover-wrap, .book-entry__cover-col').forEach(wrap => {
     const img = wrap.querySelector('img');
