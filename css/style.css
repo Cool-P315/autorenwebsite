@@ -85,8 +85,8 @@
 /* ============================================================
    TEXT SELECTION
    ============================================================ */
-::selection      { background: rgba(201, 169, 110, 0.28); }
-::-moz-selection { background: rgba(201, 169, 110, 0.28); }
+::selection      { background: rgba(var(--accent-rgb), 0.28); }
+::-moz-selection { background: rgba(var(--accent-rgb), 0.28); }
 
 /* ============================================================
    CUSTOM PROPERTIES
@@ -97,6 +97,10 @@
   --brown-dark:  #1C0E08;
   --gold:        #C9A96E;
   --gold-light:  #DFC092;
+  --accent:      #6B5026;  /* Gold-Pendant fuer Creme-Flaechen (Dark Mode: = Gold) */
+  --accent-rgb:  107, 80, 38;
+  --eco:         #2F5E2F;
+  --eco-border:  rgba(47, 94, 47, 0.55);
   --brown-mid:   #5A4530;
   --brown-deep:  #1A0F0A;
   --brown-light: #7A6045;
@@ -444,12 +448,12 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--gold);
+  background: var(--accent);
   opacity: 0.55;
 }
 
 .ornament__glyph {
-  color: var(--gold);
+  color: var(--accent);
   font-size: 1rem;
   opacity: 0.75;
   line-height: 1;
@@ -492,16 +496,16 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--gold);
-  border: 1px solid rgba(201, 169, 110, 0.88);
+  color: var(--accent);
+  border: 1px solid var(--accent);
   padding: 0.7rem 1.9rem;
   transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .btn:hover {
-  background: var(--gold);
-  color: var(--brown-deep);
-  border-color: var(--gold);
+  background: var(--accent);
+  color: var(--cream);
+  border-color: var(--accent);
 }
 
 /* ============================================================
@@ -647,7 +651,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-size: 0.68rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 0.5rem;
 }
 
@@ -659,15 +663,11 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-size: 0.62rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #5A8A5A;
-  border: 1px solid rgba(90, 138, 90, 0.38);
+  color: var(--eco);
+  border: 1px solid var(--eco-border);
   border-radius: 2px;
   padding: 0.2em 0.55em 0.2em 0.45em;
   margin-bottom: 1.1rem;
-}
-html[data-theme="dark"] .eco-badge {
-  color: #80B880;
-  border-color: rgba(128, 184, 128, 0.38);
 }
 
 .book-entry__title {
@@ -684,7 +684,7 @@ html[data-theme="dark"] .eco-badge {
   font-style: italic;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(201, 169, 110, 0.38);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.38);
 }
 
 .book-entry__desc {
@@ -699,7 +699,7 @@ html[data-theme="dark"] .eco-badge {
   line-height: 0.78;
   float: left;
   margin: 0.04em 0.08em 0 0;
-  color: var(--gold);
+  color: var(--accent);
   font-style: italic;
 }
 
@@ -720,7 +720,7 @@ html[data-theme="dark"] .eco-badge {
 
 .price-item__amount {
   font-size: 1.4rem;
-  color: var(--gold);
+  color: var(--accent);
   font-style: italic;
 }
 
@@ -733,10 +733,10 @@ html[data-theme="dark"] .eco-badge {
 .review-snippet {
   margin-top: 1.5rem;
   padding: 0.9rem 1.1rem;
-  border-left: 2px solid rgba(201, 169, 110, 0.38);
+  border-left: 2px solid rgba(var(--accent-rgb), 0.38);
 }
 .review-snippet__stars {
-  color: var(--gold);
+  color: var(--accent);
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   margin-bottom: 0.35rem;
@@ -790,22 +790,22 @@ html[data-theme="dark"] .eco-badge {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgba(201, 169, 110, 0.28);
-  border: 1px solid rgba(201, 169, 110, 0.4);
+  background: rgba(var(--accent-rgb), 0.28);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
   cursor: pointer;
   padding: 0;
   transition: background 0.2s, border-color 0.2s;
 }
 .review-slider__dot.active,
 .review-slider__dot:hover {
-  background: var(--gold);
-  border-color: var(--gold);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .book-entry__review {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.45);
+  border-top: 1px solid rgba(var(--accent-rgb), 0.45);
 }
 
 .book-entry__review-prompt {
@@ -823,7 +823,7 @@ html[data-theme="dark"] .eco-badge {
   font-weight: 400;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   opacity: 1;
   transition: opacity 0.25s;
 }
@@ -870,7 +870,7 @@ html[data-theme="dark"] .eco-badge {
   font-size: 0.68rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 1rem;
   opacity: 0.85;
 }
@@ -889,8 +889,8 @@ html[data-theme="dark"] .eco-badge {
   color: var(--brown-mid);
   line-height: 1.9;
   padding: 1.75rem 2rem;
-  border-left: 2px solid var(--gold);
-  background: rgba(201, 169, 110, 0.05);
+  border-left: 2px solid var(--accent);
+  background: rgba(var(--accent-rgb), 0.05);
   border-radius: 0 2px 2px 0;
 }
 
@@ -914,7 +914,7 @@ html[data-theme="dark"] .eco-badge {
   line-height: 0.78;
   float: left;
   margin: 0.04em 0.1em 0 0;
-  color: var(--gold);
+  color: var(--accent);
   font-style: italic;
 }
 
@@ -937,7 +937,7 @@ html[data-theme="dark"] .eco-badge {
 .about-books {
   margin-top: 3rem;
   padding-top: 2.5rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.32);
+  border-top: 1px solid rgba(var(--accent-rgb), 0.32);
 }
 
 .about-books__label {
@@ -967,12 +967,12 @@ html[data-theme="dark"] .eco-badge {
 
 .about-books__item a::before {
   content: '—';
-  color: var(--gold);
+  color: var(--accent);
   font-style: normal;
   flex-shrink: 0;
 }
 
-.about-books__item a:hover { color: var(--gold); }
+.about-books__item a:hover { color: var(--accent); }
 
 /* ============================================================
    KONTAKT
@@ -1028,7 +1028,7 @@ html[data-theme="dark"] .eco-badge {
 }
 
 .form-input:focus,
-.form-textarea:focus { border-color: var(--gold); }
+.form-textarea:focus { border-color: var(--accent); }
 
 .form-textarea {
   resize: vertical;
@@ -1042,14 +1042,14 @@ html[data-theme="dark"] .eco-badge {
   color: rgba(28, 14, 8, 0.5);
   line-height: 1.5;
 }
-.form-privacy a { color: var(--gold); text-decoration: none; }
+.form-privacy a { color: var(--accent); text-decoration: none; }
 .form-privacy a:hover { text-decoration: underline; }
 
 .contact-email {
   text-align: center;
   margin-top: 3.5rem;
   padding-top: 3rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.32);
+  border-top: 1px solid rgba(var(--accent-rgb), 0.32);
 }
 
 .contact-email__or {
@@ -1064,7 +1064,7 @@ html[data-theme="dark"] .eco-badge {
 .contact-email__link {
   font-size: 1.15rem;
   font-style: italic;
-  color: var(--gold);
+  color: var(--accent);
   transition: opacity 0.3s;
 }
 
@@ -1095,7 +1095,7 @@ html[data-theme="dark"] .eco-badge {
 }
 
 .impressum-wrap a {
-  color: var(--gold);
+  color: var(--accent);
   transition: opacity 0.3s;
 }
 
@@ -1340,14 +1340,14 @@ html[data-theme="dark"] .eco-badge {
   width: 100%;
   max-height: 85vh;
   overflow-y: auto;
-  border-top: 2px solid var(--gold);
+  border-top: 2px solid var(--accent);
   box-shadow:
     0 40px 90px rgba(26, 15, 10, 0.65),
-    0 0 0 1px rgba(201, 169, 110, 0.1);
+    0 0 0 1px rgba(var(--accent-rgb), 0.1);
   transform: scale(0.95) translateY(20px);
   transition: transform 0.4s var(--ease-smooth);
   scrollbar-width: thin;
-  scrollbar-color: rgba(201, 169, 110, 0.3) transparent;
+  scrollbar-color: rgba(var(--accent-rgb), 0.3) transparent;
 }
 
 .modal-backdrop.open .modal {
@@ -1360,7 +1360,7 @@ html[data-theme="dark"] .eco-badge {
   top: 0;
   background: var(--cream);
   z-index: 1;
-  border-bottom: 1px solid rgba(201, 169, 110, 0.28);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.28);
 }
 
 .modal__label {
@@ -1369,7 +1369,7 @@ html[data-theme="dark"] .eco-badge {
   font-size: 0.6rem;
   letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 0.5rem;
 }
 
@@ -1402,7 +1402,7 @@ html[data-theme="dark"] .eco-badge {
 }
 
 .modal__close::before { content: '✕'; font-size: 0.78rem; }
-.modal__close:hover { color: var(--gold); }
+.modal__close:hover { color: var(--accent); }
 
 .modal__body { padding: 2rem 3rem 3rem; }
 
@@ -1418,11 +1418,11 @@ html[data-theme="dark"] .eco-badge {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--gold);
+  background: var(--accent);
   opacity: 0.38;
 }
 
-.modal__ornament-glyph { color: var(--gold); opacity: 0.65; font-size: 0.85rem; }
+.modal__ornament-glyph { color: var(--accent); opacity: 0.65; font-size: 0.85rem; }
 
 .modal__text {
   font-family: var(--font-serif);
@@ -1439,14 +1439,14 @@ html[data-theme="dark"] .eco-badge {
   line-height: 0.78;
   float: left;
   margin: 0.04em 0.1em 0 0;
-  color: var(--gold);
+  color: var(--accent);
   font-style: italic;
 }
 
 .modal__footer {
   margin-top: 2.5rem;
   padding-top: 2rem;
-  border-top: 1px solid rgba(201, 169, 110, 0.32);
+  border-top: 1px solid rgba(var(--accent-rgb), 0.32);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1480,6 +1480,10 @@ html[data-theme="dark"] {
   --brown-dark:  #EDE0CF;
   --brown-mid:   #AD9A87;
   --brown-light: #8A7466;
+  --accent:      #C9A96E;
+  --accent-rgb:  201, 169, 110;
+  --eco:         #80B880;
+  --eco-border:  rgba(128, 184, 128, 0.38);
 }
 
 html[data-theme="dark"] body { background-color: var(--cream); color: var(--brown-dark); }
@@ -1514,7 +1518,7 @@ html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 1.4rem;
 }
 
@@ -1547,8 +1551,8 @@ html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
 }
 
 .share-btn:hover {
-  color: var(--gold);
-  border-color: rgba(201, 169, 110, 0.6);
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.6);
 }
 
 .share-fallback {
@@ -1564,24 +1568,24 @@ html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
   font-size: 0.68rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   background: none;
-  border: 1px solid rgba(201, 169, 110, 0.5);
+  border: 1px solid rgba(var(--accent-rgb), 0.5);
   padding: 0.45rem 1rem;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
 
 .share-copy-btn:hover {
-  background: var(--gold);
-  color: var(--brown-deep);
+  background: var(--accent);
+  color: var(--cream);
 }
 
 .share-copied {
   font-family: var(--font-sans);
   font-size: 0.68rem;
   letter-spacing: 0.1em;
-  color: var(--gold);
+  color: var(--accent);
   opacity: 0.8;
 }
 
@@ -1590,16 +1594,16 @@ html[data-theme="dark"] .share-btn {
   border-color: rgba(237, 224, 207, 0.3);
 }
 html[data-theme="dark"] .share-btn:hover {
-  color: var(--gold);
-  border-color: rgba(201, 169, 110, 0.6);
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.6);
 }
 html[data-theme="dark"] .share-copy-btn {
   color: var(--gold);
-  border-color: rgba(201, 169, 110, 0.5);
+  border-color: rgba(var(--accent-rgb), 0.5);
 }
 html[data-theme="dark"] .share-copy-btn:hover {
-  background: var(--gold);
-  color: var(--brown-deep);
+  background: var(--accent);
+  color: var(--cream);
 }
 html[data-theme="dark"] .share-copied {
   color: var(--gold);
