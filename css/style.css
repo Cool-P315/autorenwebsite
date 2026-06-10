@@ -1682,3 +1682,20 @@ html[data-theme="dark"] .share-copied {
   flex-wrap: wrap;
   margin-top: 1rem;
 }
+
+/* ============================================================
+   REDUCED MOTION — Animationen für bewegungsempfindliche
+   Nutzer deaktivieren (WCAG 2.3.3)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero__leaf { display: none; }
+  @view-transition { navigation: none; }
+}

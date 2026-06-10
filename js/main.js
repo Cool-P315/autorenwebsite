@@ -75,7 +75,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
     }
   });
 });
@@ -272,6 +273,7 @@ document.addEventListener('click', e => {
 (function () {
   const hero = document.querySelector('.hero');
   if (!hero) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const glyphs = ['❧', '✦', '❧', '✦', '·', '❧', '✦', '❧', '·', '✦'];
   for (let i = 0; i < 10; i++) {
@@ -288,9 +290,6 @@ document.addEventListener('click', e => {
 })();
 
 // ============================================================
-// 3D BOOK COVER TILT (nur Desktop / Pointer-Geräte)
-// ============================================================
-// ============================================================
 // REVIEW SLIDER
 // ============================================================
 document.querySelectorAll('.review-slider').forEach(slider => {
@@ -301,14 +300,18 @@ document.querySelectorAll('.review-slider').forEach(slider => {
     slides.forEach((s, i) => s.classList.toggle('active', i === idx));
     dots.forEach((d, i) => {
       d.classList.toggle('active', i === idx);
-      d.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      d.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
     });
   }
 
   dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
 });
 
-if (window.matchMedia('(hover: hover)').matches) {
+// ============================================================
+// 3D BOOK COVER TILT (nur Desktop / Pointer-Geräte)
+// ============================================================
+if (window.matchMedia('(hover: hover)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.querySelectorAll('.book-teaser__cover-wrap, .book-entry__cover-col').forEach(wrap => {
     const img = wrap.querySelector('img');
     if (!img) return;
