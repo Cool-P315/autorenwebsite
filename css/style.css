@@ -125,6 +125,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #1A0F0A; /* füllt den Status-Bar-Bereich (Safe Area) auf iOS */
+  overflow-x: hidden;
 }
 
 body {
@@ -133,7 +134,6 @@ body {
   line-height: 1.85;
   color: var(--brown-dark);
   background-color: var(--cream);
-  overflow-x: hidden;
 }
 
 img   { max-width: 100%; height: auto; display: block; }
@@ -171,7 +171,7 @@ body::after {
 
 .nav.scrolled,
 .nav.nav--always-dark {
-  background:  #1A0F0A;
+  background:  var(--brown-deep);
   padding:     1.1rem 3rem;
   box-shadow:  0 4px 30px rgba(0,0,0,0.4);
 }
@@ -188,8 +188,8 @@ body::after {
   height: 28px;
   border: 1px solid rgba(201, 169, 110, 0.75);
   border-radius: 50%;
-  background: #4A4A4A;
-  color: #1A0F0A;
+  background: #4A4A4A; /* neutral: passt zu light + dark */
+  color: var(--brown-deep);
   font-size: 1.1rem;
   display: flex;
   align-items: center;
