@@ -48,7 +48,11 @@ if (navToggle && navLinks) {
 const currentPage = location.pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.nav__link').forEach(link => {
   const href = link.getAttribute('href');
-  if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+  // "/" bzw. "/index.html" zeigen auf die Startseite; führenden Slash normalisieren
+  const target = (href === '/' || href === '/index.html')
+    ? 'index.html'
+    : href.replace(/^\//, '');
+  if (target === currentPage) {
     link.classList.add('active');
   }
 });
@@ -166,10 +170,18 @@ document.addEventListener('keydown', e => {
 });
 
 document.querySelectorAll('[data-modal]').forEach(trigger => {
-  trigger.addEventListener('click', () => {
+  const activate = () => {
     const id = trigger.dataset.modal;
     openModal(id);
     gcEvent('leseprobe/' + id, 'Leseprobe: ' + id);
+  };
+  trigger.addEventListener('click', activate);
+  // role="button"-Divs feuern bei Enter/Leertaste kein click-Event
+  trigger.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      activate();
+    }
   });
 });
 

@@ -883,23 +883,6 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   margin-bottom: 2.25rem;
 }
 
-.about-bio__placeholder {
-  font-size: 1.1rem;
-  font-style: italic;
-  color: var(--brown-mid);
-  line-height: 1.9;
-  padding: 1.75rem 2rem;
-  border-left: 2px solid var(--accent);
-  background: rgba(var(--accent-rgb), 0.05);
-  border-radius: 0 2px 2px 0;
-}
-
-.about-bio__placeholder .placeholder-note {
-  font-size: 0.9rem;
-  color: var(--brown-light);
-  margin-top: 0.75rem;
-}
-
 .about-bio__text {
   display: flex;
   flex-direction: column;
@@ -1308,6 +1291,19 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .book-teaser__cover-wrap:hover::after,
 .book-entry__cover-col:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Tastaturfokus: Bronze-Rahmen + Leseprobe-Badge wie beim Hover */
+.book-teaser__cover-wrap:focus-visible,
+.book-entry__cover-col:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+
+.book-teaser__cover-wrap:focus-visible::after,
+.book-entry__cover-col:focus-visible::after {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
