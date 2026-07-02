@@ -112,7 +112,14 @@ document.querySelectorAll('.book-entry__review-link').forEach(link => {
 const contactForm = document.querySelector('.form');
 if (contactForm) {
   contactForm.addEventListener('submit', function () {
-    gcEvent('kontakt/formular-absenden', 'Kontaktformular abgesendet');
+    // Honeypot-Feld ("_gotcha") ist fuer Menschen unsichtbar — nur Bots fuellen es aus.
+    // Formspree verwirft die Nachricht dann serverseitig, wir tracken es nur separat.
+    const honeypot = this.querySelector('[name="_gotcha"]');
+    if (honeypot && honeypot.value) {
+      gcEvent('kontakt/bot-abgewehrt', 'Bot abgewehrt (Honeypot)');
+    } else {
+      gcEvent('kontakt/formular-absenden', 'Kontaktformular abgesendet');
+    }
   });
 }
 

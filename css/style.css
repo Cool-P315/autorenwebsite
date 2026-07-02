@@ -153,6 +153,32 @@ body::after {
 }
 
 /* ============================================================
+   SKIP-LINK (Barrierefreiheit)
+   ============================================================ */
+.skip-link {
+  position: absolute;
+  top: -4rem;
+  left: 1.5rem;
+  z-index: 10001;
+  background: var(--brown-deep);
+  color: var(--gold);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.85rem 1.5rem;
+  border-radius: 2px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transition: top 0.2s var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  top: 1.25rem;
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ============================================================
    NAVIGATION
    ============================================================ */
 .nav {
@@ -1027,6 +1053,15 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 }
 .form-privacy a { color: var(--accent); text-decoration: none; }
 .form-privacy a:hover { text-decoration: underline; }
+
+/* Honeypot-Feld gegen Formular-Spam — fuer Menschen unsichtbar, fuer Bots erreichbar */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 
 .contact-email {
   text-align: center;
