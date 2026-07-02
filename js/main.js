@@ -71,19 +71,9 @@ document.querySelectorAll('.fade-in, .book-teaser').forEach(el => {
   observer.observe(el);
 });
 
-// --- Smooth scroll for anchor links ---
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', e => {
-    const href = anchor.getAttribute('href');
-    if (!href || href === '#') return;   // reiner Platzhalter-Link → kein querySelector('#')
-    const target = document.querySelector(href);
-    if (target) {
-      e.preventDefault();
-      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
-    }
-  });
-});
+// Hinweis: Kein JS-Smooth-Scroll für Anker-Links — html { scroll-behavior: smooth }
+// + der prefers-reduced-motion-Block in style.css regeln das vollständig. Ein früherer
+// JS-Handler hat per preventDefault() den Fokus-Sprung des Skip-Links unterbunden.
 
 // --- GoatCounter Event Tracking ---
 function gcEvent(path, title) {

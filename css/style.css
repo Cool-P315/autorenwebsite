@@ -178,6 +178,14 @@ body::after {
   outline-offset: 3px;
 }
 
+/* Anker-Ziele nicht unter der fixierten Nav landen lassen
+   (Skip-Link, buecher.html#herbstblatt / #wind aus Teasern + geteilten Links) */
+#main,
+#herbstblatt,
+#wind {
+  scroll-margin-top: var(--nav-height);
+}
+
 /* ============================================================
    NAVIGATION
    ============================================================ */
@@ -297,6 +305,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 .hero {
   position: relative;
   height: 100vh;
+  height: 100svh; /* iOS: ohne Bereich hinter der Safari-Adressleiste; alte Browser nutzen 100vh */
   min-height: 600px;
   background: var(--brown-deep);
   display: flex;
