@@ -1,4 +1,33 @@
 User-agent: *
 Allow: /
 
+# KI-Trainings-Crawler ausgeschlossen (Entscheidung 2026-07-14):
+# Die Texte dieser Website — insbesondere die Leseproben — sind
+# urheberrechtlich geschützte Prosa und nicht zum Training
+# generativer KI-Modelle freigegeben.
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
 Sitemap: https://martinpintar.at/sitemap.xml

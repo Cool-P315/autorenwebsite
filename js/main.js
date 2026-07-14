@@ -42,6 +42,23 @@ if (navToggle && navLinks) {
       navToggle.focus();
     }
   });
+
+  // Fokus-Falle: Tab bleibt im geöffneten Vollbild-Menü (analog zum Leseprobe-Modal)
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Tab' || !navLinks.classList.contains('open')) return;
+    const focusables = Array.from(nav.querySelectorAll('a[href], button:not([disabled])'))
+      .filter(el => el.offsetParent !== null);
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last  = focusables[focusables.length - 1];
+    if (!nav.contains(document.activeElement)) {
+      e.preventDefault(); first.focus();
+    } else if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  });
 }
 
 // --- Active nav link ---
@@ -95,6 +112,31 @@ document.querySelectorAll('.book-entry__review-link').forEach(link => {
   link.addEventListener('click', function () {
     const book = this.closest('article')?.querySelector('.book-entry__title')?.textContent.trim() || 'unbekannt';
     gcEvent('rezension/' + book, 'Rezension: ' + book);
+  });
+});
+
+// Amazon-Kaufbuttons in den Leseprobe-Modals. Format-Zusatz "Leseprobe-Modal":
+// zählt in den Amazon-Kauf-KPIs mit, bleibt aber von den Format-Buttons unterscheidbar.
+document.querySelectorAll('.modal-backdrop').forEach(modal => {
+  const link = modal.querySelector('.modal__footer a.btn');
+  if (!link) return;
+  link.addEventListener('click', () => {
+    const book = modal.querySelector('.modal__title')?.textContent.trim() || 'unbekannt';
+    gcEvent('amazon-kauf/' + book + '/Leseprobe-Modal', 'Amazon: Leseprobe-Modal — ' + book);
+  });
+});
+
+// Amazon-Autorenseite: CTA am Seitenende + Footer-Icon. Eigene Kategorie
+// "autorenseite" (ohne amazon-Präfix), damit die Kauf-KPIs unverfälscht bleiben.
+const pageSlug = currentPage.replace('.html', '') || 'index';
+document.querySelectorAll('.amazon-cta a.btn').forEach(link => {
+  link.addEventListener('click', () => {
+    gcEvent('autorenseite/cta-' + pageSlug, 'Amazon-Autorenseite: CTA ' + pageSlug);
+  });
+});
+document.querySelectorAll('.footer__amazon-link').forEach(link => {
+  link.addEventListener('click', () => {
+    gcEvent('autorenseite/footer-' + pageSlug, 'Amazon-Autorenseite: Footer ' + pageSlug);
   });
 });
 
@@ -243,6 +285,8 @@ document.querySelectorAll('.share-copy-btn').forEach(btn => {
     const copied  = btn.nextElementSibling;
     try {
       await navigator.clipboard.writeText(url);
+      const book = btn.closest('article')?.querySelector('.book-entry__title')?.textContent.trim() || 'unbekannt';
+      gcEvent('share/' + book, 'Geteilt (Link kopiert): ' + book);
       if (copied) {
         copied.hidden = false;
         setTimeout(() => { copied.hidden = true; }, 2000);
@@ -273,6 +317,7 @@ document.addEventListener('click', e => {
     bar.style.width = max > 0 ? (window.scrollY / max * 100) + '%' : '0';
   }
   window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
   update();
 })();
 

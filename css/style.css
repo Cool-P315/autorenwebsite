@@ -822,6 +822,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   padding-left: 1.1rem;
 }
 .review-slider__dot {
+  position: relative; /* Anker für die unsichtbare Touch-Fläche */
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -830,6 +831,12 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   cursor: pointer;
   padding: 0;
   transition: background 0.2s, border-color 0.2s;
+}
+/* Unsichtbare vergrößerte Klickfläche — Touch-Ziel ≥ 24 px (WCAG 2.5.8) */
+.review-slider__dot::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
 }
 .review-slider__dot.active,
 .review-slider__dot:hover {

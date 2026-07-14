@@ -16,11 +16,13 @@
   <meta property="og:image" content="https://martinpintar.at/assets/images/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Die Buchcover von „Ein Herbstblatt im Wind“ und „Der Wind erinnert sich“ neben dem Schriftzug Martin Pintar">
   <meta property="og:site_name" content="Martin Pintar">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Bücher — Martin Pintar">
   <meta name="twitter:description" content="„Ein Herbstblatt im Wind“ und „Der Wind erinnert sich“ — poetische Prosa von Martin Pintar, jetzt bei Amazon.">
   <meta name="twitter:image" content="https://martinpintar.at/assets/images/og-image.jpg">
+  <meta name="twitter:image:alt" content="Die Buchcover von „Ein Herbstblatt im Wind“ und „Der Wind erinnert sich“ neben dem Schriftzug Martin Pintar">
   <script type="application/ld+json">
   [
     {
@@ -39,8 +41,10 @@
         "value": "Holzschliffpapier — mind. 15 % weniger CO₂-Emissionen"
       },
       "offers": [
-        { "@type": "Offer", "price": "10.99", "priceCurrency": "EUR", "name": "Taschenbuch" },
-        { "@type": "Offer", "price": "4.99",  "priceCurrency": "EUR", "name": "eBook" }
+        { "@type": "Offer", "price": "10.99", "priceCurrency": "EUR", "name": "Taschenbuch",
+          "url": "https://www.amazon.de/dp/B0GYS3BBGW", "availability": "https://schema.org/InStock" },
+        { "@type": "Offer", "price": "4.99",  "priceCurrency": "EUR", "name": "eBook",
+          "url": "https://www.amazon.de/dp/B0GYVGX87T", "availability": "https://schema.org/InStock" }
       ],
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -73,8 +77,10 @@
       "isbn": "9798258887832",
       "url": "https://www.amazon.de/dp/B0GYQMR2WS",
       "offers": [
-        { "@type": "Offer", "price": "21.99", "priceCurrency": "EUR", "name": "Hardcover" },
-        { "@type": "Offer", "price": "4.99",  "priceCurrency": "EUR", "name": "eBook" }
+        { "@type": "Offer", "price": "21.99", "priceCurrency": "EUR", "name": "Hardcover",
+          "url": "https://www.amazon.de/dp/B0GYQMR2WS", "availability": "https://schema.org/InStock" },
+        { "@type": "Offer", "price": "4.99",  "priceCurrency": "EUR", "name": "eBook",
+          "url": "https://www.amazon.de/dp/B0GYT1FB84", "availability": "https://schema.org/InStock" }
       ],
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -93,7 +99,8 @@
   ]
   </script>
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=20260702b">
+  <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css?v=20260714">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -128,6 +135,7 @@
     <article id="herbstblatt" class="book-entry fade-in">
       <div class="book-entry__cover-col" data-modal="herbstblatt" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Ein Herbstblatt im Wind">
         <picture>
+          <source srcset="assets/images/herbstblatt-cover.avif" type="image/avif">
           <source srcset="assets/images/herbstblatt-cover.webp" type="image/webp">
           <img
             src="assets/images/herbstblatt-cover.jpg"
@@ -166,14 +174,14 @@
           <div class="review-slider__track">
             <div class="review-slider__slide active">
               <div class="review-snippet">
-                <div class="review-snippet__stars" aria-label="5 von 5 Sternen">★★★★★</div>
+                <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Besonders gefallen hat mir der ruhige, poetische Schreibstil, der lange nach dem Lesen im Kopf bleibt."</p>
                 <cite class="review-snippet__cite">— Christopher Lauinger, Amazon</cite>
               </div>
             </div>
             <div class="review-slider__slide">
               <div class="review-snippet">
-                <div class="review-snippet__stars" aria-label="5 von 5 Sternen">★★★★★</div>
+                <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Ein sehr einfühlsam geschriebenes Buch über die zyklen des Lebens."</p>
                 <cite class="review-snippet__cite">— Herbert Petschnig, Amazon (Verifizierter Kauf)</cite>
               </div>
@@ -204,6 +212,7 @@
     <article id="wind" class="book-entry book-entry--reverse book-entry--alt fade-in">
       <div class="book-entry__cover-col" data-modal="wind" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Der Wind erinnert sich">
         <picture>
+          <source srcset="assets/images/wind-cover.avif" type="image/avif">
           <source srcset="assets/images/wind-cover.webp" type="image/webp">
           <img
             src="assets/images/wind-cover.jpg"
@@ -234,7 +243,7 @@
           <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
         <div class="review-snippet">
-          <div class="review-snippet__stars" aria-label="5 von 5 Sternen">★★★★★</div>
+          <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
           <p class="review-snippet__quote">„Ein sehr tiefsinniges Buch in lyrischer Schreibweise, das zum Nachdenken über die einzelnen Lebenszyklen anregt."</p>
           <cite class="review-snippet__cite">— Herbert Petschnig, Amazon (Verifizierter Kauf)</cite>
         </div>
@@ -335,7 +344,7 @@
     </div>
   </div>
 
-  <script src="js/main.js?v=20260702b"></script>
+  <script src="js/main.js?v=20260714"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
