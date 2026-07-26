@@ -388,9 +388,9 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .hero__tagline {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
+  font-size: clamp(1.35rem, 0.95rem + 1.05vw, 1.8rem); /* <~500px Viewport greift das Minimum — Mobil bleibt unverändert */
   font-style: italic;
-  color: rgba(250, 247, 242, 0.65);
+  color: rgba(250, 247, 242, 0.72);
   display: grid; /* Sätze überlagert in 1/1 — Container hält immer die Höhe des längsten */
   opacity: 0;
   animation: fadeUp 1s var(--ease-out) 1.5s forwards;
