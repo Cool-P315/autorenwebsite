@@ -391,9 +391,18 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-size: 1.35rem;
   font-style: italic;
   color: rgba(250, 247, 242, 0.65);
+  display: grid; /* Sätze überlagert in 1/1 — Container hält immer die Höhe des längsten */
   opacity: 0;
   animation: fadeUp 1s var(--ease-out) 1.5s forwards;
 }
+
+.hero__tagline span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+}
+
+.hero__tagline span.is-visible { opacity: 1; }
 
 .hero__scroll {
   position: absolute;

@@ -384,3 +384,21 @@ if (window.matchMedia('(hover: hover)').matches &&
     });
   });
 }
+
+// ============================================================
+// TAGLINE-ROTATION (nur Hero / Startseite)
+// ============================================================
+(function () {
+  const lines = document.querySelectorAll('.hero__tagline span');
+  if (lines.length < 2) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let current = 0;
+  setInterval(() => {
+    lines[current].classList.remove('is-visible');
+    lines[current].setAttribute('aria-hidden', 'true');
+    current = (current + 1) % lines.length;
+    lines[current].classList.add('is-visible');
+    lines[current].removeAttribute('aria-hidden');
+  }, 12000); // 10 s voll sichtbar + 2 s Crossfade
+})();
