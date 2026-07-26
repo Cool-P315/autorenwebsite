@@ -338,11 +338,17 @@ document.addEventListener('click', e => {
     '<path d="M22 11.4 C24 14.2 26.3 16.8 28 20.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>' +
     '</svg>';
   const staub = new Set([4, 8]);
+  let blattNr = 0;
   for (let i = 0; i < 10; i++) {
     const leaf = document.createElement('span');
     leaf.className = 'hero__leaf';
     leaf.setAttribute('aria-hidden', 'true');
-    if (staub.has(i)) { leaf.textContent = '·'; } else { leaf.innerHTML = LEAF_SVG; }
+    if (staub.has(i)) {
+      leaf.textContent = '·';
+    } else {
+      leaf.innerHTML = LEAF_SVG;
+      if (blattNr++ % 2) leaf.classList.add('hero__leaf--flip');
+    }
     leaf.style.setProperty('--leaf-left',     (4  + Math.random() * 92) + '%');
     leaf.style.setProperty('--leaf-delay',    (Math.random() * 14)      + 's');
     leaf.style.setProperty('--leaf-duration', (7  + Math.random() * 9)  + 's');

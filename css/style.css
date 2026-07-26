@@ -1709,6 +1709,7 @@ html[data-theme="dark"] .share-copied {
 }
 
 .hero__leaf svg { display: block; width: 1em; height: 1em; }
+.hero__leaf--flip svg { transform: scaleX(-1); } /* gespiegelte Blattvariante — per Rotation nicht erreichbar */
 
 /* ============================================================
    3D COVER TILT
