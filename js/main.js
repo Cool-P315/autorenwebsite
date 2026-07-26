@@ -329,12 +329,20 @@ document.addEventListener('click', e => {
   if (!hero) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const glyphs = ['❧', '✦', '❧', '✦', '·', '❧', '✦', '❧', '·', '✦'];
+  // Herbstblatt-Silhouette, dem Szenentrenner-Ornament aus dem Buch
+  // "Ein Herbstblatt im Wind" nachempfunden; zwei Punkte bleiben als Staub.
+  const LEAF_SVG =
+    '<svg viewBox="0 0 32 32" width="1em" height="1em" xmlns="http://www.w3.org/2000/svg">' +
+    '<path fill="currentColor" d="M3 22 C4 15 10 9 20 9 C21 9 21.5 9.5 21.1 10.5 C18.4 17 11.5 22 4.6 22.5 C3.9 22.5 3.2 22.3 3 22 Z"/>' +
+    '<path fill="currentColor" d="M24.8 13 C26.3 11.4 28.5 10.8 30.2 11.2 C29.6 13.1 27.7 14.3 25.5 14.3 C25.1 14.3 24.8 13.8 24.8 13 Z"/>' +
+    '<path d="M22 11.4 C24 14.2 26.3 16.8 28 20.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>' +
+    '</svg>';
+  const staub = new Set([4, 8]);
   for (let i = 0; i < 10; i++) {
     const leaf = document.createElement('span');
     leaf.className = 'hero__leaf';
     leaf.setAttribute('aria-hidden', 'true');
-    leaf.textContent = glyphs[i];
+    if (staub.has(i)) { leaf.textContent = '·'; } else { leaf.innerHTML = LEAF_SVG; }
     leaf.style.setProperty('--leaf-left',     (4  + Math.random() * 92) + '%');
     leaf.style.setProperty('--leaf-delay',    (Math.random() * 14)      + 's');
     leaf.style.setProperty('--leaf-duration', (7  + Math.random() * 9)  + 's');
