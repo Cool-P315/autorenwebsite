@@ -99,8 +99,9 @@
   --gold-light:  #DFC092;
   --accent:      #6B5026;  /* Gold-Pendant fuer Creme-Flaechen (Dark Mode: = Gold) */
   --accent-rgb:  107, 80, 38;
-  --eco:         #2F5E2F;
-  --eco-border:  rgba(47, 94, 47, 0.55);
+  --eco:         #1C601C;
+  --eco-border:  rgba(28, 96, 28, 0.6);
+  --eco-bg:      rgba(28, 96, 28, 0.08);
   --brown-mid:   #5A4530;
   --brown-deep:  #1A0F0A;
   --brown-light: #7A6045;
@@ -708,6 +709,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--eco);
+  background: var(--eco-bg);
   border: 1px solid var(--eco-border);
   border-radius: 2px;
   padding: 0.2em 0.55em 0.2em 0.45em;
@@ -1540,6 +1542,7 @@ html[data-theme="dark"] {
   --accent-rgb:  201, 169, 110;
   --eco:         #80B880;
   --eco-border:  rgba(128, 184, 128, 0.38);
+  --eco-bg:      transparent;
 }
 
 html[data-theme="dark"] body { background-color: var(--cream); color: var(--brown-dark); }
