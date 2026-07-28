@@ -644,10 +644,10 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 }
 
 /* ============================================================
-   AUDIO SECTION (Homepage) — dunkle Hör-Karte, in beiden Themes identisch
+   AUDIO SECTION (Homepage)
+   Light: Alt-Creme + Bronze-Akzente (passend zu Buch-/Zitat-Sektion).
+   Dark: cream-alt-Karte + Gold-Typo (Abnahme Martin 2026-07-28).
    ============================================================ */
-/* Light: heller Alt-Creme-Ton passend zu Buch- und Zitat-Sektion, Bronze-Akzente.
-   Dark: dunkle Karte mit Gold-Typo (Abnahme Martin 2026-07-28). */
 .audio-card {
   max-width: 720px;
   margin: 0 auto;
