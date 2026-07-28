@@ -687,6 +687,13 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   width: 100%;
 }
 
+/* Dark Mode: Seitenhintergrund ist fast dieselbe Farbe wie die Karte —
+   hellerer Alt-Ton + Gold-Hairline geben ihr wieder eine Kontur */
+html[data-theme="dark"] .audio-card {
+  background: var(--cream-alt);
+  border: 1px solid rgba(201, 169, 110, 0.25);
+}
+
 @media (max-width: 600px) {
   .audio-card { padding: 2.5rem 1.5rem 2.25rem; }
 }
