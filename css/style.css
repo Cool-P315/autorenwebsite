@@ -644,6 +644,54 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 }
 
 /* ============================================================
+   AUDIO SECTION (Homepage) — dunkle Hör-Karte, in beiden Themes identisch
+   ============================================================ */
+.audio-card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3.25rem 2.75rem 3rem;
+  background: var(--brown-deep);
+  text-align: center;
+  color-scheme: dark;
+}
+
+.audio-card__label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.1rem;
+}
+
+.audio-card__title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.3;
+  color: var(--gold-light);
+  margin-bottom: 1.4rem;
+}
+
+.audio-card__desc {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(237, 224, 207, 0.82);
+  max-width: 56ch;
+  margin: 0 auto 2.2rem;
+}
+
+.audio-card audio {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .audio-card { padding: 2.5rem 1.5rem 2.25rem; }
+}
+
+/* ============================================================
    BOOK ENTRIES (Bücher-Seite)
    ============================================================ */
 .book-entry {

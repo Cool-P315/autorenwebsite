@@ -115,6 +115,14 @@ document.querySelectorAll('.book-entry__review-link').forEach(link => {
   });
 });
 
+// KI-Audio auf der Startseite: erstes Abspielen zählen (einmal pro Seitenaufruf)
+const audioGespraech = document.getElementById('audio-algorithmus');
+if (audioGespraech) {
+  audioGespraech.addEventListener('play', () => {
+    gcEvent('audio/warum-das-leben-kein-algorithmus-ist', 'Audio: Warum das Leben kein Algorithmus ist');
+  }, { once: true });
+}
+
 // Amazon-Kaufbuttons in den Leseprobe-Modals. Format-Zusatz "Leseprobe-Modal":
 // zählt in den Amazon-Kauf-KPIs mit, bleibt aber von den Format-Buttons unterscheidbar.
 document.querySelectorAll('.modal-backdrop').forEach(modal => {
