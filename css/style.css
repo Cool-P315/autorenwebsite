@@ -1427,9 +1427,24 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
   opacity: 1;
 }
 
+/* Titel-Ebene: Buchtitel bleibt während der Video-Phase stehen („lebendes Cover") */
+.book-cover-title {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.55s var(--ease-smooth);
+}
+
+.book-cover-media.is-playing .book-cover-title { opacity: 1; }
+
 @media (prefers-reduced-motion: reduce) {
   .book-cover-video { display: none; }
   .book-cover-media.is-playing .book-cover-video { opacity: 0; }
+  .book-cover-title { display: none; }
 }
 
 .book-teaser__cover-wrap::after,
@@ -1513,6 +1528,32 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
 
 .modal-backdrop.open .modal {
   transform: scale(1) translateY(0);
+}
+
+/* Atmosphären-Video im Modal-Kopf: Cover-Motiv als Auftakt der Leseprobe */
+.modal__hero {
+  position: relative;
+  height: 190px;
+  background: var(--brown-deep);
+  overflow: hidden;
+}
+
+.modal__hero video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal__hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(26, 15, 10, 0.22), transparent 40%, transparent 62%, var(--cream));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal__hero { display: none; }
 }
 
 .modal__header {
@@ -1626,6 +1667,7 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
 @media (max-width: 640px) {
   .modal-backdrop { padding: 1rem; align-items: flex-end; }
   .modal { max-height: 90vh; }
+  .modal__hero { height: 140px; }
   .modal__header { padding: 2rem 1.75rem 1.25rem; }
   .modal__body   { padding: 1.5rem 1.75rem 2.5rem; }
   .modal__title  { padding-right: 4rem; }
@@ -1670,6 +1712,7 @@ html[data-theme="dark"] .page-hero__title { color: #EDE0CF; }
 html[data-theme="dark"] .modal,
 html[data-theme="dark"] .modal__header { background: #1e1308; }
 html[data-theme="dark"] .modal { box-shadow: 0 40px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(201,169,110,0.12); }
+html[data-theme="dark"] .modal__hero::after { background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent 40%, transparent 62%, #1e1308); }
 html[data-theme="dark"] .modal__title { color: var(--brown-dark); }
 html[data-theme="dark"] .modal__text  { color: var(--brown-dark); }
 html[data-theme="dark"] .book-teaser__cover-wrap::after,

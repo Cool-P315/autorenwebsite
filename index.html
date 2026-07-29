@@ -40,7 +40,7 @@
   </script>
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=20260729e">
+  <link rel="stylesheet" href="css/style.css?v=20260729f">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -109,6 +109,7 @@
                 loading="lazy">
             </picture>
               <video class="book-cover-video" muted playsinline loop preload="none" poster="assets/images/herbstblatt-cover.jpg" aria-hidden="true" tabindex="-1"></video>
+              <img class="book-cover-title" src="assets/images/herbstblatt-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
             </div>
           </div>
           <h2 class="book-teaser__title">Ein Herbstblatt im Wind</h2>
@@ -130,6 +131,7 @@
                 loading="lazy">
             </picture>
               <video class="book-cover-video" muted playsinline loop preload="none" poster="assets/images/wind-cover.jpg" aria-hidden="true" tabindex="-1"></video>
+              <img class="book-cover-title" src="assets/images/wind-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
             </div>
           </div>
           <h2 class="book-teaser__title">Der Wind erinnert sich</h2>
@@ -190,6 +192,9 @@
 
   <div class="modal-backdrop" id="modal-herbstblatt" role="dialog" aria-modal="true" aria-labelledby="modal-herbstblatt-title">
     <div class="modal">
+      <div class="modal__hero" aria-hidden="true" data-hero-video="assets/video/herbstblatt-cover-web.mp4">
+        <video muted playsinline loop preload="none" tabindex="-1"></video>
+      </div>
       <div class="modal__header">
         <span class="modal__label">Leseprobe</span>
         <h2 class="modal__title" id="modal-herbstblatt-title">Ein Herbstblatt im Wind</h2>
@@ -214,6 +219,9 @@
 
   <div class="modal-backdrop" id="modal-wind" role="dialog" aria-modal="true" aria-labelledby="modal-wind-title">
     <div class="modal">
+      <div class="modal__hero" aria-hidden="true" data-hero-video="assets/video/wind-cover-web.mp4">
+        <video muted playsinline loop preload="none" tabindex="-1"></video>
+      </div>
       <div class="modal__header">
         <span class="modal__label">Leseprobe</span>
         <h2 class="modal__title" id="modal-wind-title">Der Wind erinnert sich</h2>
@@ -242,7 +250,7 @@
     </div>
   </div>
 
-  <script src="js/main.js?v=20260729e"></script>
+  <script src="js/main.js?v=20260729f"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

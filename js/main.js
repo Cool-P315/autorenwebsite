@@ -168,12 +168,35 @@ const allModals = document.querySelectorAll('.modal-backdrop');
 const MODAL_FOCUSABLE = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 let lastFocusedBeforeModal = null;
 
+// Atmosphären-Video im Modal-Kopf (reduced-motion: Hero ist per CSS ausgeblendet)
+function startModalHero(modal) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const hero = modal.querySelector('.modal__hero');
+  if (!hero) return;
+  const video = hero.querySelector('video');
+  if (!video) return;
+  if (!video.getAttribute('src')) {
+    video.src = hero.dataset.heroVideo;
+    video.load();
+  }
+  const playAttempt = video.play();
+  if (playAttempt && typeof playAttempt.catch === 'function') {
+    playAttempt.catch(() => { /* Autoplay blockiert → Standbild */ });
+  }
+}
+
+function stopModalHero(modal) {
+  const video = modal.querySelector('.modal__hero video');
+  if (video) video.pause();
+}
+
 function openModal(id) {
   const modal = document.getElementById('modal-' + id);
   if (!modal) return;
   lastFocusedBeforeModal = document.activeElement;
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
+  startModalHero(modal);
   // Fokus auf das erste fokussierbare Element im Dialog
   const focusables = modal.querySelectorAll(MODAL_FOCUSABLE);
   (focusables[0] || modal).focus();
@@ -182,6 +205,7 @@ function openModal(id) {
 function closeModal(modal) {
   modal.classList.remove('open');
   document.body.style.overflow = '';
+  stopModalHero(modal);
   // Fokus zurück auf das auslösende Element
   if (lastFocusedBeforeModal) {
     lastFocusedBeforeModal.focus();
