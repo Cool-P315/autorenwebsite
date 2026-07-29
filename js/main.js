@@ -384,13 +384,14 @@ document.querySelectorAll('.review-slider').forEach(slider => {
 });
 
 // ============================================================
-// COVER-VIDEOS: 5s Titel-Cover / 5s Video abwechselnd
+// COVER-VIDEOS: 5s Titel-Cover / 10s Video (volle Clip-Laenge)
 // Viewport-Start; reduced-motion = nur Standbild; Tilt bleibt
 // ============================================================
 (function initCoverVideos() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const PHASE_MS = 5000;
+  const COVER_MS = 5000;
+  const VIDEO_MS = 10000;
   const wraps = document.querySelectorAll('[data-cover-video]');
   if (!wraps.length) return;
 
@@ -429,16 +430,23 @@ document.querySelectorAll('.review-slider').forEach(slider => {
     let showingVideo = false;
     showCover(media, video);
 
-    wrap._coverCycleId = setInterval(() => {
+    function tick() {
       showingVideo = !showingVideo;
-      if (showingVideo) showVideo(media, video);
-      else showCover(media, video);
-    }, PHASE_MS);
+      if (showingVideo) {
+        showVideo(media, video);
+        wrap._coverCycleId = setTimeout(tick, VIDEO_MS);
+      } else {
+        showCover(media, video);
+        wrap._coverCycleId = setTimeout(tick, COVER_MS);
+      }
+    }
+
+    wrap._coverCycleId = setTimeout(tick, COVER_MS);
   }
 
   function stopCycle(wrap) {
     if (wrap._coverCycleId) {
-      clearInterval(wrap._coverCycleId);
+      clearTimeout(wrap._coverCycleId);
       wrap._coverCycleId = null;
     }
     const video = wrap.querySelector('video.book-cover-video');
