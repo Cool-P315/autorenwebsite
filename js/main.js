@@ -384,39 +384,73 @@ document.querySelectorAll('.review-slider').forEach(slider => {
 });
 
 // ============================================================
-// COVER-VIDEOS (Viewport-Loop; reduced-motion = nur Standbild)
-// Variante A: Video ersetzt Cover im Slot, Hover-Tilt bleibt
+// COVER-VIDEOS: 5s Titel-Cover / 5s Video abwechselnd
+// Viewport-Start; reduced-motion = nur Standbild; Tilt bleibt
 // ============================================================
 (function initCoverVideos() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  const PHASE_MS = 5000;
   const wraps = document.querySelectorAll('[data-cover-video]');
   if (!wraps.length) return;
 
+  function ensureSrc(wrap, video) {
+    const src = wrap.getAttribute('data-cover-video');
+    if (src && !video.getAttribute('src')) {
+      video.src = src;
+      video.load();
+    }
+  }
+
+  function showCover(media, video) {
+    media.classList.remove('is-playing');
+    video.pause();
+  }
+
+  function showVideo(media, video) {
+    try { video.currentTime = 0; } catch (_) { /* ignore */ }
+    const playAttempt = video.play();
+    if (playAttempt && typeof playAttempt.then === 'function') {
+      playAttempt
+        .then(() => { media.classList.add('is-playing'); })
+        .catch(() => { /* Autoplay blockiert → Cover bleibt */ });
+    } else {
+      media.classList.add('is-playing');
+    }
+  }
+
+  function startCycle(wrap) {
+    if (wrap._coverCycleId) return;
+    const video = wrap.querySelector('video.book-cover-video');
+    const media = wrap.querySelector('.book-cover-media');
+    if (!video || !media) return;
+
+    ensureSrc(wrap, video);
+    let showingVideo = false;
+    showCover(media, video);
+
+    wrap._coverCycleId = setInterval(() => {
+      showingVideo = !showingVideo;
+      if (showingVideo) showVideo(media, video);
+      else showCover(media, video);
+    }, PHASE_MS);
+  }
+
+  function stopCycle(wrap) {
+    if (wrap._coverCycleId) {
+      clearInterval(wrap._coverCycleId);
+      wrap._coverCycleId = null;
+    }
+    const video = wrap.querySelector('video.book-cover-video');
+    const media = wrap.querySelector('.book-cover-media');
+    if (video) video.pause();
+    if (media) media.classList.remove('is-playing');
+  }
+
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      const wrap = entry.target;
-      const video = wrap.querySelector('video.book-cover-video');
-      const media = wrap.querySelector('.book-cover-media');
-      if (!video) return;
-
-      if (entry.isIntersecting) {
-        const src = wrap.getAttribute('data-cover-video');
-        if (src && !video.getAttribute('src')) {
-          video.src = src;
-          video.load();
-        }
-        const playAttempt = video.play();
-        if (playAttempt && typeof playAttempt.then === 'function') {
-          playAttempt
-            .then(() => { if (media) media.classList.add('is-playing'); })
-            .catch(() => { /* Autoplay blockiert → Poster bleibt */ });
-        } else if (media) {
-          media.classList.add('is-playing');
-        }
-      } else {
-        video.pause();
-      }
+      if (entry.isIntersecting) startCycle(entry.target);
+      else stopCycle(entry.target);
     });
   }, { rootMargin: '80px 0px', threshold: 0.2 });
 
