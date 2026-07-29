@@ -408,14 +408,14 @@ document.querySelectorAll('.review-slider').forEach(slider => {
 });
 
 // ============================================================
-// COVER-VIDEOS: 5s Titel-Cover / 10s Video (volle Clip-Laenge)
+// COVER-VIDEOS: 3s Titel-Cover, dann Video endlos (Loop);
+// Titel bleibt via .book-cover-title-Overlay durchgehend stehen.
 // Viewport-Start; reduced-motion = nur Standbild; Tilt bleibt
 // ============================================================
 (function initCoverVideos() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const COVER_MS = 5000;
-  const VIDEO_MS = 10000;
+  const COVER_MS = 3000;
   const wraps = document.querySelectorAll('[data-cover-video]');
   if (!wraps.length) return;
 
@@ -451,21 +451,10 @@ document.querySelectorAll('.review-slider').forEach(slider => {
     if (!video || !media) return;
 
     ensureSrc(wrap, video);
-    let showingVideo = false;
     showCover(media, video);
-
-    function tick() {
-      showingVideo = !showingVideo;
-      if (showingVideo) {
-        showVideo(media, video);
-        wrap._coverCycleId = setTimeout(tick, VIDEO_MS);
-      } else {
-        showCover(media, video);
-        wrap._coverCycleId = setTimeout(tick, COVER_MS);
-      }
-    }
-
-    wrap._coverCycleId = setTimeout(tick, COVER_MS);
+    wrap._coverCycleId = setTimeout(() => {
+      showVideo(media, video);
+    }, COVER_MS);
   }
 
   function stopCycle(wrap) {
