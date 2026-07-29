@@ -100,7 +100,7 @@
   </script>
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=20260728d">
+  <link rel="stylesheet" href="css/style.css?v=20260729c">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -133,8 +133,9 @@
   <main id="main">
 
     <article id="herbstblatt" class="book-entry fade-in">
-      <div class="book-entry__cover-col" data-modal="herbstblatt" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Ein Herbstblatt im Wind">
-        <picture>
+      <div class="book-entry__cover-col" data-modal="herbstblatt" data-cover-video="assets/video/herbstblatt-cover-web.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Ein Herbstblatt im Wind">
+        <div class="book-cover-media">
+          <picture>
           <source srcset="assets/images/herbstblatt-cover.avif" type="image/avif">
           <source srcset="assets/images/herbstblatt-cover.webp" type="image/webp">
           <img
@@ -146,6 +147,8 @@
             loading="eager"
             fetchpriority="high">
         </picture>
+          <video class="book-cover-video" muted playsinline loop preload="none" poster="assets/images/herbstblatt-cover.jpg" aria-hidden="true" tabindex="-1"></video>
+        </div>
       </div>
       <div class="book-entry__text-col">
         <p class="book-entry__format">Taschenbuch &middot; eBook</p>
@@ -210,8 +213,9 @@
     </article>
 
     <article id="wind" class="book-entry book-entry--reverse book-entry--alt fade-in">
-      <div class="book-entry__cover-col" data-modal="wind" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Der Wind erinnert sich">
-        <picture>
+      <div class="book-entry__cover-col" data-modal="wind" data-cover-video="assets/video/wind-cover-web.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Der Wind erinnert sich">
+        <div class="book-cover-media">
+          <picture>
           <source srcset="assets/images/wind-cover.avif" type="image/avif">
           <source srcset="assets/images/wind-cover.webp" type="image/webp">
           <img
@@ -222,6 +226,8 @@
             height="416"
             loading="lazy">
         </picture>
+          <video class="book-cover-video" muted playsinline loop preload="none" poster="assets/images/wind-cover.jpg" aria-hidden="true" tabindex="-1"></video>
+        </div>
       </div>
       <div class="book-entry__text-col">
         <p class="book-entry__format">Hardcover &middot; eBook</p>
@@ -344,7 +350,7 @@
     </div>
   </div>
 
-  <script src="js/main.js?v=20260728d"></script>
+  <script src="js/main.js?v=20260729c"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

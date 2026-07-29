@@ -581,7 +581,8 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .book-teaser__cover-wrap { margin-bottom: 2rem; }
 
-.book-teaser__cover {
+/* Cover-Stapel: Poster + optionales Loop-Video (Tilt greift auf .book-cover-media) */
+.book-teaser__cover-wrap .book-cover-media {
   width: 190px;
   border-radius: 2px;
   box-shadow:
@@ -593,12 +594,19 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   will-change: transform;
 }
 
-.book-teaser__cover:hover {
+.book-teaser__cover-wrap:hover .book-cover-media {
   transform: translateY(-9px) rotate(-1deg);
   box-shadow:
     -8px 14px 25px rgba(26,15,10,0.32),
     -15px 20px 45px rgba(26,15,10,0.18),
     7px 7px 0 rgba(26,15,10,0.07);
+}
+
+.book-teaser__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
 }
 
 .book-teaser__title {
@@ -737,7 +745,7 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
 .book-entry--reverse .book-entry__cover-col { order: 2; }
 .book-entry--reverse .book-entry__text-col  { order: 1; }
 
-.book-entry__cover {
+.book-entry__cover-col .book-cover-media {
   width: 100%;
   border-radius: 2px;
   box-shadow:
@@ -747,7 +755,14 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
   will-change: transform;
 }
 
-.book-entry__cover:hover { transform: translateY(-7px); }
+.book-entry__cover-col:hover .book-cover-media { transform: translateY(-7px); }
+
+.book-entry__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
 
 /* Format label in gold — clearly visible in both modes */
 .book-entry__format {
@@ -1389,12 +1404,41 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
   position: relative;
 }
 
+/* Poster + Video-Stack */
+.book-cover-media {
+  position: relative;
+  line-height: 0;
+  overflow: hidden;
+}
+
+.book-cover-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.55s var(--ease-smooth);
+  pointer-events: none;
+}
+
+.book-cover-media.is-playing .book-cover-video {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-cover-video { display: none; }
+  .book-cover-media.is-playing .book-cover-video { opacity: 0; }
+}
+
 .book-teaser__cover-wrap::after,
 .book-entry__cover-col::after {
   content: 'Leseprobe';
   position: absolute;
   bottom: 0.75rem;
   left: 50%;
+  z-index: 2;
   transform: translateX(-50%) translateY(6px);
   font-family: var(--font-sans);
   font-size: 0.58rem;
@@ -1774,10 +1818,9 @@ html[data-theme="dark"] .share-copied {
 .hero__leaf--flip svg { transform: scaleX(-1); } /* gespiegelte Blattvariante — per Rotation nicht erreichbar */
 
 /* ============================================================
-   3D COVER TILT
+   3D COVER TILT (Ziel: .book-cover-media, Fallback: img)
    ============================================================ */
-.book-teaser__cover,
-.book-entry__cover {
+.book-cover-media {
   will-change: transform;
 }
 

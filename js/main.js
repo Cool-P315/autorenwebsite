@@ -384,25 +384,66 @@ document.querySelectorAll('.review-slider').forEach(slider => {
 });
 
 // ============================================================
+// COVER-VIDEOS (Viewport-Loop; reduced-motion = nur Standbild)
+// Variante A: Video ersetzt Cover im Slot, Hover-Tilt bleibt
+// ============================================================
+(function initCoverVideos() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const wraps = document.querySelectorAll('[data-cover-video]');
+  if (!wraps.length) return;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const wrap = entry.target;
+      const video = wrap.querySelector('video.book-cover-video');
+      const media = wrap.querySelector('.book-cover-media');
+      if (!video) return;
+
+      if (entry.isIntersecting) {
+        const src = wrap.getAttribute('data-cover-video');
+        if (src && !video.getAttribute('src')) {
+          video.src = src;
+          video.load();
+        }
+        const playAttempt = video.play();
+        if (playAttempt && typeof playAttempt.then === 'function') {
+          playAttempt
+            .then(() => { if (media) media.classList.add('is-playing'); })
+            .catch(() => { /* Autoplay blockiert → Poster bleibt */ });
+        } else if (media) {
+          media.classList.add('is-playing');
+        }
+      } else {
+        video.pause();
+      }
+    });
+  }, { rootMargin: '80px 0px', threshold: 0.2 });
+
+  wraps.forEach(wrap => io.observe(wrap));
+})();
+
+// ============================================================
 // 3D BOOK COVER TILT (nur Desktop / Pointer-Geräte)
+// Ziel: .book-cover-media (Video+Poster gemeinsam), sonst img
 // ============================================================
 if (window.matchMedia('(hover: hover)').matches &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.querySelectorAll('.book-teaser__cover-wrap, .book-entry__cover-col').forEach(wrap => {
-    const img = wrap.querySelector('img');
-    if (!img) return;
+    const target = wrap.querySelector('.book-cover-media') || wrap.querySelector('img');
+    if (!target) return;
 
     wrap.addEventListener('mousemove', e => {
       const r = wrap.getBoundingClientRect();
       const x = ((e.clientX - r.left)  / r.width  - 0.5) * 2;
       const y = ((e.clientY - r.top)   / r.height - 0.5) * 2;
-      img.style.transform  = `perspective(700px) rotateY(${x * 9}deg) rotateX(${-y * 6}deg) translateY(-6px) scale(1.02)`;
-      img.style.transition = 'transform 0.1s ease-out';
+      target.style.transform  = `perspective(700px) rotateY(${x * 9}deg) rotateX(${-y * 6}deg) translateY(-6px) scale(1.02)`;
+      target.style.transition = 'transform 0.1s ease-out';
     });
 
     wrap.addEventListener('mouseleave', () => {
-      img.style.transition = 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)';
-      img.style.transform  = '';
+      target.style.transition = 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)';
+      target.style.transform  = '';
     });
   });
 }
