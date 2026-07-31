@@ -1,0 +1,14 @@
+# Schreibartefakte von OneDrive/onedriver — landen sonst per "git add -A"
+# im Repo und live auf martinpintar.at (Vorfall 2026-07-31: style.css.tmp.*)
+*.tmp
+*.tmp.*
+*~
+.~lock.*#
+
+# Betriebssystem-Metadaten (macOS, Windows)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# OneDrive-Sync-Konflikte
+*-conflict-*
