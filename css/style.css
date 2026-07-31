@@ -1545,6 +1545,12 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
   object-fit: cover;
 }
 
+/* „Der Wind erinnert sich": Ausschnitt ein Sechstel über die Mitte heben,
+   damit Kopf und Schultern der Figur im Bild sind (Default 50% zeigt nur den Rumpf) */
+#modal-wind .modal__hero video {
+  object-position: 50% 30%;
+}
+
 .modal__hero::after {
   content: '';
   position: absolute;
