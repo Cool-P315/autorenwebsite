@@ -1524,6 +1524,7 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
   transition: transform 0.4s var(--ease-smooth);
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--accent-rgb), 0.3) transparent;
+  overscroll-behavior: contain; /* Scrollen bleibt im Dialog (Chaining, v. a. iOS) */
 }
 
 .modal-backdrop.open .modal {
@@ -1916,4 +1917,106 @@ html[data-theme="dark"] .share-copied {
   }
   .hero__leaf { display: none; }
   @view-transition { navigation: none; }
+}
+
+/* ============================================================
+   DRUCK — Papier statt Bildschirm: Bedienelemente und Atmosphaere
+   raus, Farbwelt hell, offene Leseprobe vollstaendig ausgeben
+   ============================================================ */
+@media print {
+  /* Die Seite faerbt fast alles ueber Custom Properties — Umdefinieren
+     genuegt, damit Light- und Dark-Mode identisch auf Papier landen. */
+  html,
+  html[data-theme="light"],
+  html[data-theme="dark"] {
+    --cream:       #fff;
+    --cream-alt:   #fff;
+    --brown-deep:  #fff;
+    --brown-dark:  #111;
+    --brown-mid:   #444;
+    --brown-light: #555;
+    --gold:        #444;
+    --gold-light:  #444;
+    --accent:      #444;
+    --accent-rgb:  68, 68, 68;
+    --eco:         #333;
+    --eco-border:  #999;
+    --eco-bg:      transparent;
+  }
+
+  @page { margin: 2cm; }
+
+  html { background: #fff !important; }
+  body { background: #fff !important; color: #111 !important; font-size: 11pt; }
+  body::after { display: none; } /* Papier-Grain */
+
+  /* Die Scroll-Animationen laufen beim Drucken nie an — ohne diese Regel
+     bleibt alles unterhalb des ersten Bildschirms unsichtbar auf dem Blatt. */
+  .fade-in,
+  .book-teaser,
+  .book-entry {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Was auf Papier nicht funktioniert: Navigation, Buttons, Bewegung */
+  .nav,
+  .footer,
+  .skip-link,
+  #scroll-progress,
+  .hero,
+  .hero__leaf,
+  .book-cover-video,
+  .book-cover-title,
+  .modal__hero,
+  .modal__close,
+  .book-entry__links,
+  .book-entry__share,
+  .share-fallback,
+  .book-entry__review,
+  .review-slider__nav,
+  .amazon-cta,
+  .audio-card audio { display: none !important; }
+
+  .page-hero { background: #fff !important; padding: 0 0 1.5rem; text-align: left; }
+  .page-hero::before { display: none; }
+  .page-hero__title { color: #111 !important; }
+  .page-hero__sub   { color: #555 !important; }
+
+  /* Beide Leserstimmen untereinander statt uebereinander gestapelt */
+  .review-slider__track { display: block; }
+  .review-slider__slide { opacity: 1 !important; grid-area: auto; margin-bottom: 1rem; }
+
+  /* Geoeffnete Leseprobe ganz ausgeben — sonst druckt nur der sichtbare
+     Ausschnitt des fixierten Dialogs. */
+  .modal-backdrop.open {
+    position: static;
+    display: block;
+    padding: 0;
+    background: none !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .modal-backdrop.open .modal {
+    max-width: none;
+    max-height: none;
+    overflow: visible;
+    transform: none;
+    box-shadow: none;
+    border-top: none;
+  }
+
+  /* Cover als Beleg, nicht als Schaufenster — sonst schiebt es den Text
+     auf die naechste Seite. */
+  .book-entry__cover-col,
+  .book-teaser__cover-wrap { max-width: 48mm; }
+
+  /* Saubere Umbrueche. Ein ganzer Bucheintrag ist laenger als eine Seite —
+     geschuetzt werden deshalb die kleinen Einheiten, nicht der Block. */
+  .review-snippet      { break-inside: avoid; }
+  .book-entry__prices  { break-inside: avoid; }
+  .price-item          { break-inside: avoid; }
+  h1, h2, h3           { break-after: avoid; }
+  p                    { orphans: 3; widows: 3; }
+  a               { color: #111 !important; text-decoration: none; }
 }

@@ -30,4 +30,30 @@ Disallow: /
 User-agent: Bytespider
 Disallow: /
 
+User-agent: xAI-Bot
+Disallow: /
+
+User-agent: GrokBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Timpibot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+# Bewusst NICHT gesperrt (Stand 2026-08-01):
+# - PerplexityBot, OAI-SearchBot, Claude-SearchBot, DuckAssistBot:
+#   Retrieval- statt Trainings-Crawler. Sie bauen die Indizes, aus denen
+#   KI-Antworten zitieren — eine Sperre kostet Auffindbarkeit.
+# - Amazonbot: Amazon ist der Verkaufskanal beider Buecher.
+# Hinweis: xAI/Grok rotiert laut Crawler-Beobachtungen ueber Wohn-IPs und
+# gibt sich als Browser aus; der Eintrag oben wirkt daher nur begrenzt.
+
 Sitemap: https://martinpintar.at/sitemap.xml

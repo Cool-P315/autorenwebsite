@@ -197,9 +197,15 @@ function openModal(id) {
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
   startModalHero(modal);
-  // Fokus auf das erste fokussierbare Element im Dialog
-  const focusables = modal.querySelectorAll(MODAL_FOCUSABLE);
-  (focusables[0] || modal).focus();
+  // Fokus auf den Dialog selbst, nicht auf "Schliessen" — Screenreader
+  // lesen dadurch zuerst Label und Buchtitel statt der Abbruch-Aktion.
+  const dialog = modal.querySelector('.modal');
+  if (dialog) {
+    dialog.setAttribute('tabindex', '-1');
+    dialog.focus();
+  } else {
+    (modal.querySelectorAll(MODAL_FOCUSABLE)[0] || modal).focus();
+  }
 }
 
 function closeModal(modal) {
@@ -226,7 +232,10 @@ allModals.forEach(modal => {
     if (!focusables.length) return;
     const first = focusables[0];
     const last  = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
+    if (!focusables.includes(document.activeElement)) {
+      // Fokus liegt auf dem Dialog-Container selbst (nach dem Oeffnen)
+      e.preventDefault(); (e.shiftKey ? last : first).focus();
+    } else if (e.shiftKey && document.activeElement === first) {
       e.preventDefault(); last.focus();
     } else if (!e.shiftKey && document.activeElement === last) {
       e.preventDefault(); first.focus();
