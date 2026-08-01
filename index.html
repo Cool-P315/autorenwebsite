@@ -143,6 +143,16 @@
     </div>
   </section>
 
+  <!-- VORÜBERGEHEND AUSGEBLENDET (2026-08-01, Wunsch Martin): Das Audio wird neu
+       generiert und kommt danach wieder herein. Zum Reaktivieren die beiden
+       template-Zeilen entfernen und ggf. den Dateinamen der neuen MP3 in der
+       source-Zeile anpassen. Inhalt eines template-Elements wird nicht
+       gerendert und laedt nichts nach.
+       Bewusst nicht mit angefasst, weil das Audio zurueckkehrt: Datenschutz
+       (Abschnitt Audio/Video), CSS (.audio-card), Tracking (main.js prueft auf
+       das Element und bleibt ohne es still), robots/sitemap.
+       Die MP3 bleibt unter assets/audio/ liegen. -->
+  <template id="audio-section-pausiert">
   <section class="section" aria-labelledby="audio-title">
     <div class="container">
       <p class="section__label fade-in section__label--center">Zum Hören</p>
@@ -157,6 +167,7 @@
       </div>
     </div>
   </section>
+  </template>
 
   <section class="section section--alt">
     <div class="container">
