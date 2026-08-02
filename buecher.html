@@ -49,7 +49,7 @@
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5",
-        "reviewCount": "2"
+        "reviewCount": "3"
       },
       "review": [
         {
@@ -63,6 +63,13 @@
           "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
           "author": { "@type": "Person", "name": "Herbert Petschnig" },
           "reviewBody": "Ein sehr einfühlsam geschriebenes Buch über die zyklen des Lebens."
+        },
+        {
+          "@type": "Review",
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "author": { "@type": "Person", "name": "Amazon Kunde" },
+          "datePublished": "2026-08-02",
+          "reviewBody": "Einen Pintar zu lesen, ist etwas ganz Besonderes. Das Erstlingswerk verfängt einen ab der ersten Sekunde."
         }
       ]
     },
@@ -190,10 +197,18 @@
                 <cite class="review-snippet__cite">— Herbert Petschnig, Amazon (Verifizierter Kauf)</cite>
               </div>
             </div>
+            <div class="review-slider__slide">
+              <div class="review-snippet">
+                <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
+                <p class="review-snippet__quote">„Einen Pintar zu lesen, ist etwas ganz Besonderes. Das Erstlingswerk verfängt einen ab der ersten Sekunde."</p>
+                <cite class="review-snippet__cite">— Amazon Kunde, Amazon</cite>
+              </div>
+            </div>
           </div>
           <div class="review-slider__nav" aria-label="Rezensionen wechseln">
-            <button class="review-slider__dot active" aria-label="Rezension 1 von 2" aria-pressed="true"></button>
-            <button class="review-slider__dot" aria-label="Rezension 2 von 2" aria-pressed="false"></button>
+            <button class="review-slider__dot active" aria-label="Rezension 1 von 3" aria-pressed="true"></button>
+            <button class="review-slider__dot" aria-label="Rezension 2 von 3" aria-pressed="false"></button>
+            <button class="review-slider__dot" aria-label="Rezension 3 von 3" aria-pressed="false"></button>
           </div>
         </div>
         <div class="book-entry__review">
