@@ -116,10 +116,10 @@ document.querySelectorAll('.book-entry__review-link').forEach(link => {
 });
 
 // KI-Audio auf der Startseite: erstes Abspielen zählen (einmal pro Seitenaufruf)
-const audioGespraech = document.getElementById('audio-algorithmus');
+const audioGespraech = document.getElementById('audio-kreislauf');
 if (audioGespraech) {
   audioGespraech.addEventListener('play', () => {
-    gcEvent('audio/warum-das-leben-kein-algorithmus-ist', 'Audio: Warum das Leben kein Algorithmus ist');
+    gcEvent('audio/der-ewige-kreislauf-von-blatt-und-wind', 'Audio: Der ewige Kreislauf von Blatt und Wind');
   }, { once: true });
 }
 

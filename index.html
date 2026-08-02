@@ -40,7 +40,7 @@
   </script>
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=20260801">
+  <link rel="stylesheet" href="css/style.css?v=20260802">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -143,31 +143,24 @@
     </div>
   </section>
 
-  <!-- VORÜBERGEHEND AUSGEBLENDET (2026-08-01, Wunsch Martin): Das Audio wird neu
-       generiert und kommt danach wieder herein. Zum Reaktivieren die beiden
-       template-Zeilen entfernen und ggf. den Dateinamen der neuen MP3 in der
-       source-Zeile anpassen. Inhalt eines template-Elements wird nicht
-       gerendert und laedt nichts nach.
-       Bewusst nicht mit angefasst, weil das Audio zurueckkehrt: Datenschutz
-       (Abschnitt Audio/Video), CSS (.audio-card), Tracking (main.js prueft auf
-       das Element und bleibt ohne es still), robots/sitemap.
-       Die MP3 bleibt unter assets/audio/ liegen. -->
-  <template id="audio-section-pausiert">
+  <!-- Audio-Sektion, reaktiviert 2026-08-02 mit der neuen NotebookLM-Vertonung
+       "Der ewige Kreislauf von Blatt und Wind" (18:12, MP3 96 kbps, 13 MB).
+       Zusammenhaengende Teile: Datenschutz (Abschnitt Audio/Video),
+       CSS (.audio-card), Tracking (main.js, ID audio-kreislauf). -->
   <section class="section" aria-labelledby="audio-title">
     <div class="container">
       <p class="section__label fade-in section__label--center">Zum Hören</p>
       <div class="audio-card fade-in">
-        <p class="audio-card__label">Audio-Gespräch · ca. 21 Minuten</p>
-        <h2 class="audio-card__title" id="audio-title">Warum das Leben kein Algorithmus ist</h2>
-        <p class="audio-card__desc">Ein Gespräch über meine Bücher — geführt von zwei KI-Stimmen, erstellt mit Google NotebookLM aus den vollständigen Buchtexten. Mir gefiel der Gedanke: Ausgerechnet eine künstliche Intelligenz erklärt in 21 Minuten, warum das Leben kein Algorithmus ist. Das Ergebnis ist ein überraschend genauer Blick von außen auf das, was ich zu sagen versuche.</p>
-        <audio controls preload="none" id="audio-algorithmus" aria-label="Audio-Gespräch: Warum das Leben kein Algorithmus ist">
-          <source src="assets/audio/warum-das-leben-kein-algorithmus-ist.mp3" type="audio/mpeg">
+        <p class="audio-card__label">Audio-Gespräch · ca. 18 Minuten</p>
+        <h2 class="audio-card__title" id="audio-title">Der ewige Kreislauf von Blatt und Wind</h2>
+        <p class="audio-card__desc">Ein Gespräch über meine beiden Bücher — geführt von zwei KI-Stimmen, erstellt mit Google NotebookLM aus den vollständigen Buchtexten. Ein Blatt, das fällt, und ein Wind, der sich erinnert: In achtzehn Minuten gehen die beiden dem nach, was zwischen den Bänden liegt. Ein überraschend genauer Blick von außen auf das, was ich zu sagen versuche.</p>
+        <audio controls preload="none" id="audio-kreislauf" aria-label="Audio-Gespräch: Der ewige Kreislauf von Blatt und Wind">
+          <source src="assets/audio/der-ewige-kreislauf-von-blatt-und-wind.mp3" type="audio/mpeg">
           Ihr Browser kann diese Audiodatei nicht abspielen.
         </audio>
       </div>
     </div>
   </section>
-  </template>
 
   <section class="section section--alt">
     <div class="container">
@@ -261,7 +254,7 @@
     </div>
   </div>
 
-  <script src="js/main.js?v=20260801"></script>
+  <script src="js/main.js?v=20260802"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
