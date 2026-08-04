@@ -123,6 +123,21 @@ if (audioGespraech) {
   }, { once: true });
 }
 
+// Autorenvideo (Über mich): erstes Abspielen zählen (einmal pro Seitenaufruf)
+const videoMartinSchreiben = document.getElementById('video-martin-schreiben');
+if (videoMartinSchreiben) {
+  videoMartinSchreiben.addEventListener('play', () => {
+    gcEvent('video/martin-schreiben', 'Video: Martin Schreibmoment');
+  }, { once: true });
+}
+
+// Startseiten-Teaser zum Autorenvideo
+document.querySelectorAll('a.video-teaser').forEach(link => {
+  link.addEventListener('click', () => {
+    gcEvent('video/teaser-klick', 'Video-Teaser: Schreibmoment');
+  });
+});
+
 // Amazon-Kaufbuttons in den Leseprobe-Modals. Format-Zusatz "Leseprobe-Modal":
 // zählt in den Amazon-Kauf-KPIs mit, bleibt aber von den Format-Buttons unterscheidbar.
 document.querySelectorAll('.modal-backdrop').forEach(modal => {
