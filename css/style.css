@@ -717,13 +717,18 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
   gap: 1.5rem 1.75rem;
   align-items: center;
   max-width: 520px;
-  margin: 2.75rem auto 0;
-  padding: 1rem 1rem 1rem 1rem;
+  margin: 2.75rem auto 2rem;
+  padding: 1rem;
   text-decoration: none;
   color: inherit;
   border: 1px solid rgba(var(--accent-rgb), 0.28);
   background: var(--cream-alt);
   transition: border-color 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth), box-shadow 0.35s var(--ease-smooth);
+}
+
+/* Abstand Teaser → Button „Über den Autor“ (Zitat-Sektion) */
+.quote-section .video-teaser + .btn {
+  margin-top: 0.5rem;
 }
 
 .video-teaser:hover {
