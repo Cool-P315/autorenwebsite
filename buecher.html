@@ -92,13 +92,28 @@
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5",
-        "reviewCount": "1"
+        "reviewCount": "3"
       },
       "review": [
         {
           "@type": "Review",
           "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "author": { "@type": "Person", "name": "Amazon Kunde" },
+          "datePublished": "2026-08-02",
+          "reviewBody": "Der Autor schreibt in einer ganz eigenen Gattung. Der Stil ist unverkennbar und auch „Der Wind erinnert sich“ fängt einen gleich von Beginn an ein. Pause vom Alltag und sich in die 24 beschriebenen Momente einfühlen."
+        },
+        {
+          "@type": "Review",
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+          "author": { "@type": "Person", "name": "Sandro Colazzo" },
+          "datePublished": "2026-08-01",
+          "reviewBody": "Dieses Buch hat mich auf eine Art erwischt, die ich nicht erwartet hatte. Der Wind als stiller Begleiter menschlicher Momente — das klingt abstrakt, fühlt sich aber beim Lesen erstaunlich nah an. Eine Sprache, die atmet. Ich hab einzelne Sätze mehrmals gelesen, einfach weil sie schön sind."
+        },
+        {
+          "@type": "Review",
+          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
           "author": { "@type": "Person", "name": "Herbert Petschnig" },
+          "datePublished": "2026-05-25",
           "reviewBody": "Ein sehr tiefsinniges Buch in lyrischer Schreibweise, das zum Nachdenken über die einzelnen Lebenszyklen anregt."
         }
       ]
@@ -265,10 +280,35 @@
           <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Hardcover bei Amazon</a>
           <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
-        <div class="review-snippet">
-          <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
-          <p class="review-snippet__quote">„Ein sehr tiefsinniges Buch in lyrischer Schreibweise, das zum Nachdenken über die einzelnen Lebenszyklen anregt."</p>
-          <cite class="review-snippet__cite">— Herbert Petschnig, Amazon (Verifizierter Kauf)</cite>
+        <div class="review-slider" aria-label="Leserstimmen">
+          <div class="review-slider__track">
+            <div class="review-slider__slide active">
+              <div class="review-snippet">
+                <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
+                <p class="review-snippet__quote">„Der Autor schreibt in einer ganz eigenen Gattung. Der Stil ist unverkennbar und auch „Der Wind erinnert sich“ fängt einen gleich von Beginn an ein. Pause vom Alltag und sich in die 24 beschriebenen Momente einfühlen."</p>
+                <cite class="review-snippet__cite">— Amazon Kunde, Amazon</cite>
+              </div>
+            </div>
+            <div class="review-slider__slide">
+              <div class="review-snippet">
+                <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
+                <p class="review-snippet__quote">„Dieses Buch hat mich auf eine Art erwischt, die ich nicht erwartet hatte. Der Wind als stiller Begleiter menschlicher Momente — das klingt abstrakt, fühlt sich aber beim Lesen erstaunlich nah an. Eine Sprache, die atmet. Ich hab einzelne Sätze mehrmals gelesen, einfach weil sie schön sind."</p>
+                <cite class="review-snippet__cite">— Sandro Colazzo, Amazon (Verifizierter Kauf)</cite>
+              </div>
+            </div>
+            <div class="review-slider__slide">
+              <div class="review-snippet">
+                <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
+                <p class="review-snippet__quote">„Ein sehr tiefsinniges Buch in lyrischer Schreibweise, das zum Nachdenken über die einzelnen Lebenszyklen anregt."</p>
+                <cite class="review-snippet__cite">— Herbert Petschnig, Amazon (Verifizierter Kauf)</cite>
+              </div>
+            </div>
+          </div>
+          <div class="review-slider__nav" aria-label="Rezensionen wechseln">
+            <button class="review-slider__dot active" aria-label="Rezension 1 von 3" aria-pressed="true"></button>
+            <button class="review-slider__dot" aria-label="Rezension 2 von 3" aria-pressed="false"></button>
+            <button class="review-slider__dot" aria-label="Rezension 3 von 3" aria-pressed="false"></button>
+          </div>
         </div>
         <div class="book-entry__review">
           <p class="book-entry__review-prompt">Schon gelesen? Ich freue mich über jede Rezension.</p>
