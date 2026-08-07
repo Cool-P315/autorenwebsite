@@ -122,7 +122,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
-  scroll-behavior: smooth;
+  /* Kein globales scroll-behavior: smooth — Touchpad/Wheel wirkt sonst zu schnell
+     und unkontrolliert (Smooth-Animation stapelt Deltas). Anker: main.js. */
+  scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #1A0F0A; /* füllt den Status-Bar-Bereich (Safe Area) auf iOS */
