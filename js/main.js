@@ -102,24 +102,9 @@ document.querySelectorAll('.fade-in, .book-teaser').forEach(el => {
   observer.observe(el);
 });
 
-// Anker-Navigation: smooth nur beim Klick (Skip-Link, #main, …).
-// Global CSS scroll-behavior: smooth macht Touchpad/Wheel zu schnell/ungezielt.
-// Fokus nach Scroll mit preventScroll — sonst springt der Skip-Link-Fokus nicht.
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', e => {
-    const href = link.getAttribute('href');
-    if (!href || href === '#') return;
-    const id = decodeURIComponent(href.slice(1));
-    const target = document.getElementById(id);
-    if (!target) return;
-    e.preventDefault();
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-    target.focus({ preventScroll: true });
-    if (history.replaceState) history.replaceState(null, '', href);
-  });
-});
+// Hinweis: Kein JS-Smooth-Scroll für Anker-Links — html { scroll-behavior: smooth }
+// + der prefers-reduced-motion-Block in style.css regeln das vollständig. Ein früherer
+// JS-Handler hat per preventDefault() den Fokus-Sprung des Skip-Links unterbunden.
 
 // --- GoatCounter Event Tracking ---
 function gcEvent(path, title) {
