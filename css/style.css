@@ -1499,8 +1499,8 @@ html[data-theme="dark"] .video-teaser__desc  { color: rgba(237, 224, 207, 0.78);
 }
 
 @keyframes nameGlow {
-  0%, 100% { text-shadow: none; }
-  50%       { text-shadow: 0 0 18px rgba(201,169,110,0.65), 0 0 40px rgba(201,169,110,0.35), 0 0 75px rgba(201,169,110,0.16); }
+  0%, 100% { text-shadow: 0 0 10px rgba(201,169,110,0.28), 0 0 28px rgba(201,169,110,0.12); }
+  50%       { text-shadow: 0 0 14px rgba(201,169,110,0.95), 0 0 32px rgba(201,169,110,0.78), 0 0 60px rgba(201,169,110,0.52), 0 0 110px rgba(201,169,110,0.28); }
 }
 
 @keyframes leaf-fall {
