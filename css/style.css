@@ -965,6 +965,31 @@ html[data-theme="dark"] .video-teaser__desc  { color: rgba(237, 224, 207, 0.78);
   font-style: italic;
 }
 
+.price-item__was {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--brown-light);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  font-style: normal;
+  line-height: 1.2;
+  margin-bottom: 0.15rem;
+}
+
+.price-item__note {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--eco);
+  margin-top: 0.4rem;
+  line-height: 1.4;
+}
+
+.price-item--promo .price-item__amount {
+  color: var(--eco);
+}
+
 .book-entry__links {
   display: flex;
   gap: 1rem;
