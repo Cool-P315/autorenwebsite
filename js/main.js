@@ -2,6 +2,18 @@
    main.js — Martin Pintar Autorwebsite
    ============================================================ */
 
+
+// --- Scroll-Lock (Nav + Modal teilen body.overflow; Zähler verhindert Konflikte) ---
+let bodyScrollLocks = 0;
+function lockBodyScroll() {
+  bodyScrollLocks += 1;
+  document.body.style.overflow = 'hidden';
+}
+function unlockBodyScroll() {
+  bodyScrollLocks = Math.max(0, bodyScrollLocks - 1);
+  if (bodyScrollLocks === 0) document.body.style.overflow = '';
+}
+
 // --- Navigation: transparent → dark on scroll ---
 const nav = document.querySelector('.nav');
 
@@ -22,14 +34,16 @@ const navLinks  = document.querySelector('.nav__links');
 if (navToggle && navLinks) {
   navToggle.addEventListener('click', () => {
     const isOpen = navLinks.classList.toggle('open');
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (isOpen) lockBodyScroll(); else unlockBodyScroll();
     navToggle.setAttribute('aria-expanded', isOpen);
   });
 
   navLinks.querySelectorAll('.nav__link').forEach(link => {
     link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      document.body.style.overflow = '';
+      if (navLinks.classList.contains('open')) {
+        navLinks.classList.remove('open');
+        unlockBodyScroll();
+      }
       navToggle.setAttribute('aria-expanded', 'false');
     });
   });
@@ -37,7 +51,7 @@ if (navToggle && navLinks) {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && navLinks.classList.contains('open')) {
       navLinks.classList.remove('open');
-      document.body.style.overflow = '';
+      unlockBodyScroll();
       navToggle.setAttribute('aria-expanded', 'false');
       navToggle.focus();
     }
@@ -210,7 +224,7 @@ function openModal(id) {
   if (!modal) return;
   lastFocusedBeforeModal = document.activeElement;
   modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockBodyScroll();
   startModalHero(modal);
   // Fokus auf den Dialog selbst, nicht auf "Schliessen" — Screenreader
   // lesen dadurch zuerst Label und Buchtitel statt der Abbruch-Aktion.
@@ -225,7 +239,7 @@ function openModal(id) {
 
 function closeModal(modal) {
   modal.classList.remove('open');
-  document.body.style.overflow = '';
+  unlockBodyScroll();
   stopModalHero(modal);
   // Fokus zurück auf das auslösende Element
   if (lastFocusedBeforeModal) {
