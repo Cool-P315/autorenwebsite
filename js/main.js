@@ -85,6 +85,10 @@ document.querySelectorAll('.nav__link').forEach(link => {
     : href.replace(/^\//, '');
   if (target === currentPage) {
     link.classList.add('active');
+    link.setAttribute('aria-current', 'page');
+  } else {
+    link.classList.remove('active');
+    link.removeAttribute('aria-current');
   }
 });
 
@@ -152,14 +156,23 @@ document.querySelectorAll('a.video-teaser').forEach(link => {
   });
 });
 
-// Amazon-Kaufbuttons in den Leseprobe-Modals. Format-Zusatz "Leseprobe-Modal":
-// zählt in den Amazon-Kauf-KPIs mit, bleibt aber von den Format-Buttons unterscheidbar.
+// Amazon-Kaufbuttons in den Leseprobe-Modals (alle Footer-Buttons, Format im Label).
 document.querySelectorAll('.modal-backdrop').forEach(modal => {
-  const link = modal.querySelector('.modal__footer a.btn');
-  if (!link) return;
-  link.addEventListener('click', () => {
-    const book = modal.querySelector('.modal__title')?.textContent.trim() || 'unbekannt';
-    gcEvent('amazon-kauf/' + book + '/Leseprobe-Modal', 'Amazon: Leseprobe-Modal — ' + book);
+  modal.querySelectorAll('.modal__footer a.btn').forEach(link => {
+    link.addEventListener('click', () => {
+      const book = modal.querySelector('.modal__title')?.textContent.trim() || 'unbekannt';
+      const format = link.textContent.trim() || 'Leseprobe-Modal';
+      gcEvent('amazon-kauf/' + book + '/' + format, 'Amazon: ' + format + ' — ' + book);
+    });
+  });
+});
+
+// Startseiten-Teaser: direkter Amazon-eBook-Button (Promo)
+document.querySelectorAll('.book-teaser__actions a[href*="amazon."]').forEach(link => {
+  link.addEventListener('click', function () {
+    const book = this.closest('article')?.querySelector('.book-teaser__title')?.textContent.trim() || 'unbekannt';
+    const format = this.textContent.trim() || 'eBook';
+    gcEvent('amazon-kauf/' + book + '/' + format + ' (Start)', 'Amazon Start: ' + format + ' — ' + book);
   });
 });
 
@@ -428,13 +441,20 @@ document.addEventListener('click', e => {
 })();
 
 // ============================================================
-// REVIEW SLIDER
+// REVIEW SLIDER — Dots, Autoplay 10 s, Swipe (Mobile)
 // ============================================================
 document.querySelectorAll('.review-slider').forEach(slider => {
   const slides = slider.querySelectorAll('.review-slider__slide');
   const dots   = slider.querySelectorAll('.review-slider__dot');
+  if (!slides.length) return;
 
-  function goTo(idx) {
+  let idx = 0;
+  let timer = null;
+  const INTERVAL_MS = 10000;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function goTo(next) {
+    idx = ((next % slides.length) + slides.length) % slides.length;
     slides.forEach((s, i) => s.classList.toggle('active', i === idx));
     dots.forEach((d, i) => {
       d.classList.toggle('active', i === idx);
@@ -442,7 +462,49 @@ document.querySelectorAll('.review-slider').forEach(slider => {
     });
   }
 
-  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+  function stopAuto() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  function startAuto() {
+    if (reduceMotion || slides.length < 2) return;
+    stopAuto();
+    timer = setInterval(() => goTo(idx + 1), INTERVAL_MS);
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      goTo(i);
+      startAuto();
+    });
+  });
+
+  // Pause bei Hover/Fokus (Desktop), nach Verlassen weiter
+  slider.addEventListener('mouseenter', stopAuto);
+  slider.addEventListener('mouseleave', startAuto);
+  slider.addEventListener('focusin', stopAuto);
+  slider.addEventListener('focusout', e => {
+    if (!slider.contains(e.relatedTarget)) startAuto();
+  });
+
+  // Swipe (Touch): horizontal > 40 px wechselt die Rezension
+  let touchX = null;
+  slider.addEventListener('touchstart', e => {
+    touchX = e.changedTouches[0].screenX;
+    stopAuto();
+  }, { passive: true });
+  slider.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].screenX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 40) goTo(idx + (dx < 0 ? 1 : -1));
+    startAuto();
+  }, { passive: true });
+
+  startAuto();
 });
 
 // ============================================================

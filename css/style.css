@@ -553,6 +553,17 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   border-color: var(--accent);
 }
 
+/* Leichtere Zweit-Aktion (z. B. Promo-eBook neben „Mehr erfahren") */
+.btn--ghost {
+  border-color: rgba(var(--accent-rgb), 0.45);
+  color: var(--brown-mid);
+}
+.btn--ghost:hover {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 /* ============================================================
    BOOK TEASERS (Homepage)
    ============================================================ */
@@ -621,7 +632,26 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   color: var(--brown-mid);
   line-height: 1.75;
   max-width: 280px;
-  margin: 0 auto 1.75rem;
+  margin: 0 auto 0.85rem;
+}
+
+.book-teaser__promo {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--eco);
+  margin: 0 auto 1.25rem;
+  max-width: 280px;
+  line-height: 1.45;
+}
+
+.book-teaser__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ============================================================
@@ -1029,6 +1059,7 @@ html[data-theme="dark"] .video-teaser__desc  { color: rgba(237, 224, 207, 0.78);
    ============================================================ */
 .review-slider {
   margin-top: 1.5rem;
+  touch-action: pan-y;
 }
 .review-slider__track {
   display: grid;
@@ -1885,6 +1916,14 @@ html[data-theme="dark"] .video-teaser__desc  { color: rgba(237, 224, 207, 0.78);
   align-items: center;
   gap: 1.5rem;
   text-align: center;
+}
+
+.modal__footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal__end-mark {

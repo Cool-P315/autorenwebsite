@@ -45,6 +45,7 @@
           "url": "https://www.amazon.de/dp/B0GYS3BBGW", "availability": "https://schema.org/InStock" },
         { "@type": "Offer", "price": "0.00",  "priceCurrency": "EUR", "name": "eBook",
           "url": "https://www.amazon.de/dp/B0GYVGX87T", "availability": "https://schema.org/InStock",
+          "priceValidUntil": "2026-08-12",
           "description": "5 Tage lang kostenlos" }
       ],
       "aggregateRating": {
@@ -89,6 +90,7 @@
           "url": "https://www.amazon.de/dp/B0GYQMR2WS", "availability": "https://schema.org/InStock" },
         { "@type": "Offer", "price": "0.00",  "priceCurrency": "EUR", "name": "eBook",
           "url": "https://www.amazon.de/dp/B0GYT1FB84", "availability": "https://schema.org/InStock",
+          "priceValidUntil": "2026-08-12",
           "description": "5 Tage lang kostenlos" }
       ],
       "aggregateRating": {
@@ -125,7 +127,7 @@
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=20260807g">
+  <link rel="stylesheet" href="css/style.css?v=202608080954">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -385,7 +387,10 @@
         </div>
         <div class="modal__footer">
           <span class="modal__end-mark">— Leseprobe endet hier —</span>
-          <a href="https://www.amazon.de/dp/B0GYS3BBGW" class="btn" target="_blank" rel="noopener noreferrer">Buch bei Amazon kaufen</a>
+          <div class="modal__footer-actions">
+            <a href="https://www.amazon.de/dp/B0GYVGX87T" class="btn" target="_blank" rel="noopener noreferrer">eBook kostenlos bei Amazon</a>
+            <a href="https://www.amazon.de/dp/B0GYS3BBGW" class="btn" target="_blank" rel="noopener noreferrer">Taschenbuch bei Amazon</a>
+          </div>
         </div>
       </div>
     </div>
@@ -418,13 +423,16 @@
         </div>
         <div class="modal__footer">
           <span class="modal__end-mark">— Leseprobe endet hier —</span>
-          <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Buch bei Amazon kaufen</a>
+          <div class="modal__footer-actions">
+            <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook kostenlos bei Amazon</a>
+            <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Hardcover bei Amazon</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="js/main.js?v=20260807g"></script>
+  <script src="js/main.js?v=202608080954"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
