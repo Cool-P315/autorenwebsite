@@ -43,10 +43,8 @@
       "offers": [
         { "@type": "Offer", "price": "10.99", "priceCurrency": "EUR", "name": "Taschenbuch",
           "url": "https://www.amazon.de/dp/B0GYS3BBGW", "availability": "https://schema.org/InStock" },
-        { "@type": "Offer", "price": "0.00",  "priceCurrency": "EUR", "name": "eBook",
-          "url": "https://www.amazon.de/dp/B0GYVGX87T", "availability": "https://schema.org/InStock",
-          "priceValidUntil": "2026-08-12",
-          "description": "5 Tage lang kostenlos" }
+        { "@type": "Offer", "price": "4.99",  "priceCurrency": "EUR", "name": "eBook",
+          "url": "https://www.amazon.de/dp/B0GYVGX87T", "availability": "https://schema.org/InStock" }
       ],
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -98,10 +96,8 @@
       "offers": [
         { "@type": "Offer", "price": "21.99", "priceCurrency": "EUR", "name": "Hardcover",
           "url": "https://www.amazon.de/dp/B0GYQMR2WS", "availability": "https://schema.org/InStock" },
-        { "@type": "Offer", "price": "0.00",  "priceCurrency": "EUR", "name": "eBook",
-          "url": "https://www.amazon.de/dp/B0GYT1FB84", "availability": "https://schema.org/InStock",
-          "priceValidUntil": "2026-08-12",
-          "description": "5 Tage lang kostenlos" }
+        { "@type": "Offer", "price": "4.99",  "priceCurrency": "EUR", "name": "eBook",
+          "url": "https://www.amazon.de/dp/B0GYT1FB84", "availability": "https://schema.org/InStock" }
       ],
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -137,7 +133,7 @@
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=202608090738">
+  <link rel="stylesheet" href="css/style.css?v=202608121202">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -202,18 +198,14 @@
             <p class="price-item__format">Taschenbuch</p>
             <p class="price-item__amount">€&thinsp;10,99</p>
           </div>
-          <div class="price-item price-item--promo">
+          <div class="price-item">
             <p class="price-item__format">eBook</p>
-            <p class="price-item__amount">
-              <span class="price-item__was">€&thinsp;4,99</span>
-              Kostenlos
-            </p>
-            <p class="price-item__note">5&nbsp;Tage lang bei Amazon</p>
+            <p class="price-item__amount">€&thinsp;4,99</p>
           </div>
         </div>
         <div class="book-entry__links">
           <a href="https://www.amazon.de/dp/B0GYS3BBGW" class="btn" target="_blank" rel="noopener noreferrer">Taschenbuch bei Amazon</a>
-          <a href="https://www.amazon.de/dp/B0GYVGX87T" class="btn" target="_blank" rel="noopener noreferrer">eBook kostenlos bei Amazon</a>
+          <a href="https://www.amazon.de/dp/B0GYVGX87T" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
         <div class="review-slider" aria-label="Leserstimmen">
           <div class="review-slider__track">
@@ -298,18 +290,14 @@
             <p class="price-item__format">Hardcover</p>
             <p class="price-item__amount">€&thinsp;21,99</p>
           </div>
-          <div class="price-item price-item--promo">
+          <div class="price-item">
             <p class="price-item__format">eBook</p>
-            <p class="price-item__amount">
-              <span class="price-item__was">€&thinsp;4,99</span>
-              Kostenlos
-            </p>
-            <p class="price-item__note">5&nbsp;Tage lang bei Amazon</p>
+            <p class="price-item__amount">€&thinsp;4,99</p>
           </div>
         </div>
         <div class="book-entry__links">
           <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Hardcover bei Amazon</a>
-          <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook kostenlos bei Amazon</a>
+          <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
         <div class="review-slider" aria-label="Leserstimmen">
           <div class="review-slider__track">
@@ -406,8 +394,7 @@
         <div class="modal__footer">
           <span class="modal__end-mark">— Leseprobe endet hier —</span>
           <div class="modal__footer-actions">
-            <a href="https://www.amazon.de/dp/B0GYVGX87T" class="btn" target="_blank" rel="noopener noreferrer">eBook kostenlos bei Amazon</a>
-            <a href="https://www.amazon.de/dp/B0GYS3BBGW" class="btn" target="_blank" rel="noopener noreferrer">Taschenbuch bei Amazon</a>
+            <a href="https://www.amazon.de/dp/B0GYS3BBGW" class="btn" target="_blank" rel="noopener noreferrer">Buch bei Amazon kaufen</a>
           </div>
         </div>
       </div>
@@ -442,15 +429,14 @@
         <div class="modal__footer">
           <span class="modal__end-mark">— Leseprobe endet hier —</span>
           <div class="modal__footer-actions">
-            <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook kostenlos bei Amazon</a>
-            <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Hardcover bei Amazon</a>
+            <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Buch bei Amazon kaufen</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="js/main.js?v=202608090738"></script>
+  <script src="js/main.js?v=202608121202"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
