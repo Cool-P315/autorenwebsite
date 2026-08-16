@@ -167,15 +167,6 @@ document.querySelectorAll('.modal-backdrop').forEach(modal => {
   });
 });
 
-// Startseiten-Teaser: direkter Amazon-eBook-Button (Promo)
-document.querySelectorAll('.book-teaser__actions a[href*="amazon."]').forEach(link => {
-  link.addEventListener('click', function () {
-    const book = this.closest('article')?.querySelector('.book-teaser__title')?.textContent.trim() || 'unbekannt';
-    const format = this.textContent.trim() || 'eBook';
-    gcEvent('amazon-kauf/' + book + '/' + format + ' (Start)', 'Amazon Start: ' + format + ' — ' + book);
-  });
-});
-
 // Amazon-Autorenseite: CTA am Seitenende + Footer-Icon. Eigene Kategorie
 // "autorenseite" (ohne amazon-Präfix), damit die Kauf-KPIs unverfälscht bleiben.
 const pageSlug = currentPage.replace('.html', '') || 'index';
@@ -455,7 +446,11 @@ document.querySelectorAll('.review-slider').forEach(slider => {
 
   function goTo(next) {
     idx = ((next % slides.length) + slides.length) % slides.length;
-    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    slides.forEach((s, i) => {
+      const on = i === idx;
+      s.classList.toggle('active', on);
+      s.setAttribute('aria-hidden', on ? 'false' : 'true');
+    });
     dots.forEach((d, i) => {
       d.classList.toggle('active', i === idx);
       d.setAttribute('aria-pressed', i === idx ? 'true' : 'false');

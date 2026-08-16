@@ -102,6 +102,8 @@
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5",
+        "bestRating": "5",
+        "ratingCount": "3",
         "reviewCount": "3"
       },
       "review": [
@@ -133,7 +135,7 @@
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=202608141702">
+  <link rel="stylesheet" href="css/style.css?v=202608160930">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -208,29 +210,29 @@
           <a href="https://www.amazon.de/dp/B0GYVGX87T" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
         <div class="review-slider" aria-label="Leserstimmen">
-          <div class="review-slider__track">
-            <div class="review-slider__slide active">
+          <div class="review-slider__track" aria-live="polite">
+            <div class="review-slider__slide active" aria-hidden="false">
               <div class="review-snippet">
                 <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Besonders gefallen hat mir der ruhige, poetische Schreibstil, der lange nach dem Lesen im Kopf bleibt."</p>
                 <cite class="review-snippet__cite">— Christopher Lauinger, Amazon</cite>
               </div>
             </div>
-            <div class="review-slider__slide">
+            <div class="review-slider__slide" aria-hidden="true">
               <div class="review-snippet">
                 <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Ein sehr einfühlsam geschriebenes Buch über die zyklen des Lebens."</p>
                 <cite class="review-snippet__cite">— Herbert Petschnig, Amazon (Verifizierter Kauf)</cite>
               </div>
             </div>
-            <div class="review-slider__slide">
+            <div class="review-slider__slide" aria-hidden="true">
               <div class="review-snippet">
                 <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Einen Pintar zu lesen, ist etwas ganz Besonderes. Das Erstlingswerk verfängt einen ab der ersten Sekunde."</p>
                 <cite class="review-snippet__cite">— Amazon Kunde, Amazon</cite>
               </div>
             </div>
-            <div class="review-slider__slide">
+            <div class="review-slider__slide" aria-hidden="true">
               <div class="review-snippet">
                 <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Ein sehr tolles Buch. Es spricht jede Altersgruppe an."</p>
@@ -300,22 +302,22 @@
           <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
         <div class="review-slider" aria-label="Leserstimmen">
-          <div class="review-slider__track">
-            <div class="review-slider__slide active">
+          <div class="review-slider__track" aria-live="polite">
+            <div class="review-slider__slide active" aria-hidden="false">
               <div class="review-snippet">
                 <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Der Autor schreibt in einer ganz eigenen Gattung. Der Stil ist unverkennbar und auch Der Wind erinnert sich fängt einen gleich von Beginn an ein. Pause vom Alltag und sich in die 24 beschriebenen Momente einfühlen."</p>
                 <cite class="review-snippet__cite">— Amazon Kunde, Amazon</cite>
               </div>
             </div>
-            <div class="review-slider__slide">
+            <div class="review-slider__slide" aria-hidden="true">
               <div class="review-snippet">
                 <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Dieses Buch hat mich auf eine Art erwischt, die ich nicht erwartet hatte. Der Wind als stiller Begleiter menschlicher Momente — das klingt abstrakt, fühlt sich aber beim Lesen erstaunlich nah an. Eine Sprache, die atmet. Ich hab einzelne Sätze mehrmals gelesen, einfach weil sie schön sind."</p>
                 <cite class="review-snippet__cite">— Sandro Colazzo, Amazon (Verifizierter Kauf)</cite>
               </div>
             </div>
-            <div class="review-slider__slide">
+            <div class="review-slider__slide" aria-hidden="true">
               <div class="review-snippet">
                 <div class="review-snippet__stars" role="img" aria-label="5 von 5 Sternen">★★★★★</div>
                 <p class="review-snippet__quote">„Ein sehr tiefsinniges Buch in lyrischer Schreibweise, das zum Nachdenken über die einzelnen Lebenszyklen anregt."</p>
@@ -436,7 +438,7 @@
     </div>
   </div>
 
-  <script src="js/main.js?v=202608141702"></script>
+  <script src="js/main.js?v=202608160930"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
