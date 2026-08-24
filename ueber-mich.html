@@ -39,23 +39,10 @@
     "sameAs": ["https://www.amazon.de/stores/Martin-Pintar/author/B0GZ8LCJNZ"]
   }
   </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "name": "Martin Pintar",
-    "description": "Ein Blick in den Moment, in dem geschrieben wird. KI-Animation aus einem Foto.",
-    "thumbnailUrl": "https://martinpintar.at/assets/images/martin-schreiben-poster.jpg",
-    "contentUrl": "https://martinpintar.at/assets/video/martin-schreiben-web.mp4",
-    "encodingFormat": "video/mp4",
-    "uploadDate": "2026-08-04",
-    "inLanguage": "de"
-  }
-  </script>
   <link rel="preload" href="assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=202608160930">
+  <link rel="stylesheet" href="css/style.css?v=202608241742">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -88,27 +75,19 @@
   <main id="main">
     <div class="about-grid">
 
-      <div class="about-media fade-in" id="martin-video">
-        <div class="about-video">
-          <video
-            id="video-martin-schreiben"
-            class="about-video__player"
-            controls
-            playsinline
-            preload="none"
-            poster="assets/images/martin-schreiben-poster.jpg"
-            width="1280"
-            height="720"
-            aria-label="Martin Pintar — Ein Blick in den Moment, in dem geschrieben wird">
-            <source src="assets/video/martin-schreiben-web.mp4" type="video/mp4">
-            Ihr Browser kann dieses Video nicht abspielen.
-          </video>
-        </div>
-        <p class="about-media__caption">Martin Pintar</p>
-        <p class="about-media__note">
-          Ein Blick in den Moment, in dem geschrieben wird.
-          <span class="about-media__ki">KI-Animation aus einem Foto.</span>
-        </p>
+      <div class="about-photo fade-in">
+        <picture>
+          <source srcset="assets/images/autor-foto.avif" type="image/avif">
+          <source srcset="assets/images/autor-foto.webp" type="image/webp">
+          <img
+            src="assets/images/autor-foto.jpg"
+            alt="Martin Pintar — Autor"
+            class="about-photo__img"
+            width="350"
+            height="415"
+            loading="lazy">
+        </picture>
+        <p class="about-photo__caption">Martin Pintar</p>
       </div>
 
       <div>
@@ -177,7 +156,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=202608160930"></script>
+  <script src="js/main.js?v=202608241742"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
