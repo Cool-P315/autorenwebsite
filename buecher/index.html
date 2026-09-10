@@ -135,7 +135,7 @@
   <link rel="preload" href="/assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/style.css?v=202609100632">
+  <link rel="stylesheet" href="/css/style.css?v=202609100635">
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -168,11 +168,11 @@
   <main id="main">
 
     <article id="herbstblatt" class="book-entry fade-in">
-      <div class="book-entry__cover-col" data-modal="herbstblatt" data-cover-video="assets/video/herbstblatt-cover-web.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Ein Herbstblatt im Wind">
+      <div class="book-entry__cover-col" data-modal="herbstblatt" data-cover-video="/assets/video/herbstblatt-cover-web.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Ein Herbstblatt im Wind">
         <div class="book-cover-media">
           <picture>
-          <source srcset="assets/images/herbstblatt-cover.avif" type="image/avif">
-          <source srcset="assets/images/herbstblatt-cover.webp" type="image/webp">
+          <source srcset="/assets/images/herbstblatt-cover.avif" type="image/avif">
+          <source srcset="/assets/images/herbstblatt-cover.webp" type="image/webp">
           <img
             src="/assets/images/herbstblatt-cover.jpg"
             alt="Ein Herbstblatt im Wind — Buchcover von Martin Pintar"
@@ -182,7 +182,7 @@
             loading="eager"
             fetchpriority="high">
         </picture>
-          <video class="book-cover-video" muted playsinline loop preload="none" poster="assets/images/herbstblatt-cover.jpg" aria-hidden="true" tabindex="-1"></video>
+          <video class="book-cover-video" muted playsinline loop preload="none" poster="/assets/images/herbstblatt-cover.jpg" aria-hidden="true" tabindex="-1"></video>
           <img class="book-cover-title" src="/assets/images/herbstblatt-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         </div>
       </div>
@@ -265,11 +265,11 @@
     </article>
 
     <article id="wind" class="book-entry book-entry--reverse book-entry--alt fade-in">
-      <div class="book-entry__cover-col" data-modal="wind" data-cover-video="assets/video/wind-cover-web.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Der Wind erinnert sich">
+      <div class="book-entry__cover-col" data-modal="wind" data-cover-video="/assets/video/wind-cover-web.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Der Wind erinnert sich">
         <div class="book-cover-media">
           <picture>
-          <source srcset="assets/images/wind-cover.avif" type="image/avif">
-          <source srcset="assets/images/wind-cover.webp" type="image/webp">
+          <source srcset="/assets/images/wind-cover.avif" type="image/avif">
+          <source srcset="/assets/images/wind-cover.webp" type="image/webp">
           <img
             src="/assets/images/wind-cover.jpg"
             alt="Der Wind erinnert sich — Buchcover von Martin Pintar"
@@ -278,7 +278,7 @@
             height="416"
             loading="lazy">
         </picture>
-          <video class="book-cover-video" muted playsinline loop preload="none" poster="assets/images/wind-cover.jpg" aria-hidden="true" tabindex="-1"></video>
+          <video class="book-cover-video" muted playsinline loop preload="none" poster="/assets/images/wind-cover.jpg" aria-hidden="true" tabindex="-1"></video>
           <img class="book-cover-title" src="/assets/images/wind-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         </div>
       </div>
@@ -376,7 +376,7 @@
 
   <div class="modal-backdrop" id="modal-herbstblatt" role="dialog" aria-modal="true" aria-labelledby="modal-herbstblatt-title">
     <div class="modal">
-      <div class="modal__hero" aria-hidden="true" data-hero-video="assets/video/herbstblatt-cover-web.mp4">
+      <div class="modal__hero" aria-hidden="true" data-hero-video="/assets/video/herbstblatt-cover-web.mp4">
         <video muted playsinline loop preload="none" tabindex="-1"></video>
       </div>
       <div class="modal__header">
@@ -405,7 +405,7 @@
 
   <div class="modal-backdrop" id="modal-wind" role="dialog" aria-modal="true" aria-labelledby="modal-wind-title">
     <div class="modal">
-      <div class="modal__hero" aria-hidden="true" data-hero-video="assets/video/wind-cover-web.mp4">
+      <div class="modal__hero" aria-hidden="true" data-hero-video="/assets/video/wind-cover-web.mp4">
         <video muted playsinline loop preload="none" tabindex="-1"></video>
       </div>
       <div class="modal__header">
@@ -438,7 +438,7 @@
     </div>
   </div>
 
-  <script src="/js/main.js?v=202609100632"></script>
+  <script src="/js/main.js?v=202609100635"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
