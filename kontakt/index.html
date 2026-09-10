@@ -5,9 +5,24 @@
   <script>(function(){var t=localStorage.getItem('mp-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1A0F0A">
-  <meta name="description" content="Diese Seite wurde nicht gefunden — Martin Pintar">
-  <title>Verirrt im Wind — Martin Pintar</title>
-  <meta name="robots" content="noindex">
+  <meta name="description" content="Schreiben Sie Martin Pintar — Buchautor. Lesereindruck, Frage oder einfach ein Wort des Austauschs.">
+  <title>Kontakt — Martin Pintar</title>
+  <link rel="canonical" href="https://martinpintar.at/kontakt/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_AT">
+  <meta property="og:url" content="https://martinpintar.at/kontakt/">
+  <meta property="og:title" content="Kontakt — Martin Pintar">
+  <meta property="og:description" content="Schreiben Sie Martin Pintar — Buchautor.">
+  <meta property="og:image" content="https://martinpintar.at/assets/images/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Die Buchcover von „Ein Herbstblatt im Wind“ und „Der Wind erinnert sich“ neben dem Schriftzug Martin Pintar">
+  <meta property="og:site_name" content="Martin Pintar">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kontakt — Martin Pintar">
+  <meta name="twitter:description" content="Schreiben Sie Martin Pintar — Buchautor.">
+  <meta name="twitter:image" content="https://martinpintar.at/assets/images/og-image.jpg">
+  <meta name="twitter:image:alt" content="Die Buchcover von „Ein Herbstblatt im Wind“ und „Der Wind erinnert sich“ neben dem Schriftzug Martin Pintar">
   <link rel="preload" href="/assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -36,34 +51,58 @@
     </div>
   </nav>
 
-  <div class="page-hero" data-bg="404">
-    <h1 class="page-hero__title">Verirrt im Wind</h1>
-    <p class="page-hero__sub">Diese Seite gibt es nicht</p>
+  <div class="page-hero" data-bg="Kontakt">
+    <h1 class="page-hero__title">Kontakt</h1>
+    <p class="page-hero__sub">Schreib mir</p>
   </div>
 
   <main id="main">
-    <div class="container">
-      <div class="quote-section fade-in error-quote">
+    <div class="contact-wrap">
 
-        <div class="ornament" aria-hidden="true">
-          <span class="ornament__glyph">❧</span>
+      <p class="contact-intro fade-in">
+        Ich freue mich über jede Nachricht — ob Lesereindruck, Frage<br>
+        oder einfach ein Wort des Austauschs.
+      </p>
+
+      <form class="form fade-in" action="https://formspree.io/f/mnjradvr" method="POST">
+        <input type="hidden" name="_subject" value="Nachricht über martinpintar.at">
+
+        <div class="hp-field" aria-hidden="true">
+          <label for="_gotcha">Bitte dieses Feld leer lassen</label>
+          <input type="text" id="_gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
         </div>
 
-        <p class="error-quote__text">
-          Diese Seite haben wir nicht gefunden. Manchmal verschwindet etwas,<br>
-          ohne Abschied — und man merkt es erst, wenn man sucht.
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input class="form-input" type="text" id="name" name="name" autocomplete="name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">E-Mail</label>
+          <input class="form-input" type="email" id="email" name="email" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Nachricht</label>
+          <textarea class="form-textarea" id="message" name="message" rows="6" required></textarea>
+        </div>
+
+        <div>
+          <button type="submit" class="btn">Absenden</button>
+        </div>
+
+        <p class="form-privacy">
+          Ihre Angaben (Name, E-Mail-Adresse, Nachricht) werden zur Zustellung Ihrer
+          Nachricht an Formspree, Inc. (USA) übertragen. Details und Rechtsgrundlage
+          finden Sie in der <a href="/datenschutz/">Datenschutzerklärung</a>.
         </p>
+      </form>
 
-        <div class="ornament" aria-hidden="true">
-          <span class="ornament__glyph">✦</span>
-        </div>
-
-        <div class="error-quote__actions">
-          <a href="/" class="btn">Zurück zur Startseite</a>
-          <a href="/buecher/" class="btn">Zu den Büchern</a>
-        </div>
-
+      <div class="contact-email fade-in">
+        <p class="contact-email__or">Oder direkt per E-Mail</p>
+        <a href="mailto:martin.pintar@me.com" class="contact-email__link">martin.pintar@me.com</a>
       </div>
+
     </div>
   </main>
 

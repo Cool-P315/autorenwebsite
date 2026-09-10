@@ -75,15 +75,25 @@ if (navToggle && navLinks) {
   });
 }
 
-// --- Active nav link ---
-const currentPage = location.pathname.split('/').pop() || 'index.html';
+// --- Active nav link (Pretty URLs: /kontakt/ etc.) ---
+function pageKeyFromPath(pathname) {
+  const parts = pathname.split('/').filter(Boolean);
+  if (parts.length === 0 || (parts.length === 1 && parts[0] === 'index.html')) {
+    return 'home';
+  }
+  if (parts[parts.length - 1] === 'index.html') parts.pop();
+  return parts[0] || 'home';
+}
+function pageKeyFromHref(href) {
+  if (!href || href === '/' || href === '/index.html') return 'home';
+  const clean = href.replace(/^\//, '').replace(/\.html$/, '').replace(/\/$/, '');
+  return clean.split('#')[0].split('/')[0] || 'home';
+}
+const currentPageKey = pageKeyFromPath(location.pathname);
 document.querySelectorAll('.nav__link').forEach(link => {
   const href = link.getAttribute('href');
-  // "/" bzw. "/index.html" zeigen auf die Startseite; führenden Slash normalisieren
-  const target = (href === '/' || href === '/index.html')
-    ? 'index.html'
-    : href.replace(/^\//, '');
-  if (target === currentPage) {
+  const key = pageKeyFromHref(href);
+  if (key === currentPageKey) {
     link.classList.add('active');
     link.setAttribute('aria-current', 'page');
   } else {
@@ -154,7 +164,7 @@ document.querySelectorAll('.modal-backdrop').forEach(modal => {
 
 // Amazon-Autorenseite: CTA am Seitenende + Footer-Icon. Eigene Kategorie
 // "autorenseite" (ohne amazon-Präfix), damit die Kauf-KPIs unverfälscht bleiben.
-const pageSlug = currentPage.replace('.html', '') || 'index';
+const pageSlug = currentPageKey === 'home' ? 'index' : currentPageKey;
 document.querySelectorAll('.amazon-cta a.btn').forEach(link => {
   link.addEventListener('click', () => {
     gcEvent('autorenseite/cta-' + pageSlug, 'Amazon-Autorenseite: CTA ' + pageSlug);
