@@ -505,6 +505,13 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-style: normal;
 }
 
+.ornament__glyph svg,
+.modal__ornament-glyph svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
 /* ============================================================
    LAYOUT UTILITIES
    ============================================================ */
@@ -1620,7 +1627,17 @@ html[data-theme="dark"] .audio-card__desc  { color: rgba(237, 224, 207, 0.82); }
   border: none;
 }
 
-.modal__close::before { content: '✕'; font-size: 0.78rem; }
+.modal__close::before {
+  content: '';
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  flex-shrink: 0;
+  background:
+    linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+  transform: rotate(45deg);
+}
 .modal__close:hover { color: var(--accent); }
 
 .modal__body { padding: 2rem 3rem 3rem; }
