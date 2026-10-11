@@ -143,14 +143,6 @@ document.querySelectorAll('.book-entry__review-link').forEach(link => {
   });
 });
 
-// KI-Audio auf der Startseite: erstes Abspielen zählen (einmal pro Seitenaufruf)
-const audioGespraech = document.getElementById('audio-kreislauf');
-if (audioGespraech) {
-  audioGespraech.addEventListener('play', () => {
-    gcEvent('audio/der-ewige-kreislauf-von-blatt-und-wind', 'Audio: Der ewige Kreislauf von Blatt und Wind');
-  }, { once: true });
-}
-
 // Amazon-Kaufbuttons in den Leseprobe-Modals (alle Footer-Buttons, Format im Label).
 document.querySelectorAll('.modal-backdrop').forEach(modal => {
   modal.querySelectorAll('.modal__footer a.btn').forEach(link => {
