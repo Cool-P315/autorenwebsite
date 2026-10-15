@@ -933,10 +933,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   width: 100%;
   border-radius: 2px;
   filter: sepia(12%) contrast(105%);
-  box-shadow:
-    8px 8px 0 var(--cream-alt),
-    12px 12px 0 rgba(201,169,110,0.18),
-    16px 16px 35px rgba(26,15,10,0.13);
+  box-shadow: 0 8px 32px rgba(44, 24, 16, 0.18); /* wie .about-outdoor__img: kein Rahmen, nur weicher Schatten */
 }
 
 .about-photo__caption {
@@ -1853,6 +1850,11 @@ html[data-theme="dark"] .share-copied {
 /* Amazon-Autorenseiten-CTA am Seitenende (buecher.html, ueber-mich.html) */
 .amazon-cta { text-align: center; padding: 3rem 2rem 4.5rem; }
 .amazon-cta .section__label { text-align: center; margin-bottom: 1.2rem; }
+
+/* Über mich: Abstand zwischen Bücherliste und Amazon-CTA verringern (vorher ca. 14rem, jetzt ca. 5rem) */
+.about-grid:has(+ .amazon-cta) { padding-bottom: 3rem; }
+.about-grid + .amazon-cta { padding-top: 0; }
+.about-grid + .amazon-cta .ornament { margin-top: 2rem; }
 
 /* zentriertes Label (index.html „Meine Bücher") */
 .section__label--center { text-align: center; }
