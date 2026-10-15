@@ -1445,6 +1445,57 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   transform: translateX(-50%) translateY(0);
 }
 
+/* ------------------------------------------------------------
+   Leseprobe-Pille (Touch)
+   Kleine Pille „Lesen“ oben rechts am Cover, nur auf Geräten ohne Hover (Handy, Tablet).
+   Das Element steht als <span class="cover-pill"> in den vier Cover-Stapeln (.book-cover-media).
+   Entfernen: die vier <span class="cover-pill">-Elemente aus index.html und buecher/index.html
+   löschen und diesen ganzen Block bis zum Kommentar „Ende Leseprobe-Pille“ streichen.
+   ------------------------------------------------------------ */
+.cover-pill {
+  display: none;
+  position: absolute;
+  top: 0.35rem; /* knapp gehalten: der Wind-Titel sitzt im Cover direkt darunter */
+  right: 0.35rem;
+  z-index: 3;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem 0.2rem 0.45rem;
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--cream);
+  background: rgba(26, 15, 10, 0.85);
+  border: 1px solid rgba(201, 169, 110, 0.45);
+  border-radius: 999px;
+  pointer-events: none; /* der Tipp geht wie bisher ans Cover */
+}
+
+.cover-pill__icon {
+  display: block;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+}
+
+html[data-theme="dark"] .cover-pill { color: #EDE0CF; } /* --cream ist im Dark Mode dunkel */
+
+@media (hover: none) {
+  .cover-pill { display: inline-flex; }
+
+  /* Hover-Schild unten am Cover entfällt: nach einem Tipp bliebe es sonst „kleben“ */
+  .book-teaser__cover-wrap::after,
+  .book-entry__cover-col::after { display: none; }
+}
+
+@media print {
+  .cover-pill { display: none !important; }
+}
+/* Ende Leseprobe-Pille */
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -1610,6 +1661,20 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .modal__text p { margin-bottom: 1.4em; }
 .modal__text p:last-child { margin-bottom: 0; }
+
+/* Szenentrenner in den Leseproben (‹›): dezent, zentriert, Akzentfarbe.
+   clear: beugt vor, dass die Initiale den Trenner umfließt, wenn der erste Absatz kurz ist. */
+.modal__text .modal__break {
+  clear: both;
+  margin: 0.3em 0 1.2em;
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--accent);
+  opacity: 0.75;
+  line-height: 1;
+  letter-spacing: 0.45em;
+  text-indent: 0.45em; /* gleicht das nachlaufende Letter-Spacing aus, damit das Paar mittig sitzt */
+}
 
 .modal__text .modal__prolog-label + p::first-letter {
   font-size: 3.2em;
