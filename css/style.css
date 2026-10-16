@@ -141,6 +141,11 @@ img   { max-width: 100%; height: auto; display: block; }
 a     { color: inherit; text-decoration: none; }
 button { cursor: pointer; background: none; border: none; }
 
+/* Startseite: body dunkel, damit Safari bei scrollY 0 (Statusleiste, untere Leiste) die Nav-Farbe
+   statt Creme übernimmt. Der sichtbare Inhalt (main) bleibt creme, Hero und Footer haben eigene Hintergründe. */
+body.page-home { background-color: var(--brown-deep); }
+.page-home main { background-color: var(--cream); }
+
 /* Paper-grain overlay */
 body::after {
   content: '';
