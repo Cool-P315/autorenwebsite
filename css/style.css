@@ -159,6 +159,18 @@ body::after {
   body::after { content: none; display: none; }
 }
 
+/* Unsichtbare Farbquelle für iOS-26-Safari (Startseite, Nav anfangs transparent).
+   Echtes Element, kein Pseudo-Element; ohne backdrop-filter und background-image. */
+.safari-tint {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background-color: #1A0F0A; /* = --brown-deep, in hellem und dunklem Design gleich */
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1002;
+}
+
 /* ============================================================
    SKIP-LINK (Barrierefreiheit)
    ============================================================ */
@@ -2022,6 +2034,7 @@ html[data-theme="dark"] .share-copied {
   .footer,
   .skip-link,
   #scroll-progress,
+  .safari-tint,
   .hero,
   .hero__leaf,
   .book-cover-video,
