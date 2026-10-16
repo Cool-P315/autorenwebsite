@@ -153,6 +153,12 @@ body::after {
   mix-blend-mode: multiply;
 }
 
+/* Touch-Geräte: Körnung weglassen. iOS-26-Safari liest sonst das fixierte Vollflächen-Overlay
+   für die Färbung der Statusleiste mit. */
+@media (hover: none) {
+  body::after { content: none; display: none; }
+}
+
 /* ============================================================
    SKIP-LINK (Barrierefreiheit)
    ============================================================ */
