@@ -214,22 +214,41 @@ function openModal(id) {
   const modal = document.getElementById('modal-' + id);
   if (!modal) return;
   lastFocusedBeforeModal = document.activeElement;
-  modal.classList.add('open');
+  clearTimeout(modal._hideTimer);
+  // Erst ins Layout (display), dann im nächsten Frame .open, damit das Einblenden animiert
+  modal.classList.add('is-visible');
+  void modal.offsetWidth;
   lockBodyScroll();
   startModalHero(modal);
   // Fokus auf den Dialog selbst, nicht auf "Schliessen" — Screenreader
   // lesen dadurch zuerst Label und Buchtitel statt der Abbruch-Aktion.
+  // Der Fokus folgt erst mit .open, vorher ist das Element noch visibility: hidden.
   const dialog = modal.querySelector('.modal');
-  if (dialog) {
-    dialog.setAttribute('tabindex', '-1');
-    dialog.focus();
-  } else {
-    (modal.querySelectorAll(MODAL_FOCUSABLE)[0] || modal).focus();
-  }
+  if (dialog) dialog.setAttribute('tabindex', '-1');
+  requestAnimationFrame(() => {
+    modal.classList.add('open');
+    if (dialog) dialog.focus();
+    else (modal.querySelectorAll(MODAL_FOCUSABLE)[0] || modal).focus();
+  });
+}
+
+// Nach dem Ausblenden wieder display: none (siehe CSS), mit Fallback-Timeout
+function hideModalAfterFade(modal) {
+  clearTimeout(modal._hideTimer);
+  const done = () => {
+    clearTimeout(modal._hideTimer);
+    modal.removeEventListener('transitionend', onEnd);
+    if (!modal.classList.contains('open')) modal.classList.remove('is-visible');
+  };
+  const onEnd = e => { if (e.target === modal && e.propertyName === 'opacity') done(); };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { done(); return; }
+  modal.addEventListener('transitionend', onEnd);
+  modal._hideTimer = setTimeout(done, 450);
 }
 
 function closeModal(modal) {
   modal.classList.remove('open');
+  hideModalAfterFade(modal);
   unlockBodyScroll();
   stopModalHero(modal);
   // Fokus zurück auf das auslösende Element
@@ -371,7 +390,8 @@ document.addEventListener('click', e => {
 (function () {
   const bar = document.createElement('div');
   bar.id = 'scroll-progress';
-  document.body.prepend(bar);
+  // In die fixierte Nav hängen (Unterkante), nicht an den oberen Bildschirmrand
+  (document.querySelector('.nav') || document.body).appendChild(bar);
 
   function update() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
