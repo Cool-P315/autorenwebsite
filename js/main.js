@@ -103,8 +103,24 @@ document.querySelectorAll('.nav__link').forEach(link => {
 });
 
 // --- Intersection Observer: fade-in on scroll ---
+// Wo der Browser scroll-gesteuerte Animationen kann, übernimmt CSS (.scroll-reveal)
+// für alles, was beim Laden noch unter dem Fenster liegt. Hohe Blöcke bleiben beim
+// Übergang, sonst wären sie beim Lesen lange halb durchsichtig.
+const supportsScrollReveal = window.CSS && CSS.supports('animation-timeline: view()') &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const revealChecked = new WeakSet();
+
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
+    if (!revealChecked.has(entry.target)) {
+      revealChecked.add(entry.target);
+      if (supportsScrollReveal && !entry.isIntersecting &&
+          entry.boundingClientRect.height < window.innerHeight * 0.6) {
+        entry.target.classList.add('scroll-reveal');
+        observer.unobserve(entry.target);
+        return;
+      }
+    }
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
       observer.unobserve(entry.target);
@@ -321,8 +337,33 @@ if (themeToggle) {
 
   themeToggle.addEventListener('click', () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    applyTheme(isDark ? 'light' : 'dark');
+    switchTheme(isDark ? 'light' : 'dark');
   });
+}
+
+// Neues Farbschema öffnet sich als Kreis vom Knopf aus (View Transition);
+// ohne Unterstützung oder bei reduzierter Bewegung: sofortiger Wechsel wie bisher
+function switchTheme(theme) {
+  const root = document.documentElement;
+  if (!document.startViewTransition ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    applyTheme(theme);
+    return;
+  }
+  const r = themeToggle.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.top + r.height / 2;
+  const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+
+  root.classList.add('theme-vt');
+  const transition = document.startViewTransition(() => applyTheme(theme));
+  transition.ready.then(() => {
+    root.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+      { duration: 700, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', pseudoElement: '::view-transition-new(root)' }
+    );
+  }).catch(() => { /* Übergang übersprungen: Theme ist trotzdem gesetzt */ });
+  transition.finished.finally(() => root.classList.remove('theme-vt'));
 }
 
 // OS-Präferenz live mitlesen (nur ohne manuelle Speicherung)
@@ -582,28 +623,48 @@ document.querySelectorAll('.review-slider').forEach(slider => {
 
 // ============================================================
 // 3D BOOK COVER TILT (nur Desktop / Pointer-Geräte)
-// Ziel: .book-cover-media (Video+Poster gemeinsam), sonst img
+// Ziel: .book-3d; setzt nur die Neigung, Ruhelage und Hover-Winkel
+// kommen aus dem CSS. rotateY bleibt ≤ 0, damit nie die (fehlende)
+// Rückenseite ins Bild dreht.
 // ============================================================
 if (window.matchMedia('(hover: hover)').matches &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.querySelectorAll('.book-teaser__cover-wrap, .book-entry__cover-col').forEach(wrap => {
-    const target = wrap.querySelector('.book-cover-media') || wrap.querySelector('img');
-    if (!target) return;
+    const book = wrap.querySelector('.book-3d');
+    if (!book) return;
 
     wrap.addEventListener('mousemove', e => {
       const r = wrap.getBoundingClientRect();
       const x = ((e.clientX - r.left)  / r.width  - 0.5) * 2;
       const y = ((e.clientY - r.top)   / r.height - 0.5) * 2;
-      target.style.transform  = `perspective(700px) rotateY(${x * 9}deg) rotateX(${-y * 6}deg) translateY(-6px) scale(1.02)`;
-      target.style.transition = 'transform 0.1s ease-out';
+      book.classList.add('is-tilting');
+      book.style.setProperty('--tilt-ry', `${x * 7}deg`);
+      book.style.setProperty('--tilt-rx', `${-y * 6}deg`);
     });
 
     wrap.addEventListener('mouseleave', () => {
-      target.style.transition = 'transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94)';
-      target.style.transform  = '';
+      book.classList.remove('is-tilting');
+      book.style.removeProperty('--tilt-ry');
+      book.style.removeProperty('--tilt-rx');
     });
   });
 }
+
+// ============================================================
+// SEITENÜBERGANG Startseite → Bücher: Nur das Cover des angeklickten
+// Buchs bekommt den Übergangsnamen; Gegenstück im <head> von buecher/.
+// ============================================================
+document.querySelectorAll('.book-teaser__actions a[href*="#"]').forEach(link => {
+  link.addEventListener('click', () => {
+    const book = link.closest('.book-teaser')?.querySelector('.book-3d');
+    if (book) book.style.viewTransitionName = 'buch-cover';
+  });
+});
+
+// Zurück aus dem Verlauf (bfcache): Namen wieder lösen
+window.addEventListener('pageshow', () => {
+  document.querySelectorAll('.book-teaser .book-3d').forEach(b => { b.style.viewTransitionName = ''; });
+});
 
 // ============================================================
 // TAGLINE-ROTATION (nur Hero / Startseite)

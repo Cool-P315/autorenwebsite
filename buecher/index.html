@@ -135,7 +135,11 @@
   <link rel="preload" href="/assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/style.css?v=202610160650">
+  <link rel="stylesheet" href="/css/style.css?v=202610222216">
+  <!-- Seitenübergang Startseite → Bücher: Cover gleitet an seinen Platz (Chrome, Safari 18.2+).
+       Rendern wartet, bis #main geparst ist; der Ziel-Eintrag wird sofort sichtbar gesetzt. -->
+  <link rel="expect" href="#main" blocking="render">
+  <script>addEventListener('pagereveal',function(e){if(!e.viewTransition||!location.hash)return;var a=document.getElementById(location.hash.slice(1));var b=a&&a.querySelector('.book-3d');if(!b)return;a.style.transition='none';a.classList.add('visible');b.style.viewTransitionName='buch-cover';e.viewTransition.finished.finally(function(){b.style.viewTransitionName='';});});</script>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -169,22 +173,25 @@
 
     <article id="herbstblatt" class="book-entry fade-in">
       <div class="book-entry__cover-col" data-modal="herbstblatt" data-cover-video="/assets/video/herbstblatt-cover-web-2026-10.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Ein Herbstblatt im Wind">
-        <div class="book-cover-media">
-          <picture>
-          <source srcset="/assets/images/herbstblatt-cover-2026-10.avif" type="image/avif">
-          <source srcset="/assets/images/herbstblatt-cover-2026-10.webp" type="image/webp">
-          <img
-            src="/assets/images/herbstblatt-cover-2026-10.jpg"
-            alt="Ein Herbstblatt im Wind — Buchcover von Martin Pintar"
-            class="book-entry__cover"
-            width="260"
-            height="402"
-            loading="eager"
-            fetchpriority="high">
-        </picture>
-          <video class="book-cover-video" muted playsinline loop preload="none" poster="/assets/images/herbstblatt-cover-2026-10.jpg" aria-hidden="true" tabindex="-1"></video>
-          <img class="book-cover-title" hidden src="/assets/images/herbstblatt-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <span class="cover-pill" aria-hidden="true"><svg class="cover-pill__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.2C9.6 4.7 6.6 4.5 3.5 5.4v13.1c3.1-.9 6.1-.7 8.5.8 2.4-1.5 5.4-1.7 8.5-.8V5.4c-3.1-.9-6.1-.7-8.5.8zM12 6.2v13.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Lesen</span>
+        <div class="book-3d">
+          <div class="book-cover-media">
+            <picture>
+            <source srcset="/assets/images/herbstblatt-cover-2026-10.avif" type="image/avif">
+            <source srcset="/assets/images/herbstblatt-cover-2026-10.webp" type="image/webp">
+            <img
+              src="/assets/images/herbstblatt-cover-2026-10.jpg"
+              alt="Ein Herbstblatt im Wind — Buchcover von Martin Pintar"
+              class="book-entry__cover"
+              width="260"
+              height="402"
+              loading="eager"
+              fetchpriority="high">
+          </picture>
+            <video class="book-cover-video" muted playsinline loop preload="none" poster="/assets/images/herbstblatt-cover-2026-10.jpg" aria-hidden="true" tabindex="-1"></video>
+            <img class="book-cover-title" hidden src="/assets/images/herbstblatt-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="cover-pill" aria-hidden="true"><svg class="cover-pill__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.2C9.6 4.7 6.6 4.5 3.5 5.4v13.1c3.1-.9 6.1-.7 8.5.8 2.4-1.5 5.4-1.7 8.5-.8V5.4c-3.1-.9-6.1-.7-8.5.8zM12 6.2v13.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Lesen</span>
+          </div>
+          <span class="book-3d__pages" aria-hidden="true"></span>
         </div>
       </div>
       <div class="book-entry__text-col">
@@ -267,21 +274,24 @@
 
     <article id="wind" class="book-entry book-entry--reverse book-entry--alt fade-in">
       <div class="book-entry__cover-col" data-modal="wind" data-cover-video="/assets/video/wind-cover-web.mp4" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Leseprobe öffnen: Der Wind erinnert sich">
-        <div class="book-cover-media">
-          <picture>
-          <source srcset="/assets/images/wind-cover.avif" type="image/avif">
-          <source srcset="/assets/images/wind-cover.webp" type="image/webp">
-          <img
-            src="/assets/images/wind-cover.jpg"
-            alt="Der Wind erinnert sich — Buchcover von Martin Pintar"
-            class="book-entry__cover"
-            width="260"
-            height="416"
-            loading="lazy">
-        </picture>
-          <video class="book-cover-video" muted playsinline loop preload="none" poster="/assets/images/wind-cover.jpg" aria-hidden="true" tabindex="-1"></video>
-          <img class="book-cover-title" src="/assets/images/wind-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          <span class="cover-pill" aria-hidden="true"><svg class="cover-pill__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.2C9.6 4.7 6.6 4.5 3.5 5.4v13.1c3.1-.9 6.1-.7 8.5.8 2.4-1.5 5.4-1.7 8.5-.8V5.4c-3.1-.9-6.1-.7-8.5.8zM12 6.2v13.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Lesen</span>
+        <div class="book-3d">
+          <div class="book-cover-media">
+            <picture>
+            <source srcset="/assets/images/wind-cover.avif" type="image/avif">
+            <source srcset="/assets/images/wind-cover.webp" type="image/webp">
+            <img
+              src="/assets/images/wind-cover.jpg"
+              alt="Der Wind erinnert sich — Buchcover von Martin Pintar"
+              class="book-entry__cover"
+              width="260"
+              height="416"
+              loading="lazy">
+          </picture>
+            <video class="book-cover-video" muted playsinline loop preload="none" poster="/assets/images/wind-cover.jpg" aria-hidden="true" tabindex="-1"></video>
+            <img class="book-cover-title" src="/assets/images/wind-titel.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <span class="cover-pill" aria-hidden="true"><svg class="cover-pill__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M12 6.2C9.6 4.7 6.6 4.5 3.5 5.4v13.1c3.1-.9 6.1-.7 8.5.8 2.4-1.5 5.4-1.7 8.5-.8V5.4c-3.1-.9-6.1-.7-8.5.8zM12 6.2v13.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Lesen</span>
+          </div>
+          <span class="book-3d__pages" aria-hidden="true"></span>
         </div>
       </div>
       <div class="book-entry__text-col">
@@ -448,7 +458,7 @@
     </div>
   </div>
 
-  <script src="/js/main.js?v=202610160650"></script>
+  <script src="/js/main.js?v=202610222216"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

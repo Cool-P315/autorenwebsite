@@ -116,6 +116,14 @@
   --ease-out:    cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 
+/* Registriert, damit der Browser die Lichtposition im Verlauf animieren kann
+   (unregistrierte Custom Properties springen nur) */
+@property --shine {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: -30%;
+}
+
 /* ============================================================
    RESET
    ============================================================ */
@@ -138,6 +146,15 @@ body {
 }
 
 img   { max-width: 100%; height: auto; display: block; }
+
+/* Typografie: ausgewogene Überschriften, keine einzelnen Wörter am Absatzende */
+h1, h2, h3,
+blockquote,
+.book-entry__subtitle,
+.book-teaser__desc,
+.hero__tagline span { text-wrap: balance; }
+p, li             { text-wrap: pretty; }
+body              { font-kerning: normal; }
 a     { color: inherit; text-decoration: none; }
 button { cursor: pointer; background: none; border: none; }
 
@@ -400,6 +417,26 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   animation:
     fadeUp   1.2s var(--ease-out) 0.7s forwards,
     nameGlow 6s   ease-in-out    3.5s infinite;
+  position: relative;
+}
+
+/* Gold-Schimmer: deckungsgleiche Kopie des Namens, nur ein schmaler Lichtstreifen
+   ist sichtbar. Liegt über dem Glühen (text-shadow), statt es zu ersetzen. */
+.hero__name::after {
+  content: attr(data-shine);
+  content: attr(data-shine) / '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: transparent;
+  text-shadow: none; /* sonst erbt die Kopie das Glühen und verdoppelt es */
+  background: linear-gradient(105deg,
+    transparent calc(var(--shine) - 14%),
+    rgba(255, 238, 200, 0.95) var(--shine),
+    transparent calc(var(--shine) + 14%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: nameShine 11s ease-in-out 4s infinite;
 }
 
 .hero__divider {
@@ -611,21 +648,20 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 
 .book-teaser__cover-wrap { margin-bottom: 2rem; }
 
-/* Cover-Stapel: Poster + optionales Loop-Video (Tilt greift auf .book-cover-media) */
+/* Cover-Stapel: Poster + optionales Loop-Video, als Vorderdeckel im 3D-Buch (.book-3d) */
+.book-teaser__cover-wrap .book-3d { width: 190px; --book-depth: 20px; }
+.book-teaser__cover-wrap:hover .book-3d { --book-lift: -9px; }
+
 .book-teaser__cover-wrap .book-cover-media {
-  width: 190px;
   border-radius: 2px;
   box-shadow:
     -5px 5px 15px rgba(26,15,10,0.28),
     -10px 10px 30px rgba(26,15,10,0.13),
     4px 4px 0 rgba(26,15,10,0.07);
-  transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth);
-  transform-origin: center bottom;
-  will-change: transform;
+  transition: box-shadow 0.5s var(--ease-smooth);
 }
 
 .book-teaser__cover-wrap:hover .book-cover-media {
-  transform: translateY(-9px) rotate(-1deg);
   box-shadow:
     -8px 14px 25px rgba(26,15,10,0.32),
     -15px 20px 45px rgba(26,15,10,0.18),
@@ -724,17 +760,15 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 .book-entry--reverse .book-entry__cover-col { order: 2; }
 .book-entry--reverse .book-entry__text-col  { order: 1; }
 
+.book-entry__cover-col .book-3d { --book-depth: 26px; }
+.book-entry__cover-col:hover .book-3d { --book-lift: -7px; }
+
 .book-entry__cover-col .book-cover-media {
-  width: 100%;
   border-radius: 2px;
   box-shadow:
     -6px 6px 20px rgba(26,15,10,0.22),
     -12px 12px 40px rgba(26,15,10,0.11);
-  transition: transform 0.5s var(--ease-smooth);
-  will-change: transform;
 }
-
-.book-entry__cover-col:hover .book-cover-media { transform: translateY(-7px); }
 
 .book-entry__cover {
   display: block;
@@ -1261,6 +1295,11 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
 @keyframes nameGlow {
   0%, 100% { text-shadow: 0 0 10px rgba(201,169,110,0.28), 0 0 28px rgba(201,169,110,0.12); }
   50%       { text-shadow: 0 0 14px rgba(201,169,110,0.95), 0 0 32px rgba(201,169,110,0.78), 0 0 60px rgba(201,169,110,0.52), 0 0 110px rgba(201,169,110,0.28); }
+}
+
+@keyframes nameShine {
+  0%        { --shine: -30%; }
+  30%, 100% { --shine: 130%; }
 }
 
 @keyframes leaf-fall {
@@ -1939,10 +1978,154 @@ html[data-theme="dark"] .share-copied {
 .hero__leaf--flip svg { transform: scaleX(-1); } /* gespiegelte Blattvariante — per Rotation nicht erreichbar */
 
 /* ============================================================
-   3D COVER TILT (Ziel: .book-cover-media, Fallback: img)
+   3D-BUCH: Cover als Vorderdeckel, dahinter Seitenblock (rechts)
+   und Rückdeckel. Ruhelage leicht gedreht, bei Hover/Fokus fast
+   frontal. Der Maus-Tilt (main.js) setzt nur --tilt-rx/--tilt-ry.
    ============================================================ */
-.book-cover-media {
+.book-teaser__cover-wrap,
+.book-entry__cover-col { perspective: 1100px; }
+
+.book-3d {
+  --book-depth: 18px;
+  --book-ry: -22deg;
+  --book-back: var(--brown-deep);
+  position: relative;
+  transform-style: preserve-3d;
+  transform:
+    translateY(var(--book-lift, 0px))
+    rotateX(var(--tilt-rx, 0deg))
+    rotateY(calc(var(--book-ry) + var(--tilt-ry, 0deg)));
+  transition: transform 0.6s var(--ease-smooth);
   will-change: transform;
+}
+
+.book-3d.is-tilting {
+  transition-duration: 0.1s;
+  transition-timing-function: ease-out;
+}
+
+.book-teaser__cover-wrap:hover .book-3d,
+.book-entry__cover-col:hover .book-3d,
+.book-teaser__cover-wrap:focus-visible .book-3d,
+.book-entry__cover-col:focus-visible .book-3d { --book-ry: -7deg; }
+
+/* Rückdeckel: eine Buchstärke hinter dem Cover */
+.book-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: var(--book-back);
+  transform: translateZ(calc(-1 * var(--book-depth)));
+  box-shadow: -10px 12px 30px rgba(26, 15, 10, 0.25);
+}
+
+/* Seitenblock: steht rechtwinklig an der rechten Kante und reicht nach hinten.
+   Feine Streifen = Papierlagen, Verlauf = Licht von vorne. */
+.book-3d__pages {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  right: 1px;
+  width: var(--book-depth);
+  transform-origin: right center;
+  transform: rotateY(-90deg);
+  background:
+    linear-gradient(to right, rgba(26, 15, 10, 0.28), rgba(26, 15, 10, 0.04) 35%, rgba(255, 255, 255, 0.12) 85%, rgba(26, 15, 10, 0.08)),
+    repeating-linear-gradient(to right, #F3EADA 0 1px, #D8CAB0 1px 2px);
+}
+
+/* Rückdeckel in der Grundfarbe des jeweiligen Covers */
+[data-modal="herbstblatt"] .book-3d { --book-back: #4A3812; }
+[data-modal="wind"] .book-3d        { --book-back: #1C2438; }
+
+/* Seitenübergang Startseite → Bücher: das angeklickte Cover gleitet an seinen Platz */
+::view-transition-group(buch-cover) {
+  animation-duration: 700ms;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ============================================================
+   THEME-WECHSEL: neues Farbschema öffnet sich kreisförmig vom
+   Mond-/Sonnen-Knopf aus (Kreis animiert main.js)
+   ============================================================ */
+html.theme-vt::view-transition-old(root),
+html.theme-vt::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ============================================================
+   ECHTE INITIALEN: Anfangsbuchstabe genau über drei Zeilen
+   (Rückfall ohne Unterstützung: die float-Initialen oben)
+   ============================================================ */
+@supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
+  .book-entry__desc::first-letter,
+  .about-bio__text p:first-child::first-letter,
+  .modal__text .modal__prolog-label + p::first-letter {
+    float: none;
+    font-size: 1em;
+    line-height: inherit;
+    margin: 0 0.1em 0 0;
+    -webkit-initial-letter: 3;
+    initial-letter: 3;
+  }
+}
+
+/* Schmale Bildschirme: Silbentrennung für lange deutsche Wörter im Fließtext */
+@media (max-width: 640px) {
+  .book-entry__desc,
+  .about-bio__text,
+  .modal__text {
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+}
+
+/* ============================================================
+   SCROLL-GESTEUERTE EINBLENDUNG (Chrome 115+, Safari 26+)
+   main.js setzt .scroll-reveal nur an Elemente, die beim Laden
+   noch unter dem sichtbaren Bereich liegen und nicht höher als
+   60 % des Fensters sind. Sonst gelten die .fade-in-Übergänge.
+   ============================================================ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-reveal {
+      animation: scroll-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 75%;
+    }
+    .scroll-reveal.fade-in-delay-1,
+    .book-teaser.scroll-reveal:nth-child(2) { animation-range: entry 15% entry 85%; }
+    .scroll-reveal.fade-in-delay-2           { animation-range: entry 25% entry 95%; }
+    .scroll-reveal.fade-in-delay-3           { animation-range: entry 30% entry 100%; }
+
+    /* Startseite: Name und Leitsatz bleiben beim Scrollen zurück und verblassen,
+       der Schriftzug im Hintergrund zieht langsamer nach (Parallaxe) */
+    .hero__content {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+    .hero__ghost {
+      animation: hero-ghost-drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+  }
+}
+
+@keyframes scroll-reveal {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes hero-drift {
+  to { transform: translateY(22vh); opacity: 0; }
+}
+
+@keyframes hero-ghost-drift {
+  to { transform: translateY(12vh); }
 }
 
 /* ============================================================
@@ -1991,6 +2174,7 @@ html[data-theme="dark"] .share-copied {
     scroll-behavior: auto !important;
   }
   .hero__leaf { display: none; }
+  .hero__name::after { display: none; }
   @view-transition { navigation: none; }
 }
 
@@ -2085,6 +2269,11 @@ html[data-theme="dark"] .share-copied {
      auf die naechste Seite. */
   .book-entry__cover-col,
   .book-teaser__cover-wrap { max-width: 48mm; }
+
+  /* 3D-Buch flach drucken */
+  .book-3d { transform: none !important; }
+  .book-3d::before,
+  .book-3d__pages { display: none; }
 
   /* Saubere Umbrueche. Ein ganzer Bucheintrag ist laenger als eine Seite —
      geschuetzt werden deshalb die kleinen Einheiten, nicht der Block. */
