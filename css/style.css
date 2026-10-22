@@ -2066,7 +2066,9 @@ html.theme-vt::view-transition-new(root) {
     float: none;
     font-size: 1em;
     line-height: inherit;
-    margin: 0 0.1em 0 0;
+    /* Kursive Initialen ragen oben über ihre Box hinaus; Abstand in rem,
+       weil em hier je nach Browser die Initialengröße meinen kann */
+    margin: 0 0.55rem 0 0;
     -webkit-initial-letter: 3;
     initial-letter: 3;
   }
