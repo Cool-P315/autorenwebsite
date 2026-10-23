@@ -1027,6 +1027,7 @@
 
     .book-entry__cover-col,
     .book-entry + .book-entry > .book-entry__cover-col {
+      width: 100%; /* feste Breite: sonst fällt die Spalte auf 0, solange das Lazy-Cover noch lädt */
       max-width: 210px;
       margin: 0 auto;
     }
@@ -1610,7 +1611,7 @@
     font-family: var(--font-sans);
     font-size: 0.72rem;
     letter-spacing: 0.1em;
-    color: rgba(201, 169, 110, 0.5);
+    color: rgba(201, 169, 110, 0.72); /* 4,9:1 auf --brown-deep (WCAG AA) */
   }
 
   .footer__link {
@@ -1618,7 +1619,7 @@
     font-size: 0.72rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: rgba(201, 169, 110, 0.5);
+    color: rgba(201, 169, 110, 0.72);
     transition: color 0.3s;
 
     &:hover { color: var(--gold); }

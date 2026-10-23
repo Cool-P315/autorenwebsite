@@ -563,6 +563,17 @@ document.querySelectorAll('.review-slider').forEach(slider => {
     }
   }
 
+  // Poster erst jetzt und aus dem schon geladenen Cover (gleiche Datei, kein zweiter Download);
+  // ein poster-Attribut im HTML würde das Cover beim Seitenaufruf zusätzlich als JPG laden
+  function ensurePoster(wrap, video) {
+    if (video.getAttribute('poster')) return;
+    const img = wrap.querySelector('picture img');
+    if (!img) return;
+    const set = () => { if (img.currentSrc) video.poster = img.currentSrc; };
+    if (img.complete) set();
+    else img.addEventListener('load', set, { once: true });
+  }
+
   function showCover(media, video) {
     media.classList.remove('is-playing');
     video.pause();
@@ -586,6 +597,7 @@ document.querySelectorAll('.review-slider').forEach(slider => {
     const media = wrap.querySelector('.book-cover-media');
     if (!video || !media) return;
 
+    ensurePoster(wrap, video);
     ensureSrc(wrap, video);
     showCover(media, video);
     wrap._coverCycleId = setTimeout(() => {
