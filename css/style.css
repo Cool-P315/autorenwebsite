@@ -1,3 +1,24 @@
+/* ============================================================
+   style.css — Martin Pintar Autorwebsite
+
+   Aufbau in Kaskaden-Ebenen (@layer): Eine spätere Ebene gewinnt
+   unabhängig von der Spezifität; innerhalb einer Ebene gelten wie
+   gewohnt Spezifität und Reihenfolge.
+     reset         Browser-Grundwerte glätten
+     base          Farb-Tokens (hell/dunkel), Schrift, Fokus, Körnung
+     layout        Seitencontainer, Abschnitte
+     components    Bausteine von der Navigation bis zur Leseprobe
+     enhancements  Einblendungen, Seitenübergänge, Initialen
+     utilities     Hilfsklassen
+     overrides     Reduzierte Bewegung, Druck
+   Außerhalb der Ebenen: @font-face, @property, @view-transition.
+
+   Dark Mode: Nur die Tokens in base wechseln (html[data-theme="dark"]),
+   Bausteine verwenden ausschließlich Tokens. Transparente Varianten
+   entstehen mit color-mix() aus dem Token.
+   ============================================================ */
+@layer reset, base, layout, components, enhancements, utilities, overrides;
+
 /* EB Garamond — self-hosted */
 @font-face {
   font-family: 'EB Garamond';
@@ -82,40 +103,6 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* ============================================================
-   TEXT SELECTION
-   ============================================================ */
-::selection      { background: rgba(var(--accent-rgb), 0.28); }
-::-moz-selection { background: rgba(var(--accent-rgb), 0.28); }
-
-/* ============================================================
-   CUSTOM PROPERTIES
-   ============================================================ */
-:root {
-  --cream:       #E2D7C5;
-  --cream-alt:   #DACBB2;
-  --brown-dark:  #1C0E08;
-  --gold:        #C9A96E;
-  --gold-light:  #DFC092;
-  --accent:      #6B5026;  /* Gold-Pendant fuer Creme-Flaechen (Dark Mode: = Gold) */
-  --accent-rgb:  107, 80, 38;
-  --eco:         #1C601C;
-  --eco-border:  rgba(28, 96, 28, 0.6);
-  --eco-bg:      rgba(28, 96, 28, 0.08);
-  --brown-mid:   #5A4530;
-  --brown-deep:  #1A0F0A;
-  --brown-light: #7A6045;
-
-  --font-serif: 'EB Garamond', 'Garamond', Georgia, serif;
-  --font-sans:  'Lato', 'Helvetica Neue', sans-serif;
-
-  --max-width:  1100px;
-  --nav-height: 80px;
-
-  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-out:    cubic-bezier(0.0, 0.0, 0.2, 1);
-}
-
 /* Registriert, damit der Browser die Lichtposition im Verlauf animieren kann
    (unregistrierte Custom Properties springen nur) */
 @property --shine {
@@ -131,2428 +118,2443 @@
   initial-value: 0deg;
 }
 
-/* ============================================================
-   RESET
-   ============================================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #1A0F0A; /* füllt den Status-Bar-Bereich (Safe Area) auf iOS */
-  overflow-x: hidden;
-}
-
-body {
-  font-family: var(--font-serif);
-  font-size: 1.125rem;
-  line-height: 1.85;
-  color: var(--brown-dark);
-  background-color: var(--cream);
-}
-
-img   { max-width: 100%; height: auto; display: block; }
-
-/* Typografie: ausgewogene Überschriften, keine einzelnen Wörter am Absatzende */
-h1, h2, h3,
-blockquote,
-.book-entry__subtitle,
-.book-teaser__desc,
-.hero__tagline span { text-wrap: balance; }
-p, li             { text-wrap: pretty; }
-body              { font-kerning: normal; }
-a     { color: inherit; text-decoration: none; }
-button { cursor: pointer; background: none; border: none; }
-
-/* Tastaturfokus: Ring in der Akzentfarbe statt Browser-Blau (auf dunklen Flächen Gold, siehe Nav/Footer).
-   :where() hält die Spezifität bei null, eigene Fokusregeln einzelner Elemente gewinnen. */
-:where(a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])):focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-:root { accent-color: var(--accent); }
-
-/* Startseite: body dunkel, damit Safari bei scrollY 0 (Statusleiste, untere Leiste) die Nav-Farbe
-   statt Creme übernimmt. Der sichtbare Inhalt (main) bleibt creme, Hero und Footer haben eigene Hintergründe. */
-body.page-home { background-color: var(--brown-deep); }
-.page-home main { background-color: var(--cream); }
-
-/* Paper-grain overlay */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.022;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: multiply;
-}
-
-/* Touch-Geräte: Körnung weglassen. iOS-26-Safari liest sonst das fixierte Vollflächen-Overlay
-   für die Färbung der Statusleiste mit. */
-@media (hover: none) {
-  body::after { content: none; display: none; }
-}
-
-/* Unsichtbare Farbquelle für iOS-26-Safari (Startseite, Nav anfangs transparent).
-   Echtes Element, kein Pseudo-Element; ohne backdrop-filter und background-image. */
-.safari-tint {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background-color: #1A0F0A; /* = --brown-deep, in hellem und dunklem Design gleich */
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1002;
-}
-
-/* ============================================================
-   SKIP-LINK (Barrierefreiheit)
-   ============================================================ */
-.skip-link {
-  position: absolute;
-  top: -4rem;
-  left: 1.5rem;
-  z-index: 10001;
-  background: var(--brown-deep);
-  color: var(--gold);
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  padding: 0.85rem 1.5rem;
-  border-radius: 2px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  transition: top 0.2s var(--ease-out);
-}
-
-.skip-link:focus-visible {
-  top: 1.25rem;
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
-}
-
-/* Anker-Ziele nicht unter der fixierten Nav landen lassen
-   (Skip-Link, buecher.html#herbstblatt / #wind) */
-#main,
-#herbstblatt,
-#wind {
-  scroll-margin-top: var(--nav-height);
-}
-
-/* ============================================================
-   NAVIGATION
-   ============================================================ */
-.nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.75rem 3rem;
-  transition:
-    background 0.5s var(--ease-smooth),
-    padding    0.4s var(--ease-smooth),
-    box-shadow 0.4s var(--ease-smooth);
-}
-
-.nav.scrolled,
-.nav.nav--always-dark {
-  background:  var(--brown-deep);
-  padding:     1.1rem 3rem;
-  box-shadow:  0 4px 30px rgba(0,0,0,0.4);
-}
-
-
-.nav__actions {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav__theme-toggle {
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(201, 169, 110, 0.75);
-  border-radius: 50%;
-  background: #4A4A4A; /* neutral: passt zu light + dark */
-  color: var(--brown-deep);
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: border-color 0.3s, background 0.3s;
-  flex-shrink: 0;
-  padding: 0;
-  line-height: 1;
-}
-
-.nav__theme-toggle::before         { content: '🌙'; }
-html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
-
-.nav__theme-toggle:hover {
-  border-color: var(--gold);
-  background: #363636;
-}
-
-.nav__logo {
-  font-family: var(--font-serif);
-  font-size:   1.4rem;
-  font-style:  italic;
-  color:       var(--gold);
-  letter-spacing: 0.02em;
-  transition:  opacity 0.3s;
-}
-.nav__logo:hover { opacity: 0.8; }
-
-.nav__links {
-  display: flex;
-  gap: 2.5rem;
-  list-style: none;
-}
-
-.nav__link {
-  font-family:    var(--font-sans);
-  font-size:      0.8rem;
-  font-weight:    400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(250, 247, 242, 0.7);
-  position: relative;
-  transition: color 0.3s;
-}
-
-.nav__link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0;
-  width: 100%; height: 1px;
-  background: var(--gold);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.3s var(--ease-smooth);
-}
-
-.nav__link:hover,
-.nav__link.active { color: var(--gold); }
-
-.nav__link:hover::after,
-.nav__link.active::after { transform: scaleX(1); }
-
-/* Fokusring auf dunklem Grund in Gold */
-.nav :focus-visible,
-.footer :focus-visible { outline-color: var(--gold); }
-
-/* Hamburger */
-.nav__toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  padding: 4px;
-}
-.nav__toggle span {
-  display: block;
-  width: 24px; height: 1px;
-  background: var(--gold);
-  transition: all 0.3s;
-}
-
-/* ============================================================
-   HERO (index only)
-   ============================================================ */
-.hero {
-  position: relative;
-  height: 100vh;
-  height: 100svh; /* iOS: ohne Bereich hinter der Safari-Adressleiste; alte Browser nutzen 100vh */
-  min-height: 600px;
-  background: var(--brown-deep);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 70% 60% at 65% 35%, rgba(201,169,110,0.09) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(44,24,16,0.6) 0%, transparent 60%);
-  animation: heroGlow 9s ease-in-out infinite alternate;
-}
-
-@keyframes heroGlow {
-  from { opacity: 0.6; transform: scale(1); }
-  to   { opacity: 1;   transform: scale(1.04); }
-}
-
-.hero__ghost {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-serif);
-  font-size: clamp(4rem, 12vw, 11rem);
-  font-style: italic;
-  color: var(--gold);
-  opacity: 0.055;
-  white-space: nowrap;
-  user-select: none;
-  pointer-events: none;
-  letter-spacing: -0.02em;
-}
-
-.hero__content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 2rem;
-}
-
-.hero__label {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.38em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 1.5rem;
-  opacity: 0;
-  animation: fadeUp 1s var(--ease-out) 0.4s forwards;
-}
-
-.hero__name {
-  font-family: var(--font-serif);
-  font-size: clamp(3rem, 8vw, 6.5rem);
-  font-weight: 400;
-  color: var(--cream);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  opacity: 0;
-  animation:
-    fadeUp   1.2s var(--ease-out) 0.7s forwards,
-    nameGlow 6s   ease-in-out    3.5s infinite;
-  position: relative;
-}
-
-/* Gold-Schimmer: deckungsgleiche Kopie des Namens, nur ein schmaler Lichtstreifen
-   ist sichtbar. Liegt über dem Glühen (text-shadow), statt es zu ersetzen. */
-.hero__name::after {
-  content: attr(data-shine);
-  content: attr(data-shine) / '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  color: transparent;
-  text-shadow: none; /* sonst erbt die Kopie das Glühen und verdoppelt es */
-  background: linear-gradient(105deg,
-    transparent calc(var(--shine) - 14%),
-    rgba(255, 238, 200, 0.95) var(--shine),
-    transparent calc(var(--shine) + 14%));
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: nameShine 11s ease-in-out 4s infinite;
-}
-
-.hero__divider {
-  width: 55px; height: 1px;
-  background: var(--gold);
-  margin: 2rem auto;
-  opacity: 0;
-  animation: fadeIn 1s var(--ease-out) 1.3s forwards;
-}
-
-.hero__tagline {
-  font-family: var(--font-serif);
-  font-size: clamp(1.35rem, 0.95rem + 1.05vw, 1.8rem); /* <~500px Viewport greift das Minimum — Mobil bleibt unverändert */
-  font-style: italic;
-  color: rgba(250, 247, 242, 0.72);
-  display: grid; /* Sätze überlagert in 1/1 — Container hält immer die Höhe des längsten */
-  opacity: 0;
-  animation: fadeUp 1s var(--ease-out) 1.5s forwards;
-}
-
-.hero__tagline span {
-  grid-area: 1 / 1;
-  opacity: 0;
-  transition: opacity 2s ease-in-out;
-}
-
-.hero__tagline span.is-visible { opacity: 1; }
-
-.hero__scroll {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  opacity: 0;
-  animation: fadeIn 1s var(--ease-out) 2.2s forwards;
-}
-
-.hero__scroll-text {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(201, 169, 110, 0.55);
-}
-
-.hero__scroll-line {
-  width: 1px; height: 42px;
-  background: linear-gradient(to bottom, rgba(201,169,110,0.7), transparent);
-  animation: scrollPulse 2.2s ease-in-out infinite;
-}
-
-/* ============================================================
-   PAGE HERO (inner pages)
-   ============================================================ */
-.page-hero {
-  background: var(--brown-deep);
-  padding: calc(var(--nav-height) + 5rem) 3rem 5rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.page-hero::before {
-  content: attr(data-bg);
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--font-serif);
-  font-size: clamp(5rem, 18vw, 16rem);
-  font-style: italic;
-  color: var(--gold);
-  opacity: 0.04;
-  white-space: nowrap;
-  pointer-events: none;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.page-hero__title {
-  font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 400;
-  color: var(--cream);
-  position: relative;
-}
-
-.page-hero__sub {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-top: 1rem;
-  opacity: 0.8;
-}
-
-/* ============================================================
-   ORNAMENTAL DIVIDER
-   ============================================================ */
-.ornament {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 4rem auto;
-  max-width: 360px;
-}
-
-.ornament::before,
-.ornament::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--accent);
-  opacity: 0.55;
-}
-
-.ornament__glyph {
-  color: var(--accent);
-  font-size: 1rem;
-  opacity: 0.75;
-  line-height: 1;
-  font-style: normal;
-}
-
-/* ============================================================
-   LAYOUT UTILITIES
-   ============================================================ */
-.container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.section {
-  padding: 7rem 2rem;
-}
-
-.section--alt {
-  background: var(--cream-alt);
-}
-
-.section__label {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  margin-bottom: 0.75rem;
-}
-
-/* ============================================================
-   BUTTON
-   ============================================================ */
-.btn {
-  display: inline-block;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  padding: 0.7rem 1.9rem;
-  position: relative;
-  transition: background 0.3s, color 0.3s, border-color 0.3s;
-}
-
-.btn:hover {
-  background: var(--accent);
-  color: var(--cream);
-  border-color: var(--accent);
-}
-
-/* Umlaufender Lichtrand: ein Lichtpunkt wandert bei Hover/Fokus um den Rahmen.
-   Der Verlauf liegt auf einem Ring, die Maske schneidet das Innere aus. */
-.btn::before,
-.modal::before {
-  content: '';
-  position: absolute;
-  pointer-events: none;
-  background: conic-gradient(from var(--rim-angle),
-    transparent 0deg 250deg,
-    rgba(223, 192, 146, 0.35) 290deg,
-    var(--gold-light) 330deg,
-    #FFF4DC 348deg,
-    transparent 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: 0;
-}
-
-.btn::before {
-  inset: -1px;
-  padding: 1.5px;
-  transition: opacity 0.4s var(--ease-smooth);
-}
-
-@media (hover: hover) {
-  .btn:hover::before,
-  .btn:focus-visible::before {
-    opacity: 1;
-    animation: rim-spin 2.6s linear infinite;
-  }
-}
-
-@keyframes rim-spin {
-  to { --rim-angle: 360deg; }
-}
-
-/* ============================================================
-   BOOK TEASERS (Homepage)
-   ============================================================ */
-.books-preview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  max-width: var(--max-width);
-  margin: 0 auto;
-}
-
-.book-teaser {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity   0.85s var(--ease-smooth),
-    transform 0.85s var(--ease-smooth);
-}
-
-.book-teaser.visible           { opacity: 1; transform: translateY(0); }
-.book-teaser:nth-child(2)      { transition-delay: 0.18s; }
-
-.book-teaser__cover-wrap { margin-bottom: 2rem; }
-
-/* Cover-Stapel: Poster + optionales Loop-Video, als Vorderdeckel im 3D-Buch (.book-3d) */
-.book-teaser__cover-wrap .book-3d { width: 190px; --book-depth: 20px; }
-.book-teaser__cover-wrap:hover .book-3d { --book-lift: -9px; }
-
-.book-teaser__cover-wrap .book-cover-media {
-  border-radius: 2px;
-  box-shadow:
-    -5px 5px 15px rgba(26,15,10,0.28),
-    -10px 10px 30px rgba(26,15,10,0.13),
-    4px 4px 0 rgba(26,15,10,0.07);
-  transition: box-shadow 0.5s var(--ease-smooth);
-}
-
-.book-teaser__cover-wrap:hover .book-cover-media {
-  box-shadow:
-    -8px 14px 25px rgba(26,15,10,0.32),
-    -15px 20px 45px rgba(26,15,10,0.18),
-    7px 7px 0 rgba(26,15,10,0.07);
-}
-
-.book-teaser__cover {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 2px;
-}
-
-.book-teaser__title {
-  font-size: 1.5rem;
-  font-style: italic;
-  font-weight: 400;
-  margin-bottom: 0.75rem;
-}
-
-.book-teaser__desc {
-  font-size: 0.95rem;
-  color: var(--brown-mid);
-  line-height: 1.75;
-  max-width: 280px;
-  margin: 0 auto 0.85rem;
-}
-
-.book-teaser__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ============================================================
-   QUOTE SECTION (Homepage)
-   ============================================================ */
-.quote-section {
-  text-align: center;
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-.quote-section blockquote {
-  font-size: clamp(1.3rem, 3vw, 2rem);
-  font-style: italic;
-  line-height: 1.65;
-  color: var(--brown-dark);
-}
-
-.quote-section cite {
-  display: block;
-  margin-top: 1.75rem;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  font-style: normal;
-}
-
-/* ============================================================
-   BOOK ENTRIES (Bücher-Seite)
-   ============================================================ */
-.book-entry {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 5rem;
-  align-items: start;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 5.5rem 2rem;
-}
-
-/* Alternating background — second entry gets cream-alt as a full-bleed panel */
-.book-entry + .book-entry,
-.book-entry--alt {
-  max-width: 100%;
-  padding-left: calc((100vw - var(--max-width)) / 2 + 2rem);
-  padding-right: calc((100vw - var(--max-width)) / 2 + 2rem);
-  background: var(--cream-alt);
-  border-top: none;
-}
-
-/* Constrain the inner grid to max-width */
-.book-entry + .book-entry > * {
-  max-width: none;
-}
-
-.book-entry--reverse {
-  grid-template-columns: 1fr 260px;
-}
-
-.book-entry--reverse .book-entry__cover-col { order: 2; }
-.book-entry--reverse .book-entry__text-col  { order: 1; }
-
-.book-entry__cover-col .book-3d { --book-depth: 26px; }
-.book-entry__cover-col:hover .book-3d { --book-lift: -7px; }
-
-.book-entry__cover-col .book-cover-media {
-  border-radius: 2px;
-  box-shadow:
-    -6px 6px 20px rgba(26,15,10,0.22),
-    -12px 12px 40px rgba(26,15,10,0.11);
-}
-
-.book-entry__cover {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 2px;
-}
-
-/* Format label in gold — clearly visible in both modes */
-.book-entry__format {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
-}
-
-.eco-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--eco);
-  background: var(--eco-bg);
-  border: 1px solid var(--eco-border);
-  border-radius: 2px;
-  padding: 0.2em 0.55em 0.2em 0.45em;
-  margin-bottom: 1.1rem;
-}
-
-.book-entry__title {
-  font-size: clamp(1.9rem, 3.5vw, 2.8rem);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1.15;
-  margin-bottom: 0.5rem;
-}
-
-.book-entry__subtitle {
-  font-size: 1rem;
-  color: var(--brown-mid);
-  font-style: italic;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.38);
-}
-
-.book-entry__desc {
-  font-size: 1.05rem;
-  line-height: 1.9;
-  color: var(--brown-dark);
-  margin-bottom: 2.5rem;
-}
-
-.book-entry__desc::first-letter {
-  font-size: 3.4em;
-  line-height: 0.78;
-  float: left;
-  margin: 0.04em 0.08em 0 0;
-  color: var(--accent);
-  font-style: italic;
-}
-
-.book-entry__prices {
-  display: flex;
-  gap: 2.5rem;
-  margin-bottom: 2rem;
-}
-
-.price-item__format {
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  margin-bottom: 0.25rem;
-}
-
-.price-item__amount {
-  font-size: 1.4rem;
-  color: var(--accent);
-  font-style: italic;
-}
-
-.book-entry__links {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.review-snippet {
-  margin-top: 1.5rem;
-  padding: 0.9rem 1.1rem;
-  border-left: 2px solid rgba(var(--accent-rgb), 0.38);
-}
-.review-snippet__stars {
-  color: var(--accent);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  margin-bottom: 0.35rem;
-}
-.review-snippet__quote {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.92rem;
-  line-height: 1.65;
-  color: var(--brown-dark);
-  margin-bottom: 0.4rem;
-}
-.review-snippet__cite {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-}
-
-/* ============================================================
-   REVIEW SLIDER
-   ============================================================ */
-.review-slider {
-  margin-top: 1.5rem;
-  touch-action: pan-y;
-}
-.review-slider__track {
-  display: grid;
-}
-.review-slider__slide {
-  grid-area: 1 / 1;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-.review-slider__slide.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-.review-slider .review-snippet {
-  margin-top: 0;
-}
-.review-slider__nav {
-  display: flex;
-  gap: 0.45rem;
-  margin-top: 0.75rem;
-  padding-left: 1.1rem;
-}
-.review-slider__dot {
-  position: relative; /* Anker für die unsichtbare Touch-Fläche */
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(var(--accent-rgb), 0.28);
-  border: 1px solid rgba(var(--accent-rgb), 0.4);
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.2s, border-color 0.2s;
-}
-/* Unsichtbare vergrößerte Klickfläche — Touch-Ziel ≥ 24 px (WCAG 2.5.8) */
-.review-slider__dot::after {
-  content: '';
-  position: absolute;
-  inset: -9px;
-}
-.review-slider__dot.active,
-.review-slider__dot:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.book-entry__review {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.45);
-}
-
-.book-entry__review-prompt {
-  font-family: var(--font-sans);
-  font-style: normal;
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
-  color: var(--brown-mid);
-  margin-bottom: 0.5rem;
-}
-
-.book-entry__review-link {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-/* ============================================================
-   ÜBER MICH
-   ============================================================ */
-.about-grid {
-  display: grid;
-  grid-template-columns: 330px 1fr;
-  gap: 6rem;
-  align-items: start;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 7rem 2rem;
-}
-
-.about-photo__img {
-  width: 100%;
-  border-radius: 2px;
-  filter: sepia(12%) contrast(105%);
-  box-shadow: 0 8px 32px rgba(44, 24, 16, 0.18); /* wie .about-outdoor__img: kein Rahmen, nur weicher Schatten */
-}
-
-.about-photo__caption {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  text-align: center;
-  margin-top: 1.1rem;
-}
-
-.about-bio__label {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1rem;
-  opacity: 0.85;
-}
-
-.about-bio__name {
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1.1;
-  margin-bottom: 2.25rem;
-}
-
-.about-bio__text {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-  font-size: 1.05rem;
-  line-height: 1.9;
-  color: var(--brown-dark);
-}
-
-.about-bio__text p:first-child::first-letter {
-  font-size: 3.2em;
-  line-height: 0.78;
-  float: left;
-  margin: 0.04em 0.1em 0 0;
-  color: var(--accent);
-  font-style: italic;
-}
-
-.about-outdoor {
-  margin-top: 2.5rem;
-}
-
-.about-outdoor__img {
-  width: 100%;
-  border-radius: 2px;
-  box-shadow: 0 8px 32px rgba(44, 24, 16, 0.18);
-  filter: sepia(8%) saturate(90%);
-  transition: filter 0.4s var(--ease-smooth);
-}
-
-.about-outdoor__img:hover {
-  filter: sepia(0%) saturate(100%);
-}
-
-.about-books {
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.32);
-}
-
-.about-books__label {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  margin-bottom: 1.5rem;
-}
-
-.about-books__list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.about-books__item a {
-  font-size: 1.15rem;
-  font-style: italic;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  transition: color 0.3s;
-}
-
-.about-books__item a::before {
-  content: '—';
-  color: var(--accent);
-  font-style: normal;
-  flex-shrink: 0;
-  transition: transform 0.3s var(--ease-smooth);
-}
-
-.about-books__item a:hover { color: var(--accent); }
-.about-books__item a:hover::before { transform: translateX(0.3em); }
-
-/* ============================================================
-   KONTAKT
-   ============================================================ */
-.contact-wrap {
-  max-width: 620px;
-  margin: 0 auto;
-  padding: 7rem 2rem;
-}
-
-.contact-intro {
-  font-size: 1.2rem;
-  font-style: italic;
-  color: var(--brown-mid);
-  line-height: 1.8;
-  margin-bottom: 3rem;
-  text-align: center;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-
-.form-label {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--brown-mid);
-}
-
-.form-input,
-.form-textarea {
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  color: var(--brown-dark);
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(28, 14, 8, 0.35);
-  padding: 0.55rem 0;
-  outline: none;
-  caret-color: var(--accent);
-  transition: border-color 0.3s, box-shadow 0.3s;
-  width: 100%;
-  line-height: 1.6;
-}
-
-/* Fokus: Linie wird in der Akzentfarbe doppelt so kräftig (statt Ring, passt zum Linienstil) */
-.form-input:focus,
-.form-textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 1px 0 0 var(--accent);
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 140px;
-}
-
-.form-privacy {
-  margin-top: 1rem;
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  color: rgba(28, 14, 8, 0.5);
-  line-height: 1.5;
-}
-.form-privacy a { color: var(--accent); }
-
-/* Honeypot-Feld gegen Formular-Spam — fuer Menschen unsichtbar, fuer Bots erreichbar */
-.hp-field {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.contact-email {
-  text-align: center;
-  margin-top: 3.5rem;
-  padding-top: 3rem;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.32);
-}
-
-.contact-email__or {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  margin-bottom: 0.75rem;
-}
-
-.contact-email__link {
-  font-size: 1.15rem;
-  font-style: italic;
-  color: var(--accent);
-}
-
-/* ============================================================
-   IMPRESSUM
-   ============================================================ */
-.impressum-wrap {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 7rem 2rem;
-}
-
-.impressum-wrap h2 {
-  font-size: 1.25rem;
-  font-style: italic;
-  font-weight: 400;
-  color: var(--brown-mid);
-  margin: 2.75rem 0 0.65rem;
-}
-
-.impressum-wrap h2:first-of-type { margin-top: 0; }
-
-.impressum-wrap p {
-  font-size: 0.97rem;
-  line-height: 1.9;
-}
-
-.impressum-wrap a { color: var(--accent); }
-
-/* Links im Fließtext: feine Unterstreichung, die bei Hover kräftiger wird und näher an die Schrift rückt */
-.impressum-wrap a,
-.form-privacy a,
-.contact-email__link,
-.book-entry__review-link {
-  text-decoration-line: underline;
-  text-decoration-color: rgba(var(--accent-rgb), 0.35);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.3em;
-  transition:
-    text-decoration-color     0.3s var(--ease-smooth),
-    text-decoration-thickness 0.3s var(--ease-smooth),
-    text-underline-offset     0.3s var(--ease-smooth);
-}
-
-.impressum-wrap a:hover,
-.form-privacy a:hover,
-.contact-email__link:hover,
-.book-entry__review-link:hover {
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.16em;
-}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.footer {
-  background: var(--brown-deep);
-  padding: 2.5rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer__copy {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: rgba(201, 169, 110, 0.5);
-}
-
-.footer__link {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(201, 169, 110, 0.5);
-  transition: color 0.3s;
-}
-
-.footer__link:hover { color: var(--gold); }
-
-.footer__links-group {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  justify-content: center;
-}
-
-.footer__amazon-link {
-  display: flex;
-  align-items: center;
-}
-
-.footer__amazon-link svg { display: block; }
-
-/* ============================================================
-   ANIMATIONS
-   ============================================================ */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes scrollPulse {
-  0%, 100% { transform: scaleY(1);   opacity: 0.55; }
-  50%       { transform: scaleY(0.5); opacity: 1;    }
-}
-
-@keyframes nameGlow {
-  0%, 100% { text-shadow: 0 0 10px rgba(201,169,110,0.28), 0 0 28px rgba(201,169,110,0.12); }
-  50%       { text-shadow: 0 0 14px rgba(201,169,110,0.95), 0 0 32px rgba(201,169,110,0.78), 0 0 60px rgba(201,169,110,0.52), 0 0 110px rgba(201,169,110,0.28); }
-}
-
-@keyframes nameShine {
-  0%        { --shine: -30%; }
-  30%, 100% { --shine: 130%; }
-}
-
-@keyframes leaf-fall {
-  0%   { transform: translate(0,       -5vh)  rotate(0deg);   opacity: 0;    }
-  8%   {                                                        opacity: 0.5;  }
-  25%  { transform: translate(1.8vw,   26vh)  rotate(95deg);                 }
-  50%  { transform: translate(-1.2vw,  55vh)  rotate(185deg); opacity: 0.28; }
-  75%  { transform: translate(2.2vw,   80vh)  rotate(270deg);                }
-  92%  {                                                        opacity: 0.12; }
-  100% { transform: translate(0.6vw,   110vh) rotate(350deg); opacity: 0;    }
-}
-
-@keyframes vt-out { to   { opacity: 0; } }
-@keyframes vt-in  { from { opacity: 0; } }
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(26px);
-  transition:
-    opacity   0.9s var(--ease-smooth),
-    transform 0.9s var(--ease-smooth);
-}
-
-.fade-in.visible            { opacity: 1; transform: translateY(0); }
-.fade-in-delay-1.visible    { transition-delay: 0.12s; }
-.fade-in-delay-2.visible    { transition-delay: 0.24s; }
-.fade-in-delay-3.visible    { transition-delay: 0.4s;  }
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 900px) {
-  .book-entry,
-  .book-entry--reverse {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding: 4rem 2rem;
-  }
-
-  .book-entry + .book-entry {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  .book-entry--alt {
-    background: var(--cream-alt);
-  }
-
-  .book-entry--reverse .book-entry__cover-col,
-  .book-entry--reverse .book-entry__text-col { order: unset; }
-
-  .book-entry__cover-col,
-  .book-entry + .book-entry > .book-entry__cover-col {
-    max-width: 210px;
-    margin: 0 auto;
-  }
-
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    padding: 5rem 1.5rem;
-  }
-
-  .about-photo { max-width: 250px; margin: 0 auto; }
-}
-
-@media (max-width: 768px) {
-  .nav        { padding: 1.25rem 1.5rem; }
-  .nav.scrolled,
-  .nav.nav--always-dark { padding: 1rem 1.5rem; }
-
-  .nav__actions { gap: 0.75rem; }
-
-  .nav__links {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: var(--brown-deep);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2.75rem;
-  }
-
-  .nav__links.open    { display: flex; }
-  .nav__link          { font-size: 1rem; letter-spacing: 0.2em; }
-  .nav__toggle        { display: flex; }
-
-  .books-preview      { grid-template-columns: 1fr; gap: 3rem; }
-
-  .footer {
-    padding: 2rem 1.5rem;
-    flex-direction: column;
-    gap: 0.75rem;
-    text-align: center;
-  }
-
-  .section             { padding: 5rem 1.5rem; }
-  .contact-wrap        { padding: 5rem 1.5rem; }
-  .impressum-wrap      { padding: 5rem 1.5rem; }
-
-  .page-hero           { padding: calc(var(--nav-height) + 3.5rem) 1.5rem 4rem; }
-}
-
-@media (max-width: 480px) {
-  html { font-size: 16px; }
-
-  .book-entry__desc::first-letter { font-size: 2.6em; }
-  .book-entry__prices             { flex-direction: column; gap: 1rem; }
-}
-
-/* ============================================================
-   LESEPROBE MODAL
-   ============================================================ */
-.book-teaser__cover-wrap,
-.book-entry__cover-col {
-  cursor: pointer;
-  position: relative;
-}
-
-/* Poster + Video-Stack */
-.book-cover-media {
-  position: relative;
-  line-height: 0;
-  overflow: hidden;
-}
-
-.book-cover-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity 0.55s var(--ease-smooth);
-  pointer-events: none;
-}
-
-.book-cover-media.is-playing .book-cover-video {
-  opacity: 1;
-}
-
-/* Titel-Ebene: Buchtitel bleibt während der Video-Phase stehen („lebendes Cover") */
-.book-cover-title {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.55s var(--ease-smooth);
-}
-
-.book-cover-media.is-playing .book-cover-title { opacity: 1; }
-
-/* Titel-Overlay ausgeblendet (Titel steckt im neuen Cover-Video); img{display:block} würde [hidden] sonst überstimmen */
-.book-cover-title[hidden] { display: none; }
-
-@media (prefers-reduced-motion: reduce) {
-  .book-cover-video { display: none; }
-  .book-cover-media.is-playing .book-cover-video { opacity: 0; }
-  .book-cover-title { display: none; }
-}
-
-.book-teaser__cover-wrap::after,
-.book-entry__cover-col::after {
-  content: 'Leseprobe';
-  position: absolute;
-  bottom: 0.75rem;
-  left: 50%;
-  z-index: 2;
-  transform: translateX(-50%) translateY(6px);
-  font-family: var(--font-sans);
-  font-size: 0.58rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--cream);
-  background: rgba(26, 15, 10, 0.85);
-  border: 1px solid rgba(201, 169, 110, 0.45);
-  padding: 0.35rem 1rem;
-  opacity: 0;
-  transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.book-teaser__cover-wrap:hover::after,
-.book-entry__cover-col:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* Tastaturfokus: Bronze-Rahmen + Leseprobe-Badge wie beim Hover */
-.book-teaser__cover-wrap:focus-visible,
-.book-entry__cover-col:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 5px;
-}
-
-.book-teaser__cover-wrap:focus-visible::after,
-.book-entry__cover-col:focus-visible::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ------------------------------------------------------------
-   Leseprobe-Pille (Touch)
-   Kleine Pille „Lesen“ oben rechts am Cover, nur auf Geräten ohne Hover (Handy, Tablet).
-   Das Element steht als <span class="cover-pill"> in den vier Cover-Stapeln (.book-cover-media).
-   Entfernen: die vier <span class="cover-pill">-Elemente aus index.html und buecher/index.html
-   löschen und diesen ganzen Block bis zum Kommentar „Ende Leseprobe-Pille“ streichen.
-   ------------------------------------------------------------ */
-.cover-pill {
-  display: none;
-  position: absolute;
-  top: 0.35rem; /* knapp gehalten: der Wind-Titel sitzt im Cover direkt darunter */
-  right: 0.35rem;
-  z-index: 3;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.2rem 0.55rem 0.2rem 0.45rem;
-  font-family: var(--font-sans);
-  font-size: 0.58rem;
-  line-height: 1;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--cream);
-  background: rgba(26, 15, 10, 0.85);
-  border: 1px solid rgba(201, 169, 110, 0.45);
-  border-radius: 999px;
-  pointer-events: none; /* der Tipp geht wie bisher ans Cover */
-}
-
-.cover-pill__icon {
-  display: block;
-  flex-shrink: 0;
-  width: 1em;
-  height: 1em;
-}
-
-html[data-theme="dark"] .cover-pill { color: #EDE0CF; } /* --cream ist im Dark Mode dunkel */
-
-@media (hover: none) {
-  .cover-pill { display: inline-flex; }
-
-  /* Hover-Schild unten am Cover entfällt: nach einem Tipp bliebe es sonst „kleben“ */
-  .book-teaser__cover-wrap::after,
-  .book-entry__cover-col::after { display: none; }
-}
-
-@media print {
-  .cover-pill { display: none !important; }
-}
-/* Ende Leseprobe-Pille */
-
-/* Leseprobe als <dialog> (showModal): Der Browser übernimmt Fokus, Escape und das
-   Sperren der Seite dahinter. Ein- und Ausblenden laufen rein über CSS: @starting-style
-   liefert den Startzustand, allow-discrete hält display/overlay beim Schließen offen,
-   bis die Blende fertig ist. Geschlossen ist der Dialog display: none, wie es
-   iOS-26-Safari für die Statusleiste braucht. */
-.modal-dialog {
-  position: fixed; /* auch beim Ausblenden in Safari/Firefox, die die Top-Layer sofort verlassen */
-  inset: 0;
-  z-index: 10000;
-  width: auto;
-  height: auto;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  padding: 2rem;
-  border: none;
-  background: transparent;
-  color: inherit;
-  overflow: visible;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.35s var(--ease-smooth);
-  transition:
-    opacity 0.35s var(--ease-smooth),
-    display 0.4s allow-discrete,
-    overlay 0.4s allow-discrete;
-}
-
-.modal-dialog[open] {
-  display: flex;
-  opacity: 1;
-}
-
-.modal-dialog::backdrop {
-  background: rgba(26, 15, 10, 0.9);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  opacity: 0;
-  transition: opacity 0.35s var(--ease-smooth);
-  transition:
-    opacity 0.35s var(--ease-smooth),
-    display 0.4s allow-discrete,
-    overlay 0.4s allow-discrete;
-}
-
-.modal-dialog[open]::backdrop { opacity: 1; }
-
-/* Seite dahinter steht still; der Platz der Scrollleiste bleibt, damit nichts springt */
-html:has(.modal-dialog[open]) {
-  overflow: hidden;
-  scrollbar-gutter: stable;
-}
-
-/* Das Fenster als Papierseite: Ränder leicht abgedunkelt, darunter zwei Blätter
-   (Schatten mit negativer Ausdehnung), oben ein Lesezeichen-Band. Gescrollt wird
-   in .modal__page, damit Rand, Band und Lichtrand stehen bleiben. */
-.modal {
-  --paper:         var(--cream);
-  --paper-edge:    rgba(26, 15, 10, 0.07);
-  --paper-under-1: #D3C5AE;
-  --paper-under-2: #C7B89D;
-  --paper-sheet:
-    linear-gradient(to right, var(--paper-edge), transparent 3.5%, transparent 96.5%, var(--paper-edge)),
-    var(--paper);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  max-width: 660px;
-  width: 100%;
-  max-height: 85vh;
-  background: var(--paper-sheet);
-  border-top: 2px solid var(--accent);
-  box-shadow:
-    0 0 0 1px rgba(var(--accent-rgb), 0.1),
-    0 5px 0 -2px var(--paper-under-1),
-    0 6px 2px -2px rgba(26, 15, 10, 0.2),
-    0 10px 0 -4px var(--paper-under-2),
-    0 11px 2px -4px rgba(26, 15, 10, 0.18),
-    0 40px 90px rgba(26, 15, 10, 0.65);
-  transform: scale(0.95) translateY(20px);
-  transition: transform 0.4s var(--ease-smooth);
-}
-
-.modal-dialog[open] .modal { transform: none; }
-
-/* Startzustand beim Öffnen. Muss nach den [open]-Regeln stehen: @starting-style
-   kaskadiert normal mit, spätere Regeln gleicher Spezifität würden gewinnen. */
-@starting-style {
-  .modal-dialog[open],
-  .modal-dialog[open]::backdrop { opacity: 0; }
-  .modal-dialog[open] .modal { transform: scale(0.95) translateY(20px); }
-}
-
-/* Scrollbereich; unten läuft der Text weich aus. Die Maske ist nicht höher als der
-   untere Innenabstand, am Ende der Leseprobe bleibt also nichts verdeckt. */
-.modal__page {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain; /* Scrollen bleibt im Dialog (Chaining, v. a. iOS) */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(var(--accent-rgb), 0.3) transparent;
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent);
-          mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent);
-}
-
-.modal__page:focus { outline: none; }
-
-/* Lichtrand: läuft beim Öffnen einmal um die Seite und verlischt.
-   Auf Creme braucht es sattes Gold und etwas Breite, sonst verschwindet er. */
-.modal::before {
-  inset: 0;
-  z-index: 3;
-  padding: 3px;
-  background: conic-gradient(from var(--rim-angle),
-    transparent 0deg 230deg,
-    rgba(201, 169, 110, 0.45) 285deg,
-    var(--gold) 322deg,
-    #F6DDA8 344deg,
-    transparent 360deg);
-}
-
-.modal-dialog[open] .modal::before {
-  animation: rim-once 2.4s var(--ease-smooth) 0.25s both;
-}
-
-@keyframes rim-once {
-  0%   { --rim-angle: 0deg;   opacity: 0; }
-  12%  {                      opacity: 1; }
-  78%  {                      opacity: 1; }
-  100% { --rim-angle: 360deg; opacity: 0; }
-}
-
-/* Lesezeichen-Band: hängt oben in die Seite, gleitet beim Öffnen herab; Farbe je Buch */
-.modal::after {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: 1.1rem;
-  z-index: 4;
-  width: 13px;
-  height: 4.4rem;
-  pointer-events: none;
-  background:
-    linear-gradient(to right, rgba(0, 0, 0, 0.22), transparent 28%, rgba(255, 255, 255, 0.16) 52%, transparent 72%, rgba(0, 0, 0, 0.26)),
-    var(--ribbon, #7A3420);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 7px), 0 100%);
-  transform-origin: top center;
-}
-
-.modal-dialog[open] .modal::after {
-  animation: ribbon-drop 0.8s var(--ease-smooth) 0.3s both;
-}
-
-@keyframes ribbon-drop {
-  from { transform: scaleY(0); }
-}
-
-#modal-herbstblatt .modal { --ribbon: #8A3A1C; }
-#modal-wind .modal        { --ribbon: #34466E; }
-
-/* Atmosphären-Video im Modal-Kopf: Cover-Motiv als Auftakt der Leseprobe */
-.modal__hero {
-  position: relative;
-  height: 190px;
-  background: var(--brown-deep);
-  overflow: hidden;
-}
-
-.modal__hero video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* „Der Wind erinnert sich": Ausschnitt über die Mitte heben, damit Kopf und
-   Oberkörper der Figur im klaren Bereich über dem Cream-Verlauf liegen
-   (Default 50% zeigt nur den Rumpf, 30% schiebt den Kopf in die Ausblendung) */
-#modal-wind .modal__hero video {
-  object-position: 50% 40%;
-}
-
-.modal__hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(26, 15, 10, 0.22), transparent 40%, transparent 62%, var(--cream));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .modal__hero { display: none; }
-}
-
-.modal__header {
-  padding: 2.5rem 3rem 1.5rem;
-  position: sticky;
-  top: 0;
-  background: var(--paper-sheet);
-  z-index: 1;
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.28);
-}
-
-/* Lesefortschritt: goldene Linie an der Unterkante des Kopfs, wächst beim Lesen mit.
-   Nur mit scroll-gesteuerten Animationen, sonst bleibt sie unsichtbar (scaleX 0). */
-.modal__header::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  background: linear-gradient(to right, var(--gold), var(--gold-light));
-  transform: scaleX(0);
-  transform-origin: left center;
-  pointer-events: none;
-}
-
-@supports (animation-timeline: scroll()) {
-  .modal__header::after {
-    animation: grow-x linear both;
-    animation-timeline: scroll(nearest block);
-  }
-}
-
-@keyframes grow-x {
-  to { transform: scaleX(1); }
-}
-
-.modal__label {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: 0.6rem;
-  letter-spacing: 0.38em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
-}
-
-.modal__title {
-  font-family: var(--font-serif);
-  font-size: 1.55rem;
-  font-style: italic;
-  font-weight: 400;
-  color: var(--brown-dark);
-  line-height: 1.2;
-  padding-right: 5rem;
-}
-
-.modal__close {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  cursor: pointer;
-  transition: color 0.25s;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  background: none;
-  border: none;
-}
-
-.modal__close::before { content: '✕'; font-size: 0.78rem; }
-.modal__close:hover { color: var(--accent); }
-
-.modal__body { padding: 2rem 3rem 3rem; }
-
-.modal__ornament {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.modal__ornament::before,
-.modal__ornament::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--accent);
-  opacity: 0.38;
-}
-
-.modal__ornament-glyph { color: var(--accent); opacity: 0.65; font-size: 0.85rem; }
-
-.modal__text {
-  font-family: var(--font-serif);
-  font-size: 1.08rem;
-  line-height: 1.95;
-  color: var(--brown-dark);
-}
-
-.modal__text p { margin-bottom: 1.4em; }
-.modal__text p:last-child { margin-bottom: 0; }
-
-/* Szenentrenner in den Leseproben (‹›): dezent, zentriert, Akzentfarbe.
-   clear: beugt vor, dass die Initiale den Trenner umfließt, wenn der erste Absatz kurz ist. */
-.modal__text .modal__break {
-  clear: both;
-  margin: 0.3em 0 1.2em;
-  text-align: center;
-  font-size: 1.5em;
-  color: var(--accent);
-  opacity: 0.75;
-  line-height: 1;
-  letter-spacing: 0.45em;
-  text-indent: 0.45em; /* gleicht das nachlaufende Letter-Spacing aus, damit das Paar mittig sitzt */
-}
-
-.modal__text .modal__prolog-label + p::first-letter {
-  font-size: 3.2em;
-  line-height: 0.78;
-  float: left;
-  margin: 0.04em 0.1em 0 0;
-  color: var(--accent);
-  font-style: italic;
-}
-
-.modal__footer {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(var(--accent-rgb), 0.32);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  text-align: center;
-}
-
-.modal__footer-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal__end-mark {
-  font-family: var(--font-sans);
-  font-size: 0.6rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-}
-
-@media (max-width: 640px) {
-  .modal-dialog { padding: 1rem; align-items: flex-end; }
-  .modal { max-height: 90vh; }
-  .modal::after { left: 0.55rem; width: 11px; height: 3.6rem; }
-  .modal__hero { height: 140px; }
-  .modal__header { padding: 2rem 1.75rem 1.25rem; }
-  .modal__body   { padding: 1.5rem 1.75rem 2.5rem; }
-  .modal__title  { padding-right: 4rem; }
-  .modal__close  { top: 1.6rem; right: 1.5rem; }
-}
-
-/* ============================================================
-   DARK MODE
-   ============================================================ */
-html[data-theme="dark"] {
-  --cream:       #1C1208;
-  --cream-alt:   #231810;
-  --brown-dark:  #EDE0CF;
-  --brown-mid:   #AD9A87;
-  --brown-light: #8A7466;
-  --accent:      #C9A96E;
-  --accent-rgb:  201, 169, 110;
-  --eco:         #80B880;
-  --eco-border:  rgba(128, 184, 128, 0.38);
-  --eco-bg:      transparent;
-}
-
-html[data-theme="dark"] body { background-color: var(--cream); color: var(--brown-dark); }
-html[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.012; }
-html[data-theme="dark"] .section--alt { background: var(--cream-alt); }
-html[data-theme="dark"] .quote-section blockquote { color: var(--brown-dark); }
-html[data-theme="dark"] .form-input,
-html[data-theme="dark"] .form-textarea {
-  color: var(--brown-dark);
-  border-bottom-color: rgba(237, 224, 208, 0.18);
-}
-html[data-theme="dark"] .form-privacy { color: rgba(237, 224, 207, 0.4); }
-html[data-theme="dark"] .hero__name       { color: #EDE0CF; }
-html[data-theme="dark"] .hero__tagline    { color: rgba(237, 224, 208, 0.72); }
-html[data-theme="dark"] .page-hero__title { color: #EDE0CF; }
-html[data-theme="dark"] .modal {
-  --paper:         #1e1308;
-  --paper-edge:    rgba(0, 0, 0, 0.28);
-  --paper-under-1: #2B1D10;
-  --paper-under-2: #23170C;
-  box-shadow:
-    0 0 0 1px rgba(201, 169, 110, 0.12),
-    0 5px 0 -2px var(--paper-under-1),
-    0 6px 2px -2px rgba(0, 0, 0, 0.5),
-    0 10px 0 -4px var(--paper-under-2),
-    0 11px 2px -4px rgba(0, 0, 0, 0.45),
-    0 40px 90px rgba(0, 0, 0, 0.85);
-}
-html[data-theme="dark"] .modal__hero::after { background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent 40%, transparent 62%, #1e1308); }
-html[data-theme="dark"] .modal__title { color: var(--brown-dark); }
-html[data-theme="dark"] .modal__text  { color: var(--brown-dark); }
-html[data-theme="dark"] .book-teaser__cover-wrap::after,
-html[data-theme="dark"] .book-entry__cover-col::after { color: #EDE0CF; }
-
-.modal__prolog-label {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1.4rem;
-}
-
-/* ============================================================
-   SHARE BUTTON
-   ============================================================ */
-.book-entry__share {
-  margin-top: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.share-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--brown-light);
-  border: 1px solid rgba(90, 69, 48, 0.35);
-  padding: 0.5rem 1.2rem;
-  cursor: pointer;
-  background: none;
-  transition: color 0.3s, border-color 0.3s;
-}
-
-.share-btn:hover {
-  color: var(--accent);
-  border-color: rgba(var(--accent-rgb), 0.6);
-}
-
-.share-fallback {
-  align-items: center;
-  gap: 0.75rem;
-}
-.share-fallback:not([hidden]) {
-  display: inline-flex;
-}
-
-.share-copy-btn {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: none;
-  border: 1px solid rgba(var(--accent-rgb), 0.5);
-  padding: 0.45rem 1rem;
-  cursor: pointer;
-  transition: background 0.3s, color 0.3s;
-}
-
-.share-copy-btn:hover {
-  background: var(--accent);
-  color: var(--cream);
-}
-
-.share-copied {
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  opacity: 0.8;
-}
-
-html[data-theme="dark"] .share-btn {
-  color: rgba(237, 224, 207, 0.75);
-  border-color: rgba(237, 224, 207, 0.3);
-}
-html[data-theme="dark"] .share-btn:hover {
-  color: var(--accent);
-  border-color: rgba(var(--accent-rgb), 0.6);
-}
-html[data-theme="dark"] .share-copy-btn {
-  color: var(--gold);
-  border-color: rgba(var(--accent-rgb), 0.5);
-}
-html[data-theme="dark"] .share-copy-btn:hover {
-  background: var(--accent);
-  color: var(--cream);
-}
-html[data-theme="dark"] .share-copied {
-  color: var(--gold);
-}
-
-/* ============================================================
-   VIEW TRANSITIONS (Chrome 126+, Safari 18+)
-   ============================================================ */
+/* Seitenübergänge (Chrome 126+, Safari 18+); bei reduzierter Bewegung aus */
 @view-transition { navigation: auto; }
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 560ms;
-  animation-timing-function: ease;
-}
-::view-transition-old(root) { animation-name: vt-out; }
-::view-transition-new(root) { animation-name: vt-in;  }
-
-/* ============================================================
-   SCROLL PROGRESS BAR
-   ============================================================ */
-#scroll-progress {
-  /* Hängt per JS in der .nav (fixed) an deren Unterkante, berührt so den oberen Bildschirmrand nicht.
-     Wächst per transform statt width (kein Layout je Frame); Rückfall ohne Scroll-Zeitleiste: main.js */
-  position: absolute;
-  bottom: 0; left: 0;
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(to right, var(--gold), var(--gold-light));
-  transform: scaleX(0);
-  transform-origin: left center;
-  z-index: 1;
-  pointer-events: none;
-}
-
-@supports (animation-timeline: scroll()) {
-  #scroll-progress {
-    animation: grow-x linear both;
-    animation-timeline: scroll(root block);
-  }
-}
-
-/* ============================================================
-   FALLING LEAVES (Hero)
-   ============================================================ */
-.hero__leaf {
-  position: absolute;
-  top: 0;
-  left: var(--leaf-left, 50%);
-  font-size: var(--leaf-size, 0.8rem);
-  color: rgba(201, 169, 110, 0.45);
-  pointer-events: none;
-  user-select: none;
-  z-index: 1;
-  opacity: 0;
-  animation: leaf-fall var(--leaf-duration, 9s) linear var(--leaf-delay, 0s) infinite;
-}
-
-.hero__leaf svg { display: block; width: 1em; height: 1em; }
-.hero__leaf--flip svg { transform: scaleX(-1); } /* gespiegelte Blattvariante — per Rotation nicht erreichbar */
-
-/* ============================================================
-   3D-BUCH: Cover als Vorderdeckel, dahinter Seitenblock (rechts)
-   und Rückdeckel. Ruhelage leicht gedreht, bei Hover/Fokus fast
-   frontal. Der Maus-Tilt (main.js) setzt nur --tilt-rx/--tilt-ry.
-   ============================================================ */
-.book-teaser__cover-wrap,
-.book-entry__cover-col { perspective: 1100px; }
-
-.book-3d {
-  --book-depth: 18px;
-  --book-ry: -22deg;
-  --book-back: var(--brown-deep);
-  position: relative;
-  transform-style: preserve-3d;
-  transform:
-    translateY(var(--book-lift, 0px))
-    rotateX(var(--tilt-rx, 0deg))
-    rotateY(calc(var(--book-ry) + var(--tilt-ry, 0deg)));
-  transition: transform 0.6s var(--ease-smooth);
-  will-change: transform;
-}
-
-.book-3d.is-tilting {
-  transition-duration: 0.1s;
-  transition-timing-function: ease-out;
-}
-
-.book-teaser__cover-wrap:hover .book-3d,
-.book-entry__cover-col:hover .book-3d,
-.book-teaser__cover-wrap:focus-visible .book-3d,
-.book-entry__cover-col:focus-visible .book-3d { --book-ry: -7deg; }
-
-/* Rückdeckel: eine Buchstärke hinter dem Cover */
-.book-3d::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 2px;
-  background: var(--book-back);
-  transform: translateZ(calc(-1 * var(--book-depth)));
-  box-shadow: -10px 12px 30px rgba(26, 15, 10, 0.25);
-}
-
-/* Seitenblock: steht rechtwinklig an der rechten Kante und reicht nach hinten.
-   Feine Streifen = Papierlagen, Verlauf = Licht von vorne. */
-.book-3d__pages {
-  position: absolute;
-  top: 2px;
-  bottom: 2px;
-  right: 1px;
-  width: var(--book-depth);
-  transform-origin: right center;
-  transform: rotateY(-90deg);
-  background:
-    linear-gradient(to right, rgba(26, 15, 10, 0.28), rgba(26, 15, 10, 0.04) 35%, rgba(255, 255, 255, 0.12) 85%, rgba(26, 15, 10, 0.08)),
-    repeating-linear-gradient(to right, #F3EADA 0 1px, #D8CAB0 1px 2px);
-}
-
-/* Rückdeckel in der Grundfarbe des jeweiligen Covers */
-[data-modal="herbstblatt"] .book-3d { --book-back: #4A3812; }
-[data-modal="wind"] .book-3d        { --book-back: #1C2438; }
-
-/* Seitenübergang Startseite → Bücher: das angeklickte Cover gleitet an seinen Platz */
-::view-transition-group(buch-cover) {
-  animation-duration: 700ms;
-  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* ============================================================
-   THEME-WECHSEL: neues Farbschema öffnet sich kreisförmig vom
-   Mond-/Sonnen-Knopf aus (Kreis animiert main.js)
-   ============================================================ */
-html.theme-vt::view-transition-old(root),
-html.theme-vt::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-/* ============================================================
-   ECHTE INITIALEN: Anfangsbuchstabe genau über drei Zeilen
-   (Rückfall ohne Unterstützung: die float-Initialen oben)
-   ============================================================ */
-@supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
-  .book-entry__desc::first-letter,
-  .about-bio__text p:first-child::first-letter,
-  .modal__text .modal__prolog-label + p::first-letter {
-    float: none;
-    font-size: 1em;
-    line-height: inherit;
-    /* Kursive Initialen ragen oben über ihre Box hinaus; Abstand in rem,
-       weil em hier je nach Browser die Initialengröße meinen kann */
-    margin: 0 0.55rem 0 0;
-    -webkit-initial-letter: 3;
-    initial-letter: 3;
-  }
-}
-
-/* Schmale Bildschirme: Silbentrennung für lange deutsche Wörter im Fließtext */
-@media (max-width: 640px) {
-  .book-entry__desc,
-  .about-bio__text,
-  .modal__text {
-    -webkit-hyphens: auto;
-    hyphens: auto;
-  }
-}
-
-/* ============================================================
-   SCROLL-GESTEUERTE EINBLENDUNG (Chrome 115+, Safari 26+)
-   main.js setzt .scroll-reveal nur an Elemente, die beim Laden
-   noch unter dem sichtbaren Bereich liegen und nicht höher als
-   60 % des Fensters sind. Sonst gelten die .fade-in-Übergänge.
-   ============================================================ */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .scroll-reveal {
-      animation: scroll-reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 5% entry 75%;
-    }
-    .scroll-reveal.fade-in-delay-1,
-    .book-teaser.scroll-reveal:nth-child(2) { animation-range: entry 15% entry 85%; }
-    .scroll-reveal.fade-in-delay-2           { animation-range: entry 25% entry 95%; }
-    .scroll-reveal.fade-in-delay-3           { animation-range: entry 30% entry 100%; }
-
-    /* Startseite: Name und Leitsatz bleiben beim Scrollen zurück und verblassen,
-       der Schriftzug im Hintergrund zieht langsamer nach (Parallaxe) */
-    .hero__content {
-      animation: hero-drift linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 90vh;
-    }
-    .hero__ghost {
-      animation: hero-ghost-drift linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 90vh;
-    }
-
-    /* Startseite: Das Wind-Zitat entsteht beim Scrollen Wort für Wort. main.js zerlegt es
-       in .quote-word (--i = Nummer, --n = Anzahl) und markiert, was danach kommt (.zitat-nach,
-       --d = Reihenfolge). Zeitleiste ist der ganze Zitatblock. Die Bereiche stehen in Längen
-       statt Prozent, damit sie auch auf hohen Bildschirmen vor dem Seitenende erreicht werden. */
-    .quote-section.is-writing {
-      --zitat-start: 6rem;                          /* Zitat ist gut eine Zeile weit sichtbar */
-      --zitat-ende:  calc(6rem + min(42vh, 340px)); /* letztes Wort ist da (Zitat etwa in Fenstermitte) */
-      --wort-dauer:  90px;
-      view-timeline: --zitat block;
-    }
-    .quote-word {
-      display: inline-block;
-      animation: quote-word linear both;
-      animation-timeline: --zitat;
-      animation-range:
-        cover calc(var(--zitat-start) + (var(--zitat-ende) - var(--zitat-start) - var(--wort-dauer)) * var(--i) / var(--n))
-        cover calc(var(--zitat-start) + (var(--zitat-ende) - var(--zitat-start) - var(--wort-dauer)) * var(--i) / var(--n) + var(--wort-dauer));
-    }
-    .zitat-nach {
-      animation: scroll-reveal linear both;
-      animation-timeline: --zitat;
-      animation-range:
-        cover calc(var(--zitat-ende) - 40px + var(--d) * 30px)
-        cover calc(var(--zitat-ende) + 50px + var(--d) * 30px);
-    }
-  }
-}
-
-@keyframes quote-word {
-  from { opacity: 0; filter: blur(4px); transform: translateY(0.4em); }
-  to   { opacity: 1; filter: none;      transform: none; }
-}
-
-@keyframes scroll-reveal {
-  from { opacity: 0; transform: translateY(26px); }
-  to   { opacity: 1; transform: none; }
-}
-
-@keyframes hero-drift {
-  to { transform: translateY(22vh); opacity: 0; }
-}
-
-@keyframes hero-ghost-drift {
-  to { transform: translateY(12vh); }
-}
-
-/* ============================================================
-   EXTRAHIERTE KLASSEN (vormals Inline-Styles)
-   ============================================================ */
-/* Amazon-Autorenseiten-CTA am Seitenende (buecher.html, ueber-mich.html) */
-.amazon-cta { text-align: center; padding: 3rem 2rem 4.5rem; }
-.amazon-cta .section__label { text-align: center; margin-bottom: 1.2rem; }
-
-/* Über mich: Abstand zwischen Bücherliste und Amazon-CTA verringern (vorher ca. 14rem, jetzt ca. 5rem) */
-.about-grid:has(+ .amazon-cta) { padding-bottom: 3rem; }
-.about-grid + .amazon-cta { padding-top: 0; }
-.about-grid + .amazon-cta .ornament { margin-top: 2rem; }
-
-/* zentriertes Label (index.html „Meine Bücher") */
-.section__label--center { text-align: center; }
-
-/* Nur für Screenreader (z. B. ganzer Zitattext, während die Wörter einzeln animiert sind) */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* 404-Fehlerseite */
-.error-quote { max-width: 680px; margin: 6rem auto; text-align: center; padding: 0 2rem; }
-.error-quote__text {
-  font-family: var(--font-serif);
-  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-  line-height: 1.9;
-  color: var(--brown-dark);
-  margin-bottom: 2rem;
-}
-.error-quote__actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-}
-
-/* ============================================================
-   REDUCED MOTION — Animationen für bewegungsempfindliche
-   Nutzer deaktivieren (WCAG 2.3.3)
-   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .hero__leaf { display: none; }
-  .hero__name::after { display: none; }
-  .btn::before,
-  .modal::before { display: none; } /* Lichtrand */
-  .modal-dialog::backdrop { transition: none; }
   @view-transition { navigation: none; }
 }
 
+
 /* ============================================================
-   DRUCK — Papier statt Bildschirm: Bedienelemente und Atmosphaere
-   raus, Farbwelt hell, offene Leseprobe vollstaendig ausgeben
+   RESET
    ============================================================ */
-@media print {
-  /* Die Seite faerbt fast alles ueber Custom Properties — Umdefinieren
-     genuegt, damit Light- und Dark-Mode identisch auf Papier landen. */
-  html,
-  html[data-theme="light"],
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #1A0F0A; /* füllt den Status-Bar-Bereich (Safe Area) auf iOS */
+    overflow-x: hidden;
+  }
+
+  img    { max-width: 100%; height: auto; display: block; }
+  a      { color: inherit; text-decoration: none; }
+  button { cursor: pointer; background: none; border: none; }
+}
+
+
+/* ============================================================
+   BASE: Tokens, Schrift, Fokus, Körnung
+   ============================================================ */
+@layer base {
+  :root {
+    color-scheme: light; /* Scrollleisten und Formular-Grundfarben passend zum Theme */
+
+    /* Wechseln mit dem Theme (Dark-Werte siehe unten) */
+    --cream:       #E2D7C5;
+    --cream-alt:   #DACBB2;
+    --brown-dark:  #1C0E08;
+    --brown-mid:   #5A4530;
+    --brown-light: #7A6045;
+    --accent:      #6B5026;  /* Gold-Pendant fuer Creme-Flaechen (Dark Mode: = Gold) */
+    --eco:         #1C601C;
+    --eco-border:  rgba(28, 96, 28, 0.6);
+    --eco-bg:      rgba(28, 96, 28, 0.08);
+
+    --on-dark:      #E2D7C5;                   /* Schrift auf den immer dunklen Flächen: Hero, Seitenkopf, Cover-Schilder */
+    --on-dark-soft: rgba(250, 247, 242, 0.72); /* Leitsatz im Hero */
+    --line-form:    rgba(28, 14, 8, 0.35);     /* Linie unter den Formularfeldern */
+    --text-hint:    rgba(28, 14, 8, 0.5);      /* Datenschutzhinweis unter dem Formular */
+    --share-text:   var(--brown-light);
+    --share-line:   rgba(90, 69, 48, 0.35);
+    --grain-blend:   multiply;
+    --grain-opacity: 0.022;
+    --theme-icon:   '🌙';
+
+    /* Leseprobe als Papierseite */
+    --paper:            var(--cream);
+    --paper-edge:       rgba(26, 15, 10, 0.07);
+    --paper-under-1:    #D3C5AE;
+    --paper-under-2:    #C7B89D;
+    --paper-ring:       rgba(107, 80, 38, 0.1);
+    --paper-shade-1:    rgba(26, 15, 10, 0.2);
+    --paper-shade-2:    rgba(26, 15, 10, 0.18);
+    --paper-drop:       rgba(26, 15, 10, 0.65);
+    --paper-hero-shade: rgba(26, 15, 10, 0.22);
+
+    /* In beiden Themes gleich */
+    --gold:        #C9A96E;
+    --gold-light:  #DFC092;
+    --brown-deep:  #1A0F0A;
+
+    --font-serif: 'EB Garamond', 'Garamond', Georgia, serif;
+    --font-sans:  'Lato', 'Helvetica Neue', sans-serif;
+
+    --max-width:  1100px;
+    --nav-height: 80px;
+
+    --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-out:    cubic-bezier(0.0, 0.0, 0.2, 1);
+
+    accent-color: var(--accent);
+  }
+
   html[data-theme="dark"] {
-    --cream:       #fff;
-    --cream-alt:   #fff;
-    --brown-deep:  #fff;
-    --brown-dark:  #111;
-    --brown-mid:   #444;
-    --brown-light: #555;
-    --gold:        #444;
-    --gold-light:  #444;
-    --accent:      #444;
-    --accent-rgb:  68, 68, 68;
-    --eco:         #333;
-    --eco-border:  #999;
+    color-scheme: dark;
+
+    --cream:       #1C1208;
+    --cream-alt:   #231810;
+    --brown-dark:  #EDE0CF;
+    --brown-mid:   #AD9A87;
+    --brown-light: #8A7466;
+    --accent:      #C9A96E;
+    --eco:         #80B880;
+    --eco-border:  rgba(128, 184, 128, 0.38);
     --eco-bg:      transparent;
+
+    --on-dark:      #EDE0CF;
+    --on-dark-soft: rgba(237, 224, 208, 0.72);
+    --line-form:    rgba(237, 224, 208, 0.18);
+    --text-hint:    rgba(237, 224, 207, 0.4);
+    --share-text:   rgba(237, 224, 207, 0.75);
+    --share-line:   rgba(237, 224, 207, 0.3);
+    --grain-blend:   screen;
+    --grain-opacity: 0.012;
+    --theme-icon:   '☀️';
+
+    --paper:            #1e1308;
+    --paper-edge:       rgba(0, 0, 0, 0.28);
+    --paper-under-1:    #2B1D10;
+    --paper-under-2:    #23170C;
+    --paper-ring:       rgba(201, 169, 110, 0.12);
+    --paper-shade-1:    rgba(0, 0, 0, 0.5);
+    --paper-shade-2:    rgba(0, 0, 0, 0.45);
+    --paper-drop:       rgba(0, 0, 0, 0.85);
+    --paper-hero-shade: rgba(0, 0, 0, 0.3);
   }
 
-  @page { margin: 2cm; }
-
-  html { background: #fff !important; }
-  body { background: #fff !important; color: #111 !important; font-size: 11pt; }
-  body::after { display: none; } /* Papier-Grain */
-
-  /* Die Scroll-Animationen laufen beim Drucken nie an — ohne diese Regel
-     bleibt alles unterhalb des ersten Bildschirms unsichtbar auf dem Blatt. */
-  .fade-in,
-  .book-teaser,
-  .book-entry {
-    opacity: 1 !important;
-    transform: none !important;
+  @media (max-width: 480px) {
+    html { font-size: 16px; }
   }
 
-  /* Was auf Papier nicht funktioniert: Navigation, Buttons, Bewegung */
-  .nav,
-  .footer,
-  .skip-link,
-  #scroll-progress,
-  .safari-tint,
-  .hero,
-  .hero__leaf,
-  .book-cover-video,
-  .book-cover-title,
-  .modal__hero,
-  .modal__close,
-  .book-entry__links,
-  .book-entry__share,
-  .share-fallback,
-  .book-entry__review,
-  .review-slider__nav,
-  .amazon-cta { display: none !important; }
+  body {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.85;
+    font-kerning: normal;
+    color: var(--brown-dark);
+    background-color: var(--cream);
 
-  .page-hero { background: #fff !important; padding: 0 0 1.5rem; text-align: left; }
-  .page-hero::before { display: none; }
-  .page-hero__title { color: #111 !important; }
-  .page-hero__sub   { color: #555 !important; }
+    /* Papierkörnung über der ganzen Seite */
+    &::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: var(--grain-blend);
+    }
 
-  /* Beide Leserstimmen untereinander statt uebereinander gestapelt */
-  .review-slider__track { display: block; }
-  .review-slider__slide { opacity: 1 !important; grid-area: auto; margin-bottom: 1rem; }
+    /* Touch-Geräte: Körnung weglassen. iOS-26-Safari liest sonst das fixierte Vollflächen-Overlay
+       für die Färbung der Statusleiste mit. */
+    @media (hover: none) {
+      &::after { content: none; display: none; }
+    }
+  }
 
-  /* Geoeffnete Leseprobe ganz ausgeben — sonst druckt nur der sichtbare
-     Ausschnitt des Dialogs. Er liegt in der Top-Layer und laesst sich nicht hinter
-     die Seite stellen; deshalb druckt dann nur die Leseprobe. */
-  body:has(.modal-dialog[open]) > :not(.modal-dialog) { display: none !important; }
-  .modal-dialog[open] {
+  /* Startseite: body dunkel, damit Safari bei scrollY 0 (Statusleiste, untere Leiste) die Nav-Farbe
+     statt Creme übernimmt. Der sichtbare Inhalt (main) bleibt creme, Hero und Footer haben eigene Hintergründe. */
+  body.page-home { background-color: var(--brown-deep); }
+  .page-home main { background-color: var(--cream); }
+
+  ::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+
+  /* Typografie: ausgewogene Überschriften, keine einzelnen Wörter am Absatzende */
+  h1, h2, h3,
+  blockquote,
+  .book-entry__subtitle,
+  .book-teaser__desc,
+  .hero__tagline span { text-wrap: balance; }
+  p, li               { text-wrap: pretty; }
+
+  /* Tastaturfokus: Ring in der Akzentfarbe statt Browser-Blau (auf dunklen Flächen Gold, siehe Nav/Footer).
+     :where() hält die Spezifität bei null, eigene Fokusregeln einzelner Elemente gewinnen. */
+  :where(a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* Anker-Ziele nicht unter der fixierten Nav landen lassen
+     (Skip-Link, buecher.html#herbstblatt / #wind) */
+  #main,
+  #herbstblatt,
+  #wind {
+    scroll-margin-top: var(--nav-height);
+  }
+}
+
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+@layer layout {
+  /* main ist Container: Buch- und Über-mich-Raster richten sich nach dem Platz,
+     den sie tatsächlich haben (ohne Scrollleiste), nicht nach dem Fenster */
+  main { container: seite / inline-size; }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section {
+    padding: 7rem 2rem;
+
+    @media (max-width: 768px) { padding: 5rem 1.5rem; }
+  }
+
+  .section--alt { background: var(--cream-alt); }
+
+  .section__label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 0.75rem;
+  }
+}
+
+
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
+@layer components {
+
+  /* ---------- Skip-Link (Barrierefreiheit) ---------- */
+  .skip-link {
     position: absolute;
-    inset: 0 0 auto 0;
-    display: block;
+    top: -4rem;
+    left: 1.5rem;
+    z-index: 10001;
+    background: var(--brown-deep);
+    color: var(--gold);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0.85rem 1.5rem;
+    border-radius: 2px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    transition: top 0.2s var(--ease-out);
+
+    &:focus-visible {
+      top: 1.25rem;
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+  }
+
+  /* Unsichtbare Farbquelle für iOS-26-Safari (Startseite, Nav anfangs transparent).
+     Echtes Element, kein Pseudo-Element; ohne backdrop-filter und background-image. */
+  .safari-tint {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background-color: #1A0F0A; /* = --brown-deep, in hellem und dunklem Design gleich */
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1002;
+  }
+
+  /* ---------- Navigation ---------- */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.75rem 3rem;
+    transition:
+      background 0.5s var(--ease-smooth),
+      padding    0.4s var(--ease-smooth),
+      box-shadow 0.4s var(--ease-smooth);
+
+    &.scrolled,
+    &.nav--always-dark {
+      background:  var(--brown-deep);
+      padding:     1.1rem 3rem;
+      box-shadow:  0 4px 30px rgba(0,0,0,0.4);
+    }
+
+    @media (max-width: 768px) {
+      padding: 1.25rem 1.5rem;
+
+      &.scrolled,
+      &.nav--always-dark { padding: 1rem 1.5rem; }
+    }
+  }
+
+  /* Fokusring auf dunklem Grund in Gold */
+  .nav :focus-visible,
+  .footer :focus-visible { outline-color: var(--gold); }
+
+  .nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    @media (max-width: 768px) { gap: 0.75rem; }
+  }
+
+  .nav__theme-toggle {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(201, 169, 110, 0.75);
+    border-radius: 50%;
+    background: #4A4A4A; /* neutral: passt zu light + dark */
+    color: var(--brown-deep);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+    flex-shrink: 0;
     padding: 0;
+    line-height: 1;
+
+    &::before { content: var(--theme-icon); }
+
+    &:hover {
+      border-color: var(--gold);
+      background: #363636;
+    }
+  }
+
+  .nav__logo {
+    font-family: var(--font-serif);
+    font-size:   1.4rem;
+    font-style:  italic;
+    color:       var(--gold);
+    letter-spacing: 0.02em;
+    transition:  opacity 0.3s;
+
+    &:hover { opacity: 0.8; }
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+
+    /* Handy: Vollbild-Menü hinter dem Hamburger */
+    @media (max-width: 768px) {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--brown-deep);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.75rem;
+
+      &.open { display: flex; }
+    }
+  }
+
+  .nav__link {
+    font-family:    var(--font-sans);
+    font-size:      0.8rem;
+    font-weight:    400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(250, 247, 242, 0.7);
+    position: relative;
+    transition: color 0.3s;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 100%; height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.3s var(--ease-smooth);
+    }
+
+    &:hover,
+    &.active { color: var(--gold); }
+
+    &:hover::after,
+    &.active::after { transform: scaleX(1); }
+
+    @media (max-width: 768px) { font-size: 1rem; letter-spacing: 0.2em; }
+  }
+
+  /* Hamburger */
+  .nav__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+
+    & span {
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    @media (max-width: 768px) { display: flex; }
+  }
+
+  /* ---------- Hero (Startseite) ---------- */
+  .hero {
+    position: relative;
+    height: 100vh;
+    height: 100svh; /* iOS: ohne Bereich hinter der Safari-Adressleiste; alte Browser nutzen 100vh */
+    min-height: 600px;
+    background: var(--brown-deep);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 65% 35%, rgba(201,169,110,0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(44,24,16,0.6) 0%, transparent 60%);
+      animation: heroGlow 9s ease-in-out infinite alternate;
+    }
+  }
+
+  .hero__ghost {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-size: clamp(4rem, 12vw, 11rem);
+    font-style: italic;
+    color: var(--gold);
+    opacity: 0.055;
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero__label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s var(--ease-out) 0.4s forwards;
+  }
+
+  .hero__name {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 400;
+    color: var(--on-dark);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation:
+      fadeUp   1.2s var(--ease-out) 0.7s forwards,
+      nameGlow 6s   ease-in-out    3.5s infinite;
+    position: relative;
+
+    /* Gold-Schimmer: deckungsgleiche Kopie des Namens, nur ein schmaler Lichtstreifen
+       ist sichtbar. Liegt über dem Glühen (text-shadow), statt es zu ersetzen. */
+    &::after {
+      content: attr(data-shine);
+      content: attr(data-shine) / '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      color: transparent;
+      text-shadow: none; /* sonst erbt die Kopie das Glühen und verdoppelt es */
+      background: linear-gradient(105deg,
+        transparent calc(var(--shine) - 14%),
+        rgba(255, 238, 200, 0.95) var(--shine),
+        transparent calc(var(--shine) + 14%));
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: nameShine 11s ease-in-out 4s infinite;
+    }
+  }
+
+  .hero__divider {
+    width: 55px; height: 1px;
+    background: var(--gold);
+    margin: 2rem auto;
+    opacity: 0;
+    animation: fadeIn 1s var(--ease-out) 1.3s forwards;
+  }
+
+  .hero__tagline {
+    font-family: var(--font-serif);
+    font-size: clamp(1.35rem, 0.95rem + 1.05vw, 1.8rem); /* <~500px Viewport greift das Minimum — Mobil bleibt unverändert */
+    font-style: italic;
+    color: var(--on-dark-soft);
+    display: grid; /* Sätze überlagert in 1/1 — Container hält immer die Höhe des längsten */
+    opacity: 0;
+    animation: fadeUp 1s var(--ease-out) 1.5s forwards;
+
+    & span {
+      grid-area: 1 / 1;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    }
+
+    & span.is-visible { opacity: 1; }
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    opacity: 0;
+    animation: fadeIn 1s var(--ease-out) 2.2s forwards;
+  }
+
+  .hero__scroll-text {
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(201, 169, 110, 0.55);
+  }
+
+  .hero__scroll-line {
+    width: 1px; height: 42px;
+    background: linear-gradient(to bottom, rgba(201,169,110,0.7), transparent);
+    animation: scrollPulse 2.2s ease-in-out infinite;
+  }
+
+  /* Fallende Herbstblätter (main.js erzeugt sie) */
+  .hero__leaf {
+    position: absolute;
+    top: 0;
+    left: var(--leaf-left, 50%);
+    font-size: var(--leaf-size, 0.8rem);
+    color: rgba(201, 169, 110, 0.45);
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+    opacity: 0;
+    animation: leaf-fall var(--leaf-duration, 9s) linear var(--leaf-delay, 0s) infinite;
+
+    & svg { display: block; width: 1em; height: 1em; }
+  }
+
+  .hero__leaf--flip svg { transform: scaleX(-1); } /* gespiegelte Blattvariante — per Rotation nicht erreichbar */
+
+  @keyframes heroGlow {
+    from { opacity: 0.6; transform: scale(1); }
+    to   { opacity: 1;   transform: scale(1.04); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1);   opacity: 0.55; }
+    50%       { transform: scaleY(0.5); opacity: 1;    }
+  }
+
+  @keyframes nameGlow {
+    0%, 100% { text-shadow: 0 0 10px rgba(201,169,110,0.28), 0 0 28px rgba(201,169,110,0.12); }
+    50%       { text-shadow: 0 0 14px rgba(201,169,110,0.95), 0 0 32px rgba(201,169,110,0.78), 0 0 60px rgba(201,169,110,0.52), 0 0 110px rgba(201,169,110,0.28); }
+  }
+
+  @keyframes nameShine {
+    0%        { --shine: -30%; }
+    30%, 100% { --shine: 130%; }
+  }
+
+  @keyframes leaf-fall {
+    0%   { transform: translate(0,       -5vh)  rotate(0deg);   opacity: 0;    }
+    8%   {                                                        opacity: 0.5;  }
+    25%  { transform: translate(1.8vw,   26vh)  rotate(95deg);                 }
+    50%  { transform: translate(-1.2vw,  55vh)  rotate(185deg); opacity: 0.28; }
+    75%  { transform: translate(2.2vw,   80vh)  rotate(270deg);                }
+    92%  {                                                        opacity: 0.12; }
+    100% { transform: translate(0.6vw,   110vh) rotate(350deg); opacity: 0;    }
+  }
+
+  /* ---------- Seitenkopf der Unterseiten ---------- */
+  .page-hero {
+    background: var(--brown-deep);
+    padding: calc(var(--nav-height) + 5rem) 3rem 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: attr(data-bg);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-serif);
+      font-size: clamp(5rem, 18vw, 16rem);
+      font-style: italic;
+      color: var(--gold);
+      opacity: 0.04;
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    @media (max-width: 768px) { padding: calc(var(--nav-height) + 3.5rem) 1.5rem 4rem; }
+  }
+
+  .page-hero__title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400;
+    color: var(--on-dark);
+    position: relative;
+  }
+
+  .page-hero__sub {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 1rem;
+    opacity: 0.8;
+  }
+
+  /* ---------- Ornament-Trenner ---------- */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 4rem auto;
+    max-width: 360px;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.55;
+    }
+  }
+
+  .ornament__glyph {
+    color: var(--accent);
+    font-size: 1rem;
+    opacity: 0.75;
+    line-height: 1;
+    font-style: normal;
+  }
+
+  /* ---------- Button ---------- */
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.7rem 1.9rem;
+    position: relative;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+
+    &:hover {
+      background: var(--accent);
+      color: var(--cream);
+      border-color: var(--accent);
+    }
+  }
+
+  /* Umlaufender Lichtrand: ein Lichtpunkt wandert um den Rahmen (Buttons bei Hover/Fokus,
+     Leseprobe einmal beim Öffnen). Der Verlauf liegt auf einem Ring, die Maske schneidet
+     das Innere aus. */
+  .btn::before,
+  .modal::before {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    background: conic-gradient(from var(--rim-angle),
+      transparent 0deg 250deg,
+      rgba(223, 192, 146, 0.35) 290deg,
+      var(--gold-light) 330deg,
+      #FFF4DC 348deg,
+      transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+  }
+
+  .btn {
+    &::before {
+      inset: -1px;
+      padding: 1.5px;
+      transition: opacity 0.4s var(--ease-smooth);
+    }
+
+    @media (hover: hover) {
+      &:hover::before,
+      &:focus-visible::before {
+        opacity: 1;
+        animation: rim-spin 2.6s linear infinite;
+      }
+    }
+  }
+
+  @keyframes rim-spin {
+    to { --rim-angle: 360deg; }
+  }
+
+  /* ---------- Buch-Teaser (Startseite) ---------- */
+  /* Raster ohne Breakpoint: zwei Spalten, solange je Karte mindestens 18rem Platz hat */
+  .books-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 3rem 4rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .book-teaser {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity   0.85s var(--ease-smooth),
+      transform 0.85s var(--ease-smooth);
+
+    &.visible            { opacity: 1; transform: translateY(0); }
+    &:nth-child(2)       { transition-delay: 0.18s; }
+  }
+
+  .book-teaser__cover-wrap {
+    margin-bottom: 2rem;
+
+    /* Cover-Stapel: Poster + optionales Loop-Video, als Vorderdeckel im 3D-Buch (.book-3d) */
+    & .book-3d { width: 190px; --book-depth: 20px; }
+    &:hover .book-3d { --book-lift: -9px; }
+
+    & .book-cover-media {
+      border-radius: 2px;
+      box-shadow:
+        -5px 5px 15px rgba(26,15,10,0.28),
+        -10px 10px 30px rgba(26,15,10,0.13),
+        4px 4px 0 rgba(26,15,10,0.07);
+      transition: box-shadow 0.5s var(--ease-smooth);
+    }
+
+    &:hover .book-cover-media {
+      box-shadow:
+        -8px 14px 25px rgba(26,15,10,0.32),
+        -15px 20px 45px rgba(26,15,10,0.18),
+        7px 7px 0 rgba(26,15,10,0.07);
+    }
+  }
+
+  .book-teaser__cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+
+  .book-teaser__title {
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+  }
+
+  .book-teaser__desc {
+    font-size: 0.95rem;
+    color: var(--brown-mid);
+    line-height: 1.75;
+    max-width: 280px;
+    margin: 0 auto 0.85rem;
+  }
+
+  .book-teaser__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ---------- Zitat (Startseite) ---------- */
+  .quote-section {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+
+    & blockquote {
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-style: italic;
+      line-height: 1.65;
+      color: var(--brown-dark);
+    }
+
+    & cite {
+      display: block;
+      margin-top: 1.75rem;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brown-light);
+      font-style: normal;
+    }
+  }
+
+  /* 404-Fehlerseite (nutzt .quote-section als Grundlage) */
+  .error-quote { max-width: 680px; margin: 6rem auto; text-align: center; padding: 0 2rem; }
+
+  .error-quote__text {
+    font-family: var(--font-serif);
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    line-height: 1.9;
+    color: var(--brown-dark);
+    margin-bottom: 2rem;
+  }
+
+  .error-quote__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  /* ---------- Bucheinträge (Bücher-Seite) ---------- */
+  .book-entry {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 5rem;
+    align-items: start;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 5.5rem 2rem;
+  }
+
+  /* Wechselnder Hintergrund: der zweite Eintrag als Fläche über die ganze Breite.
+     cqi = Breite von main ohne Scrollleiste (100vw zählte sie mit, rechts fehlte dann Rand). */
+  .book-entry + .book-entry,
+  .book-entry--alt {
+    max-width: 100%;
+    padding-left: calc((100cqi - var(--max-width)) / 2 + 2rem);
+    padding-right: calc((100cqi - var(--max-width)) / 2 + 2rem);
+    background: var(--cream-alt);
+    border-top: none;
+  }
+
+  /* Constrain the inner grid to max-width */
+  .book-entry + .book-entry > * {
+    max-width: none;
+  }
+
+  .book-entry--reverse {
+    grid-template-columns: 1fr 260px;
+  }
+
+  .book-entry--reverse .book-entry__cover-col { order: 2; }
+  .book-entry--reverse .book-entry__text-col  { order: 1; }
+
+  /* Schmaler Platz: Cover über dem Text */
+  @container seite (width <= 900px) {
+    .book-entry,
+    .book-entry--reverse {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      padding: 4rem 2rem;
+    }
+
+    .book-entry + .book-entry {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .book-entry--reverse .book-entry__cover-col,
+    .book-entry--reverse .book-entry__text-col { order: unset; }
+
+    .book-entry__cover-col,
+    .book-entry + .book-entry > .book-entry__cover-col {
+      max-width: 210px;
+      margin: 0 auto;
+    }
+  }
+
+  .book-entry__cover-col {
+    & .book-3d { --book-depth: 26px; }
+    &:hover .book-3d { --book-lift: -7px; }
+
+    & .book-cover-media {
+      border-radius: 2px;
+      box-shadow:
+        -6px 6px 20px rgba(26,15,10,0.22),
+        -12px 12px 40px rgba(26,15,10,0.11);
+    }
+  }
+
+  /* Textspalte als eigener Container: Preise und Initiale richten sich nach ihrer Breite */
+  .book-entry__text-col { container: buchtext / inline-size; }
+
+  .book-entry__cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+
+  /* Format label in gold — clearly visible in both modes */
+  .book-entry__format {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .eco-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--eco);
+    background: var(--eco-bg);
+    border: 1px solid var(--eco-border);
+    border-radius: 2px;
+    padding: 0.2em 0.55em 0.2em 0.45em;
+    margin-bottom: 1.1rem;
+  }
+
+  .book-entry__title {
+    font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  .book-entry__subtitle {
+    font-size: 1rem;
+    color: var(--brown-mid);
+    font-style: italic;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  }
+
+  .book-entry__desc {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--brown-dark);
+    margin-bottom: 2.5rem;
+
+    /* Initiale als Rückfall (ohne initial-letter, siehe enhancements) */
+    &::first-letter {
+      font-size: 3.4em;
+      line-height: 0.78;
+      float: left;
+      margin: 0.04em 0.08em 0 0;
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    @container buchtext (width <= 26rem) {
+      &::first-letter { font-size: 2.6em; }
+    }
+  }
+
+  .book-entry__prices {
+    display: flex;
+    gap: 2.5rem;
+    margin-bottom: 2rem;
+
+    @container buchtext (width <= 26rem) { flex-direction: column; gap: 1rem; }
+  }
+
+  .price-item__format {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 0.25rem;
+  }
+
+  .price-item__amount {
+    font-size: 1.4rem;
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .book-entry__links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .review-snippet {
+    margin-top: 1.5rem;
+    padding: 0.9rem 1.1rem;
+    border-left: 2px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  }
+  .review-snippet__stars {
+    color: var(--accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.35rem;
+  }
+  .review-snippet__quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--brown-dark);
+    margin-bottom: 0.4rem;
+  }
+  .review-snippet__cite {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+  }
+
+  /* ---------- Rezensions-Slider ---------- */
+  .review-slider {
+    margin-top: 1.5rem;
+    touch-action: pan-y;
+
+    & .review-snippet { margin-top: 0; }
+  }
+  .review-slider__track {
+    display: grid;
+  }
+  .review-slider__slide {
+    grid-area: 1 / 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  .review-slider__nav {
+    display: flex;
+    gap: 0.45rem;
+    margin-top: 0.75rem;
+    padding-left: 1.1rem;
+  }
+  .review-slider__dot {
+    position: relative; /* Anker für die unsichtbare Touch-Fläche */
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s, border-color 0.2s;
+
+    /* Unsichtbare vergrößerte Klickfläche — Touch-Ziel ≥ 24 px (WCAG 2.5.8) */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -9px;
+    }
+
+    &.active,
+    &:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+
+  .book-entry__review {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  .book-entry__review-prompt {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--brown-mid);
+    margin-bottom: 0.5rem;
+  }
+
+  .book-entry__review-link {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* ---------- Teilen ---------- */
+  .book-entry__share {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--share-text);
+    border: 1px solid var(--share-line);
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    background: none;
+    transition: color 0.3s, border-color 0.3s;
+
+    &:hover {
+      color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+    }
+  }
+
+  .share-fallback {
+    align-items: center;
+    gap: 0.75rem;
+
+    &:not([hidden]) { display: inline-flex; }
+  }
+
+  .share-copy-btn {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: none;
+    border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    padding: 0.45rem 1rem;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+
+    &:hover {
+      background: var(--accent);
+      color: var(--cream);
+    }
+  }
+
+  .share-copied {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    opacity: 0.8;
+  }
+
+  /* ---------- Über mich ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    gap: 6rem;
+    align-items: start;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 7rem 2rem;
+  }
+
+  @container seite (width <= 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 5rem 1.5rem;
+    }
+
+    .about-photo { max-width: 250px; margin: 0 auto; }
+  }
+
+  .about-photo__img {
+    width: 100%;
+    border-radius: 2px;
+    filter: sepia(12%) contrast(105%);
+    box-shadow: 0 8px 32px rgba(44, 24, 16, 0.18); /* wie .about-outdoor__img: kein Rahmen, nur weicher Schatten */
+  }
+
+  .about-photo__caption {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    text-align: center;
+    margin-top: 1.1rem;
+  }
+
+  .about-bio__label {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    opacity: 0.85;
+  }
+
+  .about-bio__name {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 2.25rem;
+  }
+
+  .about-bio__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--brown-dark);
+
+    /* Initiale als Rückfall (ohne initial-letter, siehe enhancements) */
+    & p:first-child::first-letter {
+      font-size: 3.2em;
+      line-height: 0.78;
+      float: left;
+      margin: 0.04em 0.1em 0 0;
+      color: var(--accent);
+      font-style: italic;
+    }
+  }
+
+  .about-outdoor {
+    margin-top: 2.5rem;
+  }
+
+  .about-outdoor__img {
+    width: 100%;
+    border-radius: 2px;
+    box-shadow: 0 8px 32px rgba(44, 24, 16, 0.18);
+    filter: sepia(8%) saturate(90%);
+    transition: filter 0.4s var(--ease-smooth);
+
+    &:hover { filter: sepia(0%) saturate(100%); }
+  }
+
+  .about-books {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  }
+
+  .about-books__label {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .about-books__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .about-books__item a {
+    font-size: 1.15rem;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: color 0.3s;
+
+    &::before {
+      content: '—';
+      color: var(--accent);
+      font-style: normal;
+      flex-shrink: 0;
+      transition: transform 0.3s var(--ease-smooth);
+    }
+
+    &:hover { color: var(--accent); }
+    &:hover::before { transform: translateX(0.3em); }
+  }
+
+  /* ---------- Kontakt ---------- */
+  .contact-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 7rem 2rem;
+
+    @media (max-width: 768px) { padding: 5rem 1.5rem; }
+  }
+
+  .contact-intro {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--brown-mid);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .form-label {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brown-mid);
+  }
+
+  .form-input,
+  .form-textarea {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--brown-dark);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line-form);
+    padding: 0.55rem 0;
+    outline: none;
+    caret-color: var(--accent);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    line-height: 1.6;
+
+    /* Fokus: Linie wird in der Akzentfarbe doppelt so kräftig (statt Ring, passt zum Linienstil) */
+    &:focus {
+      border-color: var(--accent);
+      box-shadow: 0 1px 0 0 var(--accent);
+    }
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+
+  .form-privacy {
+    margin-top: 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--text-hint);
+    line-height: 1.5;
+
+    & a { color: var(--accent); }
+  }
+
+  .contact-email {
+    text-align: center;
+    margin-top: 3.5rem;
+    padding-top: 3rem;
+    border-top: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  }
+
+  .contact-email__or {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-email__link {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* ---------- Impressum / Datenschutz ---------- */
+  .impressum-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 7rem 2rem;
+
+    & h2 {
+      font-size: 1.25rem;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--brown-mid);
+      margin: 2.75rem 0 0.65rem;
+    }
+
+    & h2:first-of-type { margin-top: 0; }
+
+    & p {
+      font-size: 0.97rem;
+      line-height: 1.9;
+    }
+
+    & a { color: var(--accent); }
+
+    @media (max-width: 768px) { padding: 5rem 1.5rem; }
+  }
+
+  /* Links im Fließtext: feine Unterstreichung, die bei Hover kräftiger wird und näher an die Schrift rückt */
+  .impressum-wrap a,
+  .form-privacy a,
+  .contact-email__link,
+  .book-entry__review-link {
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    transition:
+      text-decoration-color     0.3s var(--ease-smooth),
+      text-decoration-thickness 0.3s var(--ease-smooth),
+      text-underline-offset     0.3s var(--ease-smooth);
+
+    &:hover {
+      text-decoration-color: var(--accent);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.16em;
+    }
+  }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    background: var(--brown-deep);
+    padding: 2.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      padding: 2rem 1.5rem;
+      flex-direction: column;
+      gap: 0.75rem;
+      text-align: center;
+    }
+  }
+
+  .footer__copy {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: rgba(201, 169, 110, 0.5);
+  }
+
+  .footer__link {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(201, 169, 110, 0.5);
+    transition: color 0.3s;
+
+    &:hover { color: var(--gold); }
+  }
+
+  .footer__links-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .footer__amazon-link {
+    display: flex;
+    align-items: center;
+
+    & svg { display: block; }
+  }
+
+  /* ---------- Cover als Auslöser der Leseprobe ---------- */
+  .book-teaser__cover-wrap,
+  .book-entry__cover-col {
+    cursor: pointer;
+    position: relative;
+    perspective: 1100px; /* für das 3D-Buch */
+
+    /* Schild „Leseprobe“ unten am Cover bei Hover/Fokus */
+    &::after {
+      content: 'Leseprobe';
+      position: absolute;
+      bottom: 0.75rem;
+      left: 50%;
+      z-index: 2;
+      transform: translateX(-50%) translateY(6px);
+      font-family: var(--font-sans);
+      font-size: 0.58rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--on-dark);
+      background: rgba(26, 15, 10, 0.85);
+      border: 1px solid rgba(201, 169, 110, 0.45);
+      padding: 0.35rem 1rem;
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    &:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Tastaturfokus: Bronze-Rahmen + Leseprobe-Badge wie beim Hover */
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 5px;
+    }
+
+    &:focus-visible::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  /* Poster + Video-Stack */
+  .book-cover-media {
+    position: relative;
+    line-height: 0;
+    overflow: hidden;
+  }
+
+  .book-cover-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.55s var(--ease-smooth);
+    pointer-events: none;
+  }
+
+  .book-cover-media.is-playing .book-cover-video {
     opacity: 1;
   }
-  .modal-dialog::backdrop { display: none; }
-  .modal-dialog[open] .modal {
+
+  /* Titel-Ebene: Buchtitel bleibt während der Video-Phase stehen („lebendes Cover") */
+  .book-cover-title {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.55s var(--ease-smooth);
+  }
+
+  .book-cover-media.is-playing .book-cover-title { opacity: 1; }
+
+  /* Titel-Overlay ausgeblendet (Titel steckt im neuen Cover-Video); img{display:block} würde [hidden] sonst überstimmen */
+  .book-cover-title[hidden] { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .book-cover-video { display: none; }
+    .book-cover-media.is-playing .book-cover-video { opacity: 0; }
+    .book-cover-title { display: none; }
+  }
+
+  /* ------------------------------------------------------------
+     Leseprobe-Pille (Touch)
+     Kleine Pille „Lesen“ oben rechts am Cover, nur auf Geräten ohne Hover (Handy, Tablet).
+     Das Element steht als <span class="cover-pill"> in den vier Cover-Stapeln (.book-cover-media).
+     Entfernen: die vier <span class="cover-pill">-Elemente aus index.html und buecher/index.html
+     löschen und diesen ganzen Block bis zum Kommentar „Ende Leseprobe-Pille“ streichen
+     (plus die Zeile im Druckteil unter overrides).
+     ------------------------------------------------------------ */
+  .cover-pill {
+    display: none;
+    position: absolute;
+    top: 0.35rem; /* knapp gehalten: der Wind-Titel sitzt im Cover direkt darunter */
+    right: 0.35rem;
+    z-index: 3;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.55rem 0.2rem 0.45rem;
+    font-family: var(--font-sans);
+    font-size: 0.58rem;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--on-dark);
+    background: rgba(26, 15, 10, 0.85);
+    border: 1px solid rgba(201, 169, 110, 0.45);
+    border-radius: 999px;
+    pointer-events: none; /* der Tipp geht wie bisher ans Cover */
+  }
+
+  .cover-pill__icon {
     display: block;
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+  }
+
+  @media (hover: none) {
+    .cover-pill { display: inline-flex; }
+
+    /* Hover-Schild unten am Cover entfällt: nach einem Tipp bliebe es sonst „kleben“ */
+    .book-teaser__cover-wrap::after,
+    .book-entry__cover-col::after { display: none; }
+  }
+  /* Ende Leseprobe-Pille */
+
+  /* ---------- 3D-Buch ----------
+     Cover als Vorderdeckel, dahinter Seitenblock (rechts) und Rückdeckel. Ruhelage leicht
+     gedreht, bei Hover/Fokus fast frontal. Der Maus-Tilt (main.js) setzt nur --tilt-rx/--tilt-ry. */
+  .book-3d {
+    --book-depth: 18px;
+    --book-ry: -22deg;
+    --book-back: var(--brown-deep);
+    position: relative;
+    transform-style: preserve-3d;
+    transform:
+      translateY(var(--book-lift, 0px))
+      rotateX(var(--tilt-rx, 0deg))
+      rotateY(calc(var(--book-ry) + var(--tilt-ry, 0deg)));
+    transition: transform 0.6s var(--ease-smooth);
+    will-change: transform;
+
+    &.is-tilting {
+      transition-duration: 0.1s;
+      transition-timing-function: ease-out;
+    }
+
+    /* Rückdeckel: eine Buchstärke hinter dem Cover */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 2px;
+      background: var(--book-back);
+      transform: translateZ(calc(-1 * var(--book-depth)));
+      box-shadow: -10px 12px 30px rgba(26, 15, 10, 0.25);
+    }
+  }
+
+  .book-teaser__cover-wrap:hover .book-3d,
+  .book-entry__cover-col:hover .book-3d,
+  .book-teaser__cover-wrap:focus-visible .book-3d,
+  .book-entry__cover-col:focus-visible .book-3d { --book-ry: -7deg; }
+
+  /* Seitenblock: steht rechtwinklig an der rechten Kante und reicht nach hinten.
+     Feine Streifen = Papierlagen, Verlauf = Licht von vorne. */
+  .book-3d__pages {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    right: 1px;
+    width: var(--book-depth);
+    transform-origin: right center;
+    transform: rotateY(-90deg);
+    background:
+      linear-gradient(to right, rgba(26, 15, 10, 0.28), rgba(26, 15, 10, 0.04) 35%, rgba(255, 255, 255, 0.12) 85%, rgba(26, 15, 10, 0.08)),
+      repeating-linear-gradient(to right, #F3EADA 0 1px, #D8CAB0 1px 2px);
+  }
+
+  /* Rückdeckel in der Grundfarbe des jeweiligen Covers */
+  [data-modal="herbstblatt"] .book-3d { --book-back: #4A3812; }
+  [data-modal="wind"] .book-3d        { --book-back: #1C2438; }
+
+  /* ---------- Leseprobe (<dialog>) ----------
+     showModal(): Der Browser übernimmt Fokus, Escape und das Sperren der Seite dahinter.
+     Ein- und Ausblenden laufen rein über CSS: @starting-style liefert den Startzustand,
+     allow-discrete hält display/overlay beim Schließen offen, bis die Blende fertig ist.
+     Geschlossen ist der Dialog display: none, wie es iOS-26-Safari für die Statusleiste braucht. */
+  .modal-dialog {
+    position: fixed; /* auch beim Ausblenden in Safari/Firefox, die die Top-Layer sofort verlassen */
+    inset: 0;
+    z-index: 10000;
+    width: auto;
+    height: auto;
     max-width: none;
     max-height: none;
-    transform: none;
-    box-shadow: none;
-    border-top: none;
-    background: none;
-  }
-  .modal__page {
+    margin: 0;
+    padding: 2rem;
+    border: none;
+    background: transparent;
+    color: inherit;
     overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.35s var(--ease-smooth);
+    transition:
+      opacity 0.35s var(--ease-smooth),
+      display 0.4s allow-discrete,
+      overlay 0.4s allow-discrete;
+
+    &[open] {
+      display: flex;
+      opacity: 1;
+    }
+
+    &::backdrop {
+      background: rgba(26, 15, 10, 0.9);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      transition: opacity 0.35s var(--ease-smooth);
+      transition:
+        opacity 0.35s var(--ease-smooth),
+        display 0.4s allow-discrete,
+        overlay 0.4s allow-discrete;
+    }
+
+    &[open]::backdrop { opacity: 1; }
+
+    @media (max-width: 640px) { padding: 1rem; align-items: flex-end; }
   }
-  .modal__header { position: static; background: none; }
-  .modal::before,
-  .modal::after,
-  .modal__header::after { display: none; }
 
-  /* Cover als Beleg, nicht als Schaufenster — sonst schiebt es den Text
-     auf die naechste Seite. */
-  .book-entry__cover-col,
-  .book-teaser__cover-wrap { max-width: 48mm; }
+  /* Seite dahinter steht still; der Platz der Scrollleiste bleibt, damit nichts springt */
+  html:has(.modal-dialog[open]) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
 
-  /* 3D-Buch flach drucken */
-  .book-3d { transform: none !important; }
-  .book-3d::before,
-  .book-3d__pages { display: none; }
+  /* Das Fenster als Papierseite: Ränder leicht abgedunkelt, darunter zwei Blätter
+     (Schatten mit negativer Ausdehnung), oben ein Lesezeichen-Band. Gescrollt wird
+     in .modal__page, damit Rand, Band und Lichtrand stehen bleiben. */
+  .modal {
+    --paper-sheet:
+      linear-gradient(to right, var(--paper-edge), transparent 3.5%, transparent 96.5%, var(--paper-edge)),
+      var(--paper);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 660px;
+    width: 100%;
+    max-height: 85vh;
+    background: var(--paper-sheet);
+    border-top: 2px solid var(--accent);
+    box-shadow:
+      0 0 0 1px var(--paper-ring),
+      0 5px 0 -2px var(--paper-under-1),
+      0 6px 2px -2px var(--paper-shade-1),
+      0 10px 0 -4px var(--paper-under-2),
+      0 11px 2px -4px var(--paper-shade-2),
+      0 40px 90px var(--paper-drop);
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.4s var(--ease-smooth);
 
-  /* Saubere Umbrueche. Ein ganzer Bucheintrag ist laenger als eine Seite —
-     geschuetzt werden deshalb die kleinen Einheiten, nicht der Block. */
-  .review-snippet      { break-inside: avoid; }
-  .book-entry__prices  { break-inside: avoid; }
-  .price-item          { break-inside: avoid; }
-  h1, h2, h3           { break-after: avoid; }
-  p                    { orphans: 3; widows: 3; }
-  a               { color: #111 !important; text-decoration: none; }
+    /* Lichtrand: läuft beim Öffnen einmal um die Seite und verlischt.
+       Auf Creme braucht es sattes Gold und etwas Breite, sonst verschwindet er. */
+    &::before {
+      inset: 0;
+      z-index: 3;
+      padding: 3px;
+      background: conic-gradient(from var(--rim-angle),
+        transparent 0deg 230deg,
+        rgba(201, 169, 110, 0.45) 285deg,
+        var(--gold) 322deg,
+        #F6DDA8 344deg,
+        transparent 360deg);
+    }
+
+    /* Lesezeichen-Band: hängt oben in die Seite, gleitet beim Öffnen herab; Farbe je Buch */
+    &::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 1.1rem;
+      z-index: 4;
+      width: 13px;
+      height: 4.4rem;
+      pointer-events: none;
+      background:
+        linear-gradient(to right, rgba(0, 0, 0, 0.22), transparent 28%, rgba(255, 255, 255, 0.16) 52%, transparent 72%, rgba(0, 0, 0, 0.26)),
+        var(--ribbon, #7A3420);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 7px), 0 100%);
+      transform-origin: top center;
+    }
+
+    @media (max-width: 640px) {
+      max-height: 90vh;
+
+      &::after { left: 0.55rem; width: 11px; height: 3.6rem; }
+    }
+  }
+
+  .modal-dialog[open] .modal {
+    transform: none;
+
+    &::before { animation: rim-once 2.4s var(--ease-smooth) 0.25s both; }
+    &::after  { animation: ribbon-drop 0.8s var(--ease-smooth) 0.3s both; }
+  }
+
+  /* Startzustand beim Öffnen. Muss nach den [open]-Regeln stehen: @starting-style
+     kaskadiert normal mit, spätere Regeln gleicher Spezifität würden gewinnen. */
+  @starting-style {
+    .modal-dialog[open],
+    .modal-dialog[open]::backdrop { opacity: 0; }
+    .modal-dialog[open] .modal { transform: scale(0.95) translateY(20px); }
+  }
+
+  #modal-herbstblatt .modal { --ribbon: #8A3A1C; }
+  #modal-wind .modal        { --ribbon: #34466E; }
+
+  @keyframes rim-once {
+    0%   { --rim-angle: 0deg;   opacity: 0; }
+    12%  {                      opacity: 1; }
+    78%  {                      opacity: 1; }
+    100% { --rim-angle: 360deg; opacity: 0; }
+  }
+
+  @keyframes ribbon-drop {
+    from { transform: scaleY(0); }
+  }
+
+  /* Scrollbereich; unten läuft der Text weich aus. Die Maske ist nicht höher als der
+     untere Innenabstand, am Ende der Leseprobe bleibt also nichts verdeckt. */
+  .modal__page {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain; /* Scrollen bleibt im Dialog (Chaining, v. a. iOS) */
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--accent) 30%, transparent) transparent;
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent);
+            mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent);
+
+    &:focus { outline: none; }
+  }
+
+  /* Atmosphären-Video im Modal-Kopf: Cover-Motiv als Auftakt der Leseprobe */
+  .modal__hero {
+    position: relative;
+    height: 190px;
+    background: var(--brown-deep);
+    overflow: hidden;
+
+    & video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, var(--paper-hero-shade), transparent 40%, transparent 62%, var(--paper));
+    }
+
+    @media (max-width: 640px) { height: 140px; }
+    @media (prefers-reduced-motion: reduce) { display: none; }
+  }
+
+  /* „Der Wind erinnert sich": Ausschnitt über die Mitte heben, damit Kopf und
+     Oberkörper der Figur im klaren Bereich über dem Cream-Verlauf liegen
+     (Default 50% zeigt nur den Rumpf, 30% schiebt den Kopf in die Ausblendung) */
+  #modal-wind .modal__hero video {
+    object-position: 50% 40%;
+  }
+
+  .modal__header {
+    padding: 2.5rem 3rem 1.5rem;
+    position: sticky;
+    top: 0;
+    background: var(--paper-sheet);
+    z-index: 1;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+
+    /* Lesefortschritt: goldene Linie an der Unterkante des Kopfs, wächst beim Lesen mit.
+       Nur mit scroll-gesteuerten Animationen, sonst bleibt sie unsichtbar (scaleX 0). */
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--gold-light));
+      transform: scaleX(0);
+      transform-origin: left center;
+      pointer-events: none;
+    }
+
+    @supports (animation-timeline: scroll()) {
+      &::after {
+        animation: grow-x linear both;
+        animation-timeline: scroll(nearest block);
+      }
+    }
+
+    @media (max-width: 640px) { padding: 2rem 1.75rem 1.25rem; }
+  }
+
+  .modal__label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal__title {
+    font-family: var(--font-serif);
+    font-size: 1.55rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--brown-dark);
+    line-height: 1.2;
+    padding-right: 5rem;
+
+    @media (max-width: 640px) { padding-right: 4rem; }
+  }
+
+  .modal__close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    cursor: pointer;
+    transition: color 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: none;
+    border: none;
+
+    &::before { content: '✕'; font-size: 0.78rem; }
+    &:hover { color: var(--accent); }
+
+    @media (max-width: 640px) { top: 1.6rem; right: 1.5rem; }
+  }
+
+  .modal__body {
+    padding: 2rem 3rem 3rem;
+
+    @media (max-width: 640px) { padding: 1.5rem 1.75rem 2.5rem; }
+  }
+
+  .modal__ornament {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.38;
+    }
+  }
+
+  .modal__ornament-glyph { color: var(--accent); opacity: 0.65; font-size: 0.85rem; }
+
+  .modal__text {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    line-height: 1.95;
+    color: var(--brown-dark);
+
+    & p { margin-bottom: 1.4em; }
+    & p:last-child { margin-bottom: 0; }
+
+    /* Szenentrenner in den Leseproben (‹›): dezent, zentriert, Akzentfarbe.
+       clear: beugt vor, dass die Initiale den Trenner umfließt, wenn der erste Absatz kurz ist. */
+    & .modal__break {
+      clear: both;
+      margin: 0.3em 0 1.2em;
+      text-align: center;
+      font-size: 1.5em;
+      color: var(--accent);
+      opacity: 0.75;
+      line-height: 1;
+      letter-spacing: 0.45em;
+      text-indent: 0.45em; /* gleicht das nachlaufende Letter-Spacing aus, damit das Paar mittig sitzt */
+    }
+
+    /* Initiale als Rückfall (ohne initial-letter, siehe enhancements) */
+    & .modal__prolog-label + p::first-letter {
+      font-size: 3.2em;
+      line-height: 0.78;
+      float: left;
+      margin: 0.04em 0.1em 0 0;
+      color: var(--accent);
+      font-style: italic;
+    }
+  }
+
+  .modal__prolog-label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.4rem;
+  }
+
+  .modal__footer {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .modal__footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal__end-mark {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+  }
+
+  /* ---------- Fortschrittsbalken unter der Navigation ----------
+     Hängt per JS in der .nav (fixed) an deren Unterkante, berührt so den oberen Bildschirmrand nicht.
+     Wächst per transform statt width (kein Layout je Frame); Rückfall ohne Scroll-Zeitleiste: main.js */
+  #scroll-progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 1;
+    pointer-events: none;
+
+    @supports (animation-timeline: scroll()) {
+      animation: grow-x linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+
+  @keyframes grow-x {
+    to { transform: scaleX(1); }
+  }
+
+  /* ---------- Amazon-Autorenseite am Seitenende (Bücher, Über mich) ---------- */
+  .amazon-cta {
+    text-align: center;
+    padding: 3rem 2rem 4.5rem;
+
+    & .section__label { text-align: center; margin-bottom: 1.2rem; }
+  }
+
+  /* Über mich: Abstand zwischen Bücherliste und Amazon-CTA verringern (vorher ca. 14rem, jetzt ca. 5rem) */
+  .about-grid:has(+ .amazon-cta) { padding-bottom: 3rem; }
+  .about-grid + .amazon-cta { padding-top: 0; }
+  .about-grid + .amazon-cta .ornament { margin-top: 2rem; }
+}
+
+
+/* ============================================================
+   ENHANCEMENTS: Einblendungen, Seitenübergänge, Initialen
+   ============================================================ */
+@layer enhancements {
+
+  /* Einblenden beim Scrollen (JS setzt .visible), Rückfall für .scroll-reveal */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity   0.9s var(--ease-smooth),
+      transform 0.9s var(--ease-smooth);
+
+    &.visible { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in-delay-1.visible    { transition-delay: 0.12s; }
+  .fade-in-delay-2.visible    { transition-delay: 0.24s; }
+  .fade-in-delay-3.visible    { transition-delay: 0.4s;  }
+
+  /* Seitenübergang: sanftes Überblenden */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 560ms;
+    animation-timing-function: ease;
+  }
+  ::view-transition-old(root) { animation-name: vt-out; }
+  ::view-transition-new(root) { animation-name: vt-in;  }
+
+  @keyframes vt-out { to   { opacity: 0; } }
+  @keyframes vt-in  { from { opacity: 0; } }
+
+  /* Startseite → Bücher: das angeklickte Cover gleitet an seinen Platz */
+  ::view-transition-group(buch-cover) {
+    animation-duration: 700ms;
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Theme-Wechsel: neues Farbschema öffnet sich kreisförmig vom Mond-/Sonnen-Knopf aus
+     (Kreis animiert main.js) */
+  html.theme-vt::view-transition-old(root),
+  html.theme-vt::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  /* Echte Initialen: Anfangsbuchstabe genau über drei Zeilen
+     (Rückfall ohne Unterstützung: die float-Initialen in components) */
+  @supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
+    .book-entry__desc::first-letter,
+    .about-bio__text p:first-child::first-letter,
+    .modal__text .modal__prolog-label + p::first-letter {
+      float: none;
+      font-size: 1em;
+      line-height: inherit;
+      /* Kursive Initialen ragen oben über ihre Box hinaus; Abstand in rem,
+         weil em hier je nach Browser die Initialengröße meinen kann */
+      margin: 0 0.55rem 0 0;
+      -webkit-initial-letter: 3;
+      initial-letter: 3;
+    }
+  }
+
+  /* Schmale Bildschirme: Silbentrennung für lange deutsche Wörter im Fließtext */
+  @media (max-width: 640px) {
+    .book-entry__desc,
+    .about-bio__text,
+    .modal__text {
+      -webkit-hyphens: auto;
+      hyphens: auto;
+    }
+  }
+
+  /* Scroll-gesteuerte Einblendung (Chrome 115+, Safari 26+). main.js setzt .scroll-reveal
+     nur an Elemente, die beim Laden noch unter dem sichtbaren Bereich liegen und nicht
+     höher als 60 % des Fensters sind. Sonst gelten die .fade-in-Übergänge. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .scroll-reveal {
+        animation: scroll-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 75%;
+      }
+      .scroll-reveal.fade-in-delay-1,
+      .book-teaser.scroll-reveal:nth-child(2) { animation-range: entry 15% entry 85%; }
+      .scroll-reveal.fade-in-delay-2           { animation-range: entry 25% entry 95%; }
+      .scroll-reveal.fade-in-delay-3           { animation-range: entry 30% entry 100%; }
+
+      /* Startseite: Name und Leitsatz bleiben beim Scrollen zurück und verblassen,
+         der Schriftzug im Hintergrund zieht langsamer nach (Parallaxe) */
+      .hero__content {
+        animation: hero-drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 90vh;
+      }
+      .hero__ghost {
+        animation: hero-ghost-drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 90vh;
+      }
+
+      /* Startseite: Das Wind-Zitat entsteht beim Scrollen Wort für Wort. main.js zerlegt es
+         in .quote-word (--i = Nummer, --n = Anzahl) und markiert, was danach kommt (.zitat-nach,
+         --d = Reihenfolge). Zeitleiste ist der ganze Zitatblock. Die Bereiche stehen in Längen
+         statt Prozent, damit sie auch auf hohen Bildschirmen vor dem Seitenende erreicht werden. */
+      .quote-section.is-writing {
+        --zitat-start: 6rem;                          /* Zitat ist gut eine Zeile weit sichtbar */
+        --zitat-ende:  calc(6rem + min(42vh, 340px)); /* letztes Wort ist da (Zitat etwa in Fenstermitte) */
+        --wort-dauer:  90px;
+        view-timeline: --zitat block;
+      }
+      .quote-word {
+        display: inline-block;
+        animation: quote-word linear both;
+        animation-timeline: --zitat;
+        animation-range:
+          cover calc(var(--zitat-start) + (var(--zitat-ende) - var(--zitat-start) - var(--wort-dauer)) * var(--i) / var(--n))
+          cover calc(var(--zitat-start) + (var(--zitat-ende) - var(--zitat-start) - var(--wort-dauer)) * var(--i) / var(--n) + var(--wort-dauer));
+      }
+      .zitat-nach {
+        animation: scroll-reveal linear both;
+        animation-timeline: --zitat;
+        animation-range:
+          cover calc(var(--zitat-ende) - 40px + var(--d) * 30px)
+          cover calc(var(--zitat-ende) + 50px + var(--d) * 30px);
+      }
+    }
+  }
+
+  @keyframes quote-word {
+    from { opacity: 0; filter: blur(4px); transform: translateY(0.4em); }
+    to   { opacity: 1; filter: none;      transform: none; }
+  }
+
+  @keyframes scroll-reveal {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @keyframes hero-drift {
+    to { transform: translateY(22vh); opacity: 0; }
+  }
+
+  @keyframes hero-ghost-drift {
+    to { transform: translateY(12vh); }
+  }
+}
+
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+@layer utilities {
+  /* zentriertes Label (index.html „Meine Bücher") */
+  .section__label--center { text-align: center; }
+
+  /* Nur für Screenreader (z. B. ganzer Zitattext, während die Wörter einzeln animiert sind) */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Honeypot-Feld gegen Formular-Spam — fuer Menschen unsichtbar, fuer Bots erreichbar */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+}
+
+
+/* ============================================================
+   OVERRIDES: Reduzierte Bewegung, Druck
+   ============================================================ */
+@layer overrides {
+
+  /* Animationen für bewegungsempfindliche Nutzer deaktivieren (WCAG 2.3.3) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .hero__leaf { display: none; }
+    .hero__name::after { display: none; }
+    .btn::before,
+    .modal::before { display: none; } /* Lichtrand */
+    .modal-dialog::backdrop { transition: none; }
+  }
+
+  /* Druck — Papier statt Bildschirm: Bedienelemente und Atmosphaere raus,
+     Farbwelt hell, offene Leseprobe vollstaendig ausgeben */
+  @media print {
+    /* Die Seite faerbt alles ueber Tokens — Umdefinieren genuegt, damit Light-
+       und Dark-Mode identisch auf Papier landen (diese Ebene schlaegt base). */
+    :root {
+      color-scheme: light;
+      --cream:       #fff;
+      --cream-alt:   #fff;
+      --brown-deep:  #fff;
+      --brown-dark:  #111;
+      --brown-mid:   #444;
+      --brown-light: #555;
+      --gold:        #444;
+      --gold-light:  #444;
+      --accent:      #444;
+      --eco:         #333;
+      --eco-border:  #999;
+      --eco-bg:      transparent;
+      --paper:       #fff;
+    }
+
+    @page { margin: 2cm; }
+
+    html { background: #fff !important; }
+    body { background: #fff !important; color: #111 !important; font-size: 11pt; }
+    body::after { display: none; } /* Papier-Grain */
+
+    /* Die Scroll-Animationen laufen beim Drucken nie an — ohne diese Regel
+       bleibt alles unterhalb des ersten Bildschirms unsichtbar auf dem Blatt. */
+    .fade-in,
+    .book-teaser,
+    .book-entry {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    /* Was auf Papier nicht funktioniert: Navigation, Buttons, Bewegung */
+    .nav,
+    .footer,
+    .skip-link,
+    #scroll-progress,
+    .safari-tint,
+    .hero,
+    .hero__leaf,
+    .book-cover-video,
+    .book-cover-title,
+    .cover-pill,
+    .modal__hero,
+    .modal__close,
+    .book-entry__links,
+    .book-entry__share,
+    .share-fallback,
+    .book-entry__review,
+    .review-slider__nav,
+    .amazon-cta { display: none !important; }
+
+    .page-hero { background: #fff !important; padding: 0 0 1.5rem; text-align: left; }
+    .page-hero::before { display: none; }
+    .page-hero__title { color: #111 !important; }
+    .page-hero__sub   { color: #555 !important; }
+
+    /* Beide Leserstimmen untereinander statt uebereinander gestapelt */
+    .review-slider__track { display: block; }
+    .review-slider__slide { opacity: 1 !important; grid-area: auto; margin-bottom: 1rem; }
+
+    /* Geoeffnete Leseprobe ganz ausgeben — sonst druckt nur der sichtbare
+       Ausschnitt des Dialogs. Er liegt in der Top-Layer und laesst sich nicht hinter
+       die Seite stellen; deshalb druckt dann nur die Leseprobe. */
+    body:has(.modal-dialog[open]) > :not(.modal-dialog) { display: none !important; }
+    .modal-dialog[open] {
+      position: absolute;
+      inset: 0 0 auto 0;
+      display: block;
+      padding: 0;
+      opacity: 1;
+    }
+    .modal-dialog::backdrop { display: none; }
+    .modal-dialog[open] .modal {
+      display: block;
+      max-width: none;
+      max-height: none;
+      transform: none;
+      box-shadow: none;
+      border-top: none;
+      background: none;
+    }
+    .modal__page {
+      overflow: visible;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .modal__header { position: static; background: none; }
+    .modal::before,
+    .modal::after,
+    .modal__header::after { display: none; }
+
+    /* Cover als Beleg, nicht als Schaufenster — sonst schiebt es den Text
+       auf die naechste Seite. */
+    .book-entry__cover-col,
+    .book-teaser__cover-wrap { max-width: 48mm; }
+
+    /* 3D-Buch flach drucken */
+    .book-3d { transform: none !important; }
+    .book-3d::before,
+    .book-3d__pages { display: none; }
+
+    /* Saubere Umbrueche. Ein ganzer Bucheintrag ist laenger als eine Seite —
+       geschuetzt werden deshalb die kleinen Einheiten, nicht der Block. */
+    .review-snippet      { break-inside: avoid; }
+    .book-entry__prices  { break-inside: avoid; }
+    .price-item          { break-inside: avoid; }
+    h1, h2, h3           { break-after: avoid; }
+    p                    { orphans: 3; widows: 3; }
+    a               { color: #111 !important; text-decoration: none; }
+  }
 }
