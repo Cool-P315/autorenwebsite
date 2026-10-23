@@ -124,6 +124,13 @@
   initial-value: -30%;
 }
 
+/* Winkel des umlaufenden Lichtrands (Buttons, Leseprobe-Fenster) */
+@property --rim-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 /* ============================================================
    RESET
    ============================================================ */
@@ -157,6 +164,14 @@ p, li             { text-wrap: pretty; }
 body              { font-kerning: normal; }
 a     { color: inherit; text-decoration: none; }
 button { cursor: pointer; background: none; border: none; }
+
+/* Tastaturfokus: Ring in der Akzentfarbe statt Browser-Blau (auf dunklen Flächen Gold, siehe Nav/Footer).
+   :where() hält die Spezifität bei null, eigene Fokusregeln einzelner Elemente gewinnen. */
+:where(a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+:root { accent-color: var(--accent); }
 
 /* Startseite: body dunkel, damit Safari bei scrollY 0 (Statusleiste, untere Leiste) die Nav-Farbe
    statt Creme übernimmt. Der sichtbare Inhalt (main) bleibt creme, Hero und Footer haben eigene Hintergründe. */
@@ -315,16 +330,22 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   content: '';
   position: absolute;
   bottom: -4px; left: 0;
-  width: 0; height: 1px;
+  width: 100%; height: 1px;
   background: var(--gold);
-  transition: width 0.3s var(--ease-smooth);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s var(--ease-smooth);
 }
 
 .nav__link:hover,
 .nav__link.active { color: var(--gold); }
 
 .nav__link:hover::after,
-.nav__link.active::after { width: 100%; }
+.nav__link.active::after { transform: scaleX(1); }
+
+/* Fokusring auf dunklem Grund in Gold */
+.nav :focus-visible,
+.footer :focus-visible { outline-color: var(--gold); }
 
 /* Hamburger */
 .nav__toggle {
@@ -565,13 +586,6 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-style: normal;
 }
 
-.ornament__glyph svg,
-.modal__ornament-glyph svg {
-  display: block;
-  width: 1em;
-  height: 1em;
-}
-
 /* ============================================================
    LAYOUT UTILITIES
    ============================================================ */
@@ -611,6 +625,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   color: var(--accent);
   border: 1px solid var(--accent);
   padding: 0.7rem 1.9rem;
+  position: relative;
   transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
@@ -618,6 +633,43 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   background: var(--accent);
   color: var(--cream);
   border-color: var(--accent);
+}
+
+/* Umlaufender Lichtrand: ein Lichtpunkt wandert bei Hover/Fokus um den Rahmen.
+   Der Verlauf liegt auf einem Ring, die Maske schneidet das Innere aus. */
+.btn::before,
+.modal::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  background: conic-gradient(from var(--rim-angle),
+    transparent 0deg 250deg,
+    rgba(223, 192, 146, 0.35) 290deg,
+    var(--gold-light) 330deg,
+    #FFF4DC 348deg,
+    transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+}
+
+.btn::before {
+  inset: -1px;
+  padding: 1.5px;
+  transition: opacity 0.4s var(--ease-smooth);
+}
+
+@media (hover: hover) {
+  .btn:hover::before,
+  .btn:focus-visible::before {
+    opacity: 1;
+    animation: rim-spin 2.6s linear infinite;
+  }
+}
+
+@keyframes rim-spin {
+  to { --rim-angle: 360deg; }
 }
 
 /* ============================================================
@@ -965,12 +1017,6 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent);
-  opacity: 1;
-  transition: opacity 0.25s;
-}
-
-.book-entry__review-link:hover {
-  opacity: 0.75;
 }
 
 /* ============================================================
@@ -1091,9 +1137,11 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   color: var(--accent);
   font-style: normal;
   flex-shrink: 0;
+  transition: transform 0.3s var(--ease-smooth);
 }
 
 .about-books__item a:hover { color: var(--accent); }
+.about-books__item a:hover::before { transform: translateX(0.3em); }
 
 /* ============================================================
    KONTAKT
@@ -1143,13 +1191,18 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   border-bottom: 1px solid rgba(28, 14, 8, 0.35);
   padding: 0.55rem 0;
   outline: none;
-  transition: border-color 0.3s;
+  caret-color: var(--accent);
+  transition: border-color 0.3s, box-shadow 0.3s;
   width: 100%;
   line-height: 1.6;
 }
 
+/* Fokus: Linie wird in der Akzentfarbe doppelt so kräftig (statt Ring, passt zum Linienstil) */
 .form-input:focus,
-.form-textarea:focus { border-color: var(--accent); }
+.form-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 1px 0 0 var(--accent);
+}
 
 .form-textarea {
   resize: vertical;
@@ -1163,8 +1216,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   color: rgba(28, 14, 8, 0.5);
   line-height: 1.5;
 }
-.form-privacy a { color: var(--accent); text-decoration: none; }
-.form-privacy a:hover { text-decoration: underline; }
+.form-privacy a { color: var(--accent); }
 
 /* Honeypot-Feld gegen Formular-Spam — fuer Menschen unsichtbar, fuer Bots erreichbar */
 .hp-field {
@@ -1195,10 +1247,7 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   font-size: 1.15rem;
   font-style: italic;
   color: var(--accent);
-  transition: opacity 0.3s;
 }
-
-.contact-email__link:hover { opacity: 0.75; }
 
 /* ============================================================
    IMPRESSUM
@@ -1224,12 +1273,31 @@ html[data-theme="dark"] .nav__theme-toggle::before { content: '☀️'; }
   line-height: 1.9;
 }
 
-.impressum-wrap a {
-  color: var(--accent);
-  transition: opacity 0.3s;
+.impressum-wrap a { color: var(--accent); }
+
+/* Links im Fließtext: feine Unterstreichung, die bei Hover kräftiger wird und näher an die Schrift rückt */
+.impressum-wrap a,
+.form-privacy a,
+.contact-email__link,
+.book-entry__review-link {
+  text-decoration-line: underline;
+  text-decoration-color: rgba(var(--accent-rgb), 0.35);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition:
+    text-decoration-color     0.3s var(--ease-smooth),
+    text-decoration-thickness 0.3s var(--ease-smooth),
+    text-underline-offset     0.3s var(--ease-smooth);
 }
 
-.impressum-wrap a:hover { opacity: 0.75; }
+.impressum-wrap a:hover,
+.form-privacy a:hover,
+.contact-email__link:hover,
+.book-entry__review-link:hover {
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.16em;
+}
 
 /* ============================================================
    FOOTER
@@ -1558,60 +1626,167 @@ html[data-theme="dark"] .cover-pill { color: #EDE0CF; } /* --cream ist im Dark M
 }
 /* Ende Leseprobe-Pille */
 
-.modal-backdrop {
-  position: fixed;
+/* Leseprobe als <dialog> (showModal): Der Browser übernimmt Fokus, Escape und das
+   Sperren der Seite dahinter. Ein- und Ausblenden laufen rein über CSS: @starting-style
+   liefert den Startzustand, allow-discrete hält display/overlay beim Schließen offen,
+   bis die Blende fertig ist. Geschlossen ist der Dialog display: none, wie es
+   iOS-26-Safari für die Statusleiste braucht. */
+.modal-dialog {
+  position: fixed; /* auch beim Ausblenden in Safari/Firefox, die die Top-Layer sofort verlassen */
   inset: 0;
   z-index: 10000;
-  background: rgba(26, 15, 10, 0.9);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  /* Geschlossen display: none, nicht nur unsichtbar: iOS-26-Safari liest
-     auch unsichtbare fixierte Elemente am oberen Rand für die Statusleiste. */
-  display: none;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 2rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  overflow: visible;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s var(--ease-smooth), visibility 0.35s;
+  transition: opacity 0.35s var(--ease-smooth);
+  transition:
+    opacity 0.35s var(--ease-smooth),
+    display 0.4s allow-discrete,
+    overlay 0.4s allow-discrete;
 }
 
-/* is-visible: Element ist im Layout (JS setzt es vor .open, damit das Einblenden animiert) */
-.modal-backdrop.is-visible,
-.modal-backdrop.open {
+.modal-dialog[open] {
   display: flex;
-}
-
-.modal-backdrop.is-visible {
-  visibility: visible; /* fokussierbar, solange das Ein-/Ausblenden läuft */
-}
-
-.modal-backdrop.open {
   opacity: 1;
-  visibility: visible;
 }
 
+.modal-dialog::backdrop {
+  background: rgba(26, 15, 10, 0.9);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-smooth);
+  transition:
+    opacity 0.35s var(--ease-smooth),
+    display 0.4s allow-discrete,
+    overlay 0.4s allow-discrete;
+}
+
+.modal-dialog[open]::backdrop { opacity: 1; }
+
+/* Seite dahinter steht still; der Platz der Scrollleiste bleibt, damit nichts springt */
+html:has(.modal-dialog[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+/* Das Fenster als Papierseite: Ränder leicht abgedunkelt, darunter zwei Blätter
+   (Schatten mit negativer Ausdehnung), oben ein Lesezeichen-Band. Gescrollt wird
+   in .modal__page, damit Rand, Band und Lichtrand stehen bleiben. */
 .modal {
+  --paper:         var(--cream);
+  --paper-edge:    rgba(26, 15, 10, 0.07);
+  --paper-under-1: #D3C5AE;
+  --paper-under-2: #C7B89D;
+  --paper-sheet:
+    linear-gradient(to right, var(--paper-edge), transparent 3.5%, transparent 96.5%, var(--paper-edge)),
+    var(--paper);
   position: relative;
-  background: var(--cream);
+  display: flex;
+  flex-direction: column;
   max-width: 660px;
   width: 100%;
   max-height: 85vh;
-  overflow-y: auto;
+  background: var(--paper-sheet);
   border-top: 2px solid var(--accent);
   box-shadow:
-    0 40px 90px rgba(26, 15, 10, 0.65),
-    0 0 0 1px rgba(var(--accent-rgb), 0.1);
+    0 0 0 1px rgba(var(--accent-rgb), 0.1),
+    0 5px 0 -2px var(--paper-under-1),
+    0 6px 2px -2px rgba(26, 15, 10, 0.2),
+    0 10px 0 -4px var(--paper-under-2),
+    0 11px 2px -4px rgba(26, 15, 10, 0.18),
+    0 40px 90px rgba(26, 15, 10, 0.65);
   transform: scale(0.95) translateY(20px);
   transition: transform 0.4s var(--ease-smooth);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(var(--accent-rgb), 0.3) transparent;
-  overscroll-behavior: contain; /* Scrollen bleibt im Dialog (Chaining, v. a. iOS) */
 }
 
-.modal-backdrop.open .modal {
-  transform: scale(1) translateY(0);
+.modal-dialog[open] .modal { transform: none; }
+
+/* Startzustand beim Öffnen. Muss nach den [open]-Regeln stehen: @starting-style
+   kaskadiert normal mit, spätere Regeln gleicher Spezifität würden gewinnen. */
+@starting-style {
+  .modal-dialog[open],
+  .modal-dialog[open]::backdrop { opacity: 0; }
+  .modal-dialog[open] .modal { transform: scale(0.95) translateY(20px); }
 }
+
+/* Scrollbereich; unten läuft der Text weich aus. Die Maske ist nicht höher als der
+   untere Innenabstand, am Ende der Leseprobe bleibt also nichts verdeckt. */
+.modal__page {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain; /* Scrollen bleibt im Dialog (Chaining, v. a. iOS) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--accent-rgb), 0.3) transparent;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent);
+          mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent);
+}
+
+.modal__page:focus { outline: none; }
+
+/* Lichtrand: läuft beim Öffnen einmal um die Seite und verlischt.
+   Auf Creme braucht es sattes Gold und etwas Breite, sonst verschwindet er. */
+.modal::before {
+  inset: 0;
+  z-index: 3;
+  padding: 3px;
+  background: conic-gradient(from var(--rim-angle),
+    transparent 0deg 230deg,
+    rgba(201, 169, 110, 0.45) 285deg,
+    var(--gold) 322deg,
+    #F6DDA8 344deg,
+    transparent 360deg);
+}
+
+.modal-dialog[open] .modal::before {
+  animation: rim-once 2.4s var(--ease-smooth) 0.25s both;
+}
+
+@keyframes rim-once {
+  0%   { --rim-angle: 0deg;   opacity: 0; }
+  12%  {                      opacity: 1; }
+  78%  {                      opacity: 1; }
+  100% { --rim-angle: 360deg; opacity: 0; }
+}
+
+/* Lesezeichen-Band: hängt oben in die Seite, gleitet beim Öffnen herab; Farbe je Buch */
+.modal::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 1.1rem;
+  z-index: 4;
+  width: 13px;
+  height: 4.4rem;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(0, 0, 0, 0.22), transparent 28%, rgba(255, 255, 255, 0.16) 52%, transparent 72%, rgba(0, 0, 0, 0.26)),
+    var(--ribbon, #7A3420);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 7px), 0 100%);
+  transform-origin: top center;
+}
+
+.modal-dialog[open] .modal::after {
+  animation: ribbon-drop 0.8s var(--ease-smooth) 0.3s both;
+}
+
+@keyframes ribbon-drop {
+  from { transform: scaleY(0); }
+}
+
+#modal-herbstblatt .modal { --ribbon: #8A3A1C; }
+#modal-wind .modal        { --ribbon: #34466E; }
 
 /* Atmosphären-Video im Modal-Kopf: Cover-Motiv als Auftakt der Leseprobe */
 .modal__hero {
@@ -1650,9 +1825,35 @@ html[data-theme="dark"] .cover-pill { color: #EDE0CF; } /* --cream ist im Dark M
   padding: 2.5rem 3rem 1.5rem;
   position: sticky;
   top: 0;
-  background: var(--cream);
+  background: var(--paper-sheet);
   z-index: 1;
   border-bottom: 1px solid rgba(var(--accent-rgb), 0.28);
+}
+
+/* Lesefortschritt: goldene Linie an der Unterkante des Kopfs, wächst beim Lesen mit.
+   Nur mit scroll-gesteuerten Animationen, sonst bleibt sie unsichtbar (scaleX 0). */
+.modal__header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold), var(--gold-light));
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .modal__header::after {
+    animation: grow-x linear both;
+    animation-timeline: scroll(nearest block);
+  }
+}
+
+@keyframes grow-x {
+  to { transform: scaleX(1); }
 }
 
 .modal__label {
@@ -1693,17 +1894,7 @@ html[data-theme="dark"] .cover-pill { color: #EDE0CF; } /* --cream ist im Dark M
   border: none;
 }
 
-.modal__close::before {
-  content: '';
-  display: inline-block;
-  width: 0.7em;
-  height: 0.7em;
-  flex-shrink: 0;
-  background:
-    linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat,
-    linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
-  transform: rotate(45deg);
-}
+.modal__close::before { content: '✕'; font-size: 0.78rem; }
 .modal__close:hover { color: var(--accent); }
 
 .modal__body { padding: 2rem 3rem 3rem; }
@@ -1787,8 +1978,9 @@ html[data-theme="dark"] .cover-pill { color: #EDE0CF; } /* --cream ist im Dark M
 }
 
 @media (max-width: 640px) {
-  .modal-backdrop { padding: 1rem; align-items: flex-end; }
+  .modal-dialog { padding: 1rem; align-items: flex-end; }
   .modal { max-height: 90vh; }
+  .modal::after { left: 0.55rem; width: 11px; height: 3.6rem; }
   .modal__hero { height: 140px; }
   .modal__header { padding: 2rem 1.75rem 1.25rem; }
   .modal__body   { padding: 1.5rem 1.75rem 2.5rem; }
@@ -1825,9 +2017,19 @@ html[data-theme="dark"] .form-privacy { color: rgba(237, 224, 207, 0.4); }
 html[data-theme="dark"] .hero__name       { color: #EDE0CF; }
 html[data-theme="dark"] .hero__tagline    { color: rgba(237, 224, 208, 0.72); }
 html[data-theme="dark"] .page-hero__title { color: #EDE0CF; }
-html[data-theme="dark"] .modal,
-html[data-theme="dark"] .modal__header { background: #1e1308; }
-html[data-theme="dark"] .modal { box-shadow: 0 40px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(201,169,110,0.12); }
+html[data-theme="dark"] .modal {
+  --paper:         #1e1308;
+  --paper-edge:    rgba(0, 0, 0, 0.28);
+  --paper-under-1: #2B1D10;
+  --paper-under-2: #23170C;
+  box-shadow:
+    0 0 0 1px rgba(201, 169, 110, 0.12),
+    0 5px 0 -2px var(--paper-under-1),
+    0 6px 2px -2px rgba(0, 0, 0, 0.5),
+    0 10px 0 -4px var(--paper-under-2),
+    0 11px 2px -4px rgba(0, 0, 0, 0.45),
+    0 40px 90px rgba(0, 0, 0, 0.85);
+}
 html[data-theme="dark"] .modal__hero::after { background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent 40%, transparent 62%, #1e1308); }
 html[data-theme="dark"] .modal__title { color: var(--brown-dark); }
 html[data-theme="dark"] .modal__text  { color: var(--brown-dark); }
@@ -1947,15 +2149,24 @@ html[data-theme="dark"] .share-copied {
    SCROLL PROGRESS BAR
    ============================================================ */
 #scroll-progress {
-  /* Hängt per JS in der .nav (fixed) an deren Unterkante, berührt so den oberen Bildschirmrand nicht */
+  /* Hängt per JS in der .nav (fixed) an deren Unterkante, berührt so den oberen Bildschirmrand nicht.
+     Wächst per transform statt width (kein Layout je Frame); Rückfall ohne Scroll-Zeitleiste: main.js */
   position: absolute;
   bottom: 0; left: 0;
   height: 2px;
-  width: 0;
+  width: 100%;
   background: linear-gradient(to right, var(--gold), var(--gold-light));
+  transform: scaleX(0);
+  transform-origin: left center;
   z-index: 1;
-  transition: width 0.08s linear;
   pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  #scroll-progress {
+    animation: grow-x linear both;
+    animation-timeline: scroll(root block);
+  }
 }
 
 /* ============================================================
@@ -2114,7 +2325,38 @@ html.theme-vt::view-transition-new(root) {
       animation-timeline: scroll(root);
       animation-range: 0 90vh;
     }
+
+    /* Startseite: Das Wind-Zitat entsteht beim Scrollen Wort für Wort. main.js zerlegt es
+       in .quote-word (--i = Nummer, --n = Anzahl) und markiert, was danach kommt (.zitat-nach,
+       --d = Reihenfolge). Zeitleiste ist der ganze Zitatblock. Die Bereiche stehen in Längen
+       statt Prozent, damit sie auch auf hohen Bildschirmen vor dem Seitenende erreicht werden. */
+    .quote-section.is-writing {
+      --zitat-start: 6rem;                          /* Zitat ist gut eine Zeile weit sichtbar */
+      --zitat-ende:  calc(6rem + min(42vh, 340px)); /* letztes Wort ist da (Zitat etwa in Fenstermitte) */
+      --wort-dauer:  90px;
+      view-timeline: --zitat block;
+    }
+    .quote-word {
+      display: inline-block;
+      animation: quote-word linear both;
+      animation-timeline: --zitat;
+      animation-range:
+        cover calc(var(--zitat-start) + (var(--zitat-ende) - var(--zitat-start) - var(--wort-dauer)) * var(--i) / var(--n))
+        cover calc(var(--zitat-start) + (var(--zitat-ende) - var(--zitat-start) - var(--wort-dauer)) * var(--i) / var(--n) + var(--wort-dauer));
+    }
+    .zitat-nach {
+      animation: scroll-reveal linear both;
+      animation-timeline: --zitat;
+      animation-range:
+        cover calc(var(--zitat-ende) - 40px + var(--d) * 30px)
+        cover calc(var(--zitat-ende) + 50px + var(--d) * 30px);
+    }
   }
+}
+
+@keyframes quote-word {
+  from { opacity: 0; filter: blur(4px); transform: translateY(0.4em); }
+  to   { opacity: 1; filter: none;      transform: none; }
 }
 
 @keyframes scroll-reveal {
@@ -2144,6 +2386,19 @@ html.theme-vt::view-transition-new(root) {
 
 /* zentriertes Label (index.html „Meine Bücher") */
 .section__label--center { text-align: center; }
+
+/* Nur für Screenreader (z. B. ganzer Zitattext, während die Wörter einzeln animiert sind) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* 404-Fehlerseite */
 .error-quote { max-width: 680px; margin: 6rem auto; text-align: center; padding: 0 2rem; }
@@ -2177,6 +2432,9 @@ html.theme-vt::view-transition-new(root) {
   }
   .hero__leaf { display: none; }
   .hero__name::after { display: none; }
+  .btn::before,
+  .modal::before { display: none; } /* Lichtrand */
+  .modal-dialog::backdrop { transition: none; }
   @view-transition { navigation: none; }
 }
 
@@ -2249,23 +2507,35 @@ html.theme-vt::view-transition-new(root) {
   .review-slider__slide { opacity: 1 !important; grid-area: auto; margin-bottom: 1rem; }
 
   /* Geoeffnete Leseprobe ganz ausgeben — sonst druckt nur der sichtbare
-     Ausschnitt des fixierten Dialogs. */
-  .modal-backdrop.open {
-    position: static;
+     Ausschnitt des Dialogs. Er liegt in der Top-Layer und laesst sich nicht hinter
+     die Seite stellen; deshalb druckt dann nur die Leseprobe. */
+  body:has(.modal-dialog[open]) > :not(.modal-dialog) { display: none !important; }
+  .modal-dialog[open] {
+    position: absolute;
+    inset: 0 0 auto 0;
     display: block;
     padding: 0;
-    background: none !important;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    opacity: 1;
   }
-  .modal-backdrop.open .modal {
+  .modal-dialog::backdrop { display: none; }
+  .modal-dialog[open] .modal {
+    display: block;
     max-width: none;
     max-height: none;
-    overflow: visible;
     transform: none;
     box-shadow: none;
     border-top: none;
+    background: none;
   }
+  .modal__page {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .modal__header { position: static; background: none; }
+  .modal::before,
+  .modal::after,
+  .modal__header::after { display: none; }
 
   /* Cover als Beleg, nicht als Schaufenster — sonst schiebt es den Text
      auf die naechste Seite. */

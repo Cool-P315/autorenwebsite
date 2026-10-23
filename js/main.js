@@ -132,6 +132,51 @@ document.querySelectorAll('.fade-in, .book-teaser').forEach(el => {
   observer.observe(el);
 });
 
+// --- Startseite: Wind-Zitat entsteht beim Scrollen Wort für Wort (Animation: CSS) ---
+// Nur wenn der ganze Zitatblock ins Fenster passt; sonst bleibt die normale Einblendung.
+(function () {
+  const section = document.querySelector('.quote-section');
+  const quote = section && section.querySelector('blockquote');
+  if (!quote || !supportsScrollReveal || section.offsetHeight > window.innerHeight * 0.85) return;
+
+  // Screenreader bekommen den Satz am Stück, die Wörter sind nur Optik
+  const spoken = document.createElement('span');
+  spoken.className = 'visually-hidden';
+  spoken.textContent = quote.textContent.replace(/\s+/g, ' ').trim();
+  const visual = document.createElement('span');
+  visual.setAttribute('aria-hidden', 'true');
+
+  let n = 0;
+  Array.from(quote.childNodes).forEach(node => {
+    if (node.nodeType !== Node.TEXT_NODE) { visual.append(node); return; } // <br>
+    node.textContent.split(/(\s+)/).forEach(part => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) { visual.append(' '); return; }
+      const word = document.createElement('span');
+      word.className = 'quote-word';
+      word.style.setProperty('--i', n++);
+      word.textContent = part;
+      visual.append(word);
+    });
+  });
+  quote.replaceChildren(spoken, visual);
+  quote.style.setProperty('--n', n);
+
+  // Zitat selbst und alles danach laufen auf der Zeitleiste des Zitatblocks
+  let after = false, d = 0;
+  section.querySelectorAll(':scope > *').forEach(el => {
+    if (el === quote) { after = true; }
+    else if (!after) return;
+    observer.unobserve(el);
+    el.classList.remove('fade-in', 'scroll-reveal', 'visible');
+    if (el !== quote) {
+      el.classList.add('zitat-nach');
+      el.style.setProperty('--d', d++);
+    }
+  });
+  section.classList.add('is-writing');
+})();
+
 // Hinweis: Kein JS-Smooth-Scroll für Anker-Links — html { scroll-behavior: smooth }
 // + der prefers-reduced-motion-Block in style.css regeln das vollständig. Ein früherer
 // JS-Handler hat per preventDefault() den Fokus-Sprung des Skip-Links unterbunden.
@@ -160,7 +205,7 @@ document.querySelectorAll('.book-entry__review-link').forEach(link => {
 });
 
 // Amazon-Kaufbuttons in den Leseprobe-Modals (alle Footer-Buttons, Format im Label).
-document.querySelectorAll('.modal-backdrop').forEach(modal => {
+document.querySelectorAll('.modal-dialog').forEach(modal => {
   modal.querySelectorAll('.modal__footer a.btn').forEach(link => {
     link.addEventListener('click', () => {
       const book = modal.querySelector('.modal__title')?.textContent.trim() || 'unbekannt';
@@ -199,10 +244,10 @@ if (contactForm) {
   });
 }
 
-// --- Leseprobe Modal ---
-const allModals = document.querySelectorAll('.modal-backdrop');
-const MODAL_FOCUSABLE = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
-let lastFocusedBeforeModal = null;
+// --- Leseprobe Modal (<dialog>) ---
+// showModal() sperrt die Seite dahinter, hält den Tabulator im Dialog, schließt mit
+// Escape und gibt den Fokus danach zurück; Ein-/Ausblenden und Scroll-Sperre macht das CSS.
+const allModals = document.querySelectorAll('.modal-dialog');
 
 // Atmosphären-Video im Modal-Kopf (reduced-motion: Hero ist per CSS ausgeblendet)
 function startModalHero(modal) {
@@ -228,80 +273,25 @@ function stopModalHero(modal) {
 
 function openModal(id) {
   const modal = document.getElementById('modal-' + id);
-  if (!modal) return;
-  lastFocusedBeforeModal = document.activeElement;
-  clearTimeout(modal._hideTimer);
-  // Erst ins Layout (display), dann im nächsten Frame .open, damit das Einblenden animiert
-  modal.classList.add('is-visible');
-  void modal.offsetWidth;
-  lockBodyScroll();
+  if (!modal || modal.open) return;
+  modal.showModal();
   startModalHero(modal);
-  // Fokus auf den Dialog selbst, nicht auf "Schliessen" — Screenreader
-  // lesen dadurch zuerst Label und Buchtitel statt der Abbruch-Aktion.
-  // Der Fokus folgt erst mit .open, vorher ist das Element noch visibility: hidden.
-  const dialog = modal.querySelector('.modal');
-  if (dialog) dialog.setAttribute('tabindex', '-1');
-  requestAnimationFrame(() => {
-    modal.classList.add('open');
-    if (dialog) dialog.focus();
-    else (modal.querySelectorAll(MODAL_FOCUSABLE)[0] || modal).focus();
-  });
-}
-
-// Nach dem Ausblenden wieder display: none (siehe CSS), mit Fallback-Timeout
-function hideModalAfterFade(modal) {
-  clearTimeout(modal._hideTimer);
-  const done = () => {
-    clearTimeout(modal._hideTimer);
-    modal.removeEventListener('transitionend', onEnd);
-    if (!modal.classList.contains('open')) modal.classList.remove('is-visible');
-  };
-  const onEnd = e => { if (e.target === modal && e.propertyName === 'opacity') done(); };
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { done(); return; }
-  modal.addEventListener('transitionend', onEnd);
-  modal._hideTimer = setTimeout(done, 450);
-}
-
-function closeModal(modal) {
-  modal.classList.remove('open');
-  hideModalAfterFade(modal);
-  unlockBodyScroll();
-  stopModalHero(modal);
-  // Fokus zurück auf das auslösende Element
-  if (lastFocusedBeforeModal) {
-    lastFocusedBeforeModal.focus();
-    lastFocusedBeforeModal = null;
-  }
+  // Fokus auf die Seite selbst, nicht auf "Schliessen" — Screenreader lesen dadurch
+  // zuerst Label und Buchtitel, Pfeiltasten scrollen sofort den Text.
+  const page = modal.querySelector('.modal__page');
+  if (page) page.focus({ preventScroll: true });
 }
 
 allModals.forEach(modal => {
-  modal.addEventListener('click', e => { if (e.target === modal) closeModal(modal); });
+  // Klick neben die Seite schließt — nur wenn er auch dort begann (nicht beim
+  // Markieren von Text, das außerhalb endet)
+  let downOutside = false;
+  modal.addEventListener('pointerdown', e => { downOutside = e.target === modal; });
+  modal.addEventListener('click', e => { if (e.target === modal && downOutside) modal.close(); });
   const btn = modal.querySelector('.modal__close');
-  if (btn) btn.addEventListener('click', () => closeModal(modal));
-
-  // Focus-Trap: Tabulator innerhalb des offenen Dialogs halten
-  modal.addEventListener('keydown', e => {
-    if (e.key !== 'Tab') return;
-    const focusables = Array.from(modal.querySelectorAll(MODAL_FOCUSABLE))
-      .filter(el => el.offsetParent !== null);
-    if (!focusables.length) return;
-    const first = focusables[0];
-    const last  = focusables[focusables.length - 1];
-    if (!focusables.includes(document.activeElement)) {
-      // Fokus liegt auf dem Dialog-Container selbst (nach dem Oeffnen)
-      e.preventDefault(); (e.shiftKey ? last : first).focus();
-    } else if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault(); last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault(); first.focus();
-    }
-  });
-});
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    allModals.forEach(m => { if (m.classList.contains('open')) closeModal(m); });
-  }
+  if (btn) btn.addEventListener('click', () => modal.close());
+  // close kommt bei jedem Weg (Button, Escape, Klick daneben)
+  modal.addEventListener('close', () => stopModalHero(modal));
 });
 
 document.querySelectorAll('[data-modal]').forEach(trigger => {
@@ -434,9 +424,12 @@ document.addEventListener('click', e => {
   // In die fixierte Nav hängen (Unterkante), nicht an den oberen Bildschirmrand
   (document.querySelector('.nav') || document.body).appendChild(bar);
 
+  // Mit Scroll-Zeitleiste wächst der Balken rein per CSS; das hier ist der Rückfall
+  if (window.CSS && CSS.supports('animation-timeline: scroll()')) return;
+
   function update() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = max > 0 ? (window.scrollY / max * 100) + '%' : '0';
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(window.scrollY / max, 1) : 0) + ')';
   }
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update, { passive: true });
