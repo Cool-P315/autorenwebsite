@@ -2037,6 +2037,25 @@
     z-index: 1;
     border-bottom: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
 
+    /* Oben läuft der Text weich unter den Kopf (Gegenstück zur Maske unten). Eine Maske auf
+       .modal__page ginge hier nicht, sie würde den klebenden Kopf mit ausblenden. Der Streifen
+       ist so hoch wie der obere Innenabstand von .modal__body, am Anfang bleibt das
+       Ornament also frei. */
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 1px);
+      height: 2rem;
+      background: var(--paper-sheet);
+      -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+              mask-image: linear-gradient(to bottom, #000, transparent);
+      pointer-events: none;
+
+      @media (max-width: 640px) { height: 1.5rem; }
+    }
+
     /* Lesefortschritt: goldene Linie an der Unterkante des Kopfs, wächst beim Lesen mit.
        Nur mit scroll-gesteuerten Animationen, sonst bleibt sie unsichtbar (scaleX 0). */
     &::after {
@@ -2537,6 +2556,7 @@
     .modal__header { position: static; background: none; }
     .modal::before,
     .modal::after,
+    .modal__header::before,
     .modal__header::after { display: none; }
 
     /* Cover als Beleg, nicht als Schaufenster — sonst schiebt es den Text
