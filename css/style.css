@@ -812,7 +812,7 @@
   }
 
   /* Umlaufender Lichtrand: ein Lichtpunkt wandert um den Rahmen (Buttons bei Hover/Fokus,
-     Leseprobe einmal beim Öffnen). Der Verlauf liegt auf einem Ring, die Maske schneidet
+     Leseprobe zweimal beim Öffnen). Der Verlauf liegt auf einem Ring, die Maske schneidet
      das Innere aus. */
   .btn::before,
   .modal::before {
@@ -1956,7 +1956,7 @@
   .modal-dialog[open] .modal {
     transform: none;
 
-    &::before { animation: rim-once 2.4s var(--ease-smooth) 0.25s both; }
+    &::before { animation: rim-once 4.4s var(--ease-smooth) 0.25s both; }
     &::after  { animation: ribbon-drop 0.8s var(--ease-smooth) 0.3s both; }
   }
 
@@ -1971,11 +1971,13 @@
   #modal-herbstblatt .modal { --ribbon: #8A3A1C; }
   #modal-wind .modal        { --ribbon: #34466E; }
 
+  /* Zwei Runden (Martin 2026-10-24: eine fiel kaum auf): erste Runde voll sichtbar,
+     in der zweiten langsam ausblenden. Drei Runden wären zu lang, man liest dann schon. */
   @keyframes rim-once {
     0%   { --rim-angle: 0deg;   opacity: 0; }
-    12%  {                      opacity: 1; }
-    78%  {                      opacity: 1; }
-    100% { --rim-angle: 360deg; opacity: 0; }
+    6%   {                      opacity: 1; }
+    55%  {                      opacity: 1; }
+    100% { --rim-angle: 720deg; opacity: 0; }
   }
 
   @keyframes ribbon-drop {
