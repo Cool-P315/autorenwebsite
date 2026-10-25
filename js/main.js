@@ -678,13 +678,20 @@ if (window.matchMedia('(hover: hover)').matches &&
 document.querySelectorAll('.book-teaser__actions a[href*="#"]').forEach(link => {
   link.addEventListener('click', () => {
     const book = link.closest('.book-teaser')?.querySelector('.book-3d');
-    if (book) book.style.viewTransitionName = 'buch-cover';
+    if (book) {
+      book.style.viewTransitionName = 'buch-cover';
+      // Navigation bleibt beim Übergang stehen (Gegenstück in buecher/index.html)
+      const nav = document.querySelector('.nav');
+      if (nav) nav.style.viewTransitionName = 'site-nav';
+    }
   });
 });
 
 // Zurück aus dem Verlauf (bfcache): Namen wieder lösen
 window.addEventListener('pageshow', () => {
   document.querySelectorAll('.book-teaser .book-3d').forEach(b => { b.style.viewTransitionName = ''; });
+  const nav = document.querySelector('.nav');
+  if (nav) nav.style.viewTransitionName = '';
 });
 
 // ============================================================
