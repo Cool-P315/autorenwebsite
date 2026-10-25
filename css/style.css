@@ -1632,13 +1632,51 @@
     justify-content: center;
   }
 
-  /* Symbol-Links im Footer (Amazon, Goodreads, später weitere): gleiche Darstellung */
-  .footer__amazon-link,
-  .footer__goodreads-link {
+  /* Symbol-Links im Footer (Amazon, Goodreads, später LovelyBooks): eigene Gruppe,
+     enger beieinander und etwas weiter weg von Impressum/Datenschutz */
+  .footer__icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 1rem; /* zusammen mit dem Gruppenabstand 2,5rem bis „Datenschutz“ */
+  }
+
+  .footer__icons a {
+    position: relative;
     display: flex;
     align-items: center;
 
-    & svg { display: block; }
+    /* 24 px = Rastergröße der Symbole (scharf) und Mindestgröße für Tippziele (WCAG 2.2) */
+    & svg { display: block; width: 24px; height: 24px; }
+
+    /* Hinweistext beim Darüberfahren (nur Geräte mit Maus), Text aus aria-label */
+    @media (hover: hover) {
+      &::after {
+        content: attr(aria-label);
+        position: absolute;
+        bottom: calc(100% + 0.6rem);
+        right: 0; /* rechtsbündig, damit er am rechten Seitenrand nicht übersteht */
+        transform: translateY(4px);
+        font-family: var(--font-sans);
+        font-size: 0.58rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--on-dark);
+        background: rgba(26, 15, 10, 0.92);
+        border: 1px solid rgba(201, 169, 110, 0.45);
+        padding: 0.35rem 0.8rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth);
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   }
 
   /* ---------- Cover als Auslöser der Leseprobe ---------- */
