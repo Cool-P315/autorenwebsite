@@ -2256,6 +2256,34 @@
     & .section__label { text-align: center; margin-bottom: 1.2rem; }
   }
 
+  /* Über mich: Amazon-Button und darunter Goodreads/LovelyBooks als Paar.
+     Der Block ist so breit wie der Amazon-Button; das Paar (width: 0 + min-width: 100%)
+     bestimmt die Breite nicht mit, teilt sie aber in zwei gleiche Hälften. */
+  .amazon-cta__block {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 100%;
+
+    & .section__label { margin: 2.2rem 0 1.2rem; }
+  }
+
+  .amazon-cta__pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 0;
+    min-width: 100%;
+
+    & .btn { padding-inline: 0.5rem; text-align: center; }
+
+    /* Schmal: Pfeil bei beiden weg, Sperrung etwas enger, damit "LovelyBooks" einzeilig bleibt */
+    @media (max-width: 480px) {
+      & .btn { letter-spacing: 0.12em; }
+      & .amazon-cta__pfeil { display: none; }
+    }
+  }
+
   /* Über mich: Abstand zwischen Bücherliste und Amazon-CTA verringern (vorher ca. 14rem, jetzt ca. 5rem) */
   .about-grid:has(+ .amazon-cta) { padding-bottom: 3rem; }
   .about-grid + .amazon-cta { padding-top: 0; }

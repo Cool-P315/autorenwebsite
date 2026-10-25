@@ -219,6 +219,7 @@ document.querySelectorAll('.modal-dialog').forEach(modal => {
 // "autorenseite" (ohne amazon-Präfix), damit die Kauf-KPIs unverfälscht bleiben.
 const pageSlug = currentPageKey === 'home' ? 'index' : currentPageKey;
 document.querySelectorAll('.amazon-cta a.btn').forEach(link => {
+  if (link.closest('.amazon-cta__pair')) return; // Goodreads/LovelyBooks zählen eigen
   link.addEventListener('click', () => {
     gcEvent('autorenseite/cta-' + pageSlug, 'Amazon-Autorenseite: CTA ' + pageSlug);
   });
@@ -226,6 +227,14 @@ document.querySelectorAll('.amazon-cta a.btn').forEach(link => {
 document.querySelectorAll('.footer__amazon-link').forEach(link => {
   link.addEventListener('click', () => {
     gcEvent('autorenseite/footer-' + pageSlug, 'Amazon-Autorenseite: Footer ' + pageSlug);
+  });
+});
+
+// Über mich: Goodreads und LovelyBooks unter dem Amazon-Button.
+document.querySelectorAll('.amazon-cta__pair a').forEach(link => {
+  link.addEventListener('click', () => {
+    const ziel = link.href.includes('goodreads') ? 'goodreads' : 'lovelybooks';
+    gcEvent('autorenseite/' + ziel + '-' + pageSlug, ziel + '-Profil: Textlink ' + pageSlug);
   });
 });
 
