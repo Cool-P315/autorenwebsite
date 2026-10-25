@@ -2334,17 +2334,21 @@
   ::view-transition-new(buch-cover) {
     animation-duration: 500ms;
   }
-  /* Nur bei diesem Übergang (Klasse setzt buecher/index.html): Die Seite wechselt erst,
-     wenn das Cover schon unterwegs ist. plus-lighter hält Gleiches (Kopfzeile, Hintergrund)
-     beim Überblenden ruhig, setzt aber gleiche Verzögerung, Dauer und Kurve für alt und neu voraus. */
-  html.vt-buch::view-transition-image-pair(root) { isolation: isolate; }
-  html.vt-buch::view-transition-old(root),
+  /* Nur bei diesem Übergang (Klasse setzt buecher/index.html): Die Startseite ist sofort weg,
+     das Cover fliegt über den leeren Hintergrund, die Bücherseite blendet danach langsam ein. */
+  /* Nur während des Cover-Übergangs: Sonst scheint in der Lücke der dunkle html-Hintergrund
+     (für die iOS-Statusleiste) durch und die helle Seite blitzt dunkel auf. */
+  html.vt-buch { background-color: var(--cream); }
+  html.vt-buch::view-transition-old(root) {
+    animation-duration: 100ms;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
   html.vt-buch::view-transition-new(root) {
     animation-delay: 200ms;
     animation-duration: 500ms;
     animation-timing-function: ease-in-out;
     animation-fill-mode: both;
-    mix-blend-mode: plus-lighter;
   }
 
   /* Theme-Wechsel: neues Farbschema öffnet sich kreisförmig vom Mond-/Sonnen-Knopf aus
