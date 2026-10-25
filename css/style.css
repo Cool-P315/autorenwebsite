@@ -2337,14 +2337,15 @@
   /* Nur bei diesem Übergang (Klasse setzt buecher/index.html): Die Startseite ist sofort weg,
      das Cover fliegt über den leeren Hintergrund, die Bücherseite blendet danach langsam ein. */
   /* Nur während des Cover-Übergangs: Die Lücke bekommt ihre Seitenfarbe in der Übergangsebene.
-     Safari färbt die iOS-Statusleiste nach der background-color (dunkel, wie die Navigation),
-     sichtbar ist die Creme-Fläche aus background-image. Der html-Hintergrund bleibt dunkel. */
-  html.vt-buch::view-transition {
-    background-color: var(--brown-deep);
-    background-image: linear-gradient(var(--cream), var(--cream));
+     Der html-Hintergrund bleibt dunkel (iOS-Statusleiste), sonst blitzt dort die Farbe um. */
+  html.vt-buch::view-transition { background-color: var(--cream); }
+  /* Die Navigation bleibt als eigene Gruppe stehen und liegt über dem fliegenden Cover.
+     Der Schatten füllt unter iOS den Statusleisten-Streifen über der Navigation dunkel,
+     weil die Übergangsebene bis unter die Statusleiste reicht (Versatz = Spread: endet an der Unterkante). */
+  html.vt-buch::view-transition-group(site-nav) {
+    z-index: 1;
+    box-shadow: 0 -100px 0 100px var(--brown-deep);
   }
-  /* Die Navigation bleibt als eigene Gruppe stehen und liegt über dem fliegenden Cover. */
-  html.vt-buch::view-transition-group(site-nav) { z-index: 1; }
   html.vt-buch::view-transition-old(root) {
     animation-duration: 100ms;
     animation-timing-function: ease-out;
