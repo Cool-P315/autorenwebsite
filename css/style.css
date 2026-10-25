@@ -267,9 +267,12 @@
   }
 
   /* Startseite: body dunkel, damit Safari bei scrollY 0 (Statusleiste, untere Leiste) die Nav-Farbe
-     statt Creme übernimmt. Der sichtbare Inhalt (main) bleibt creme, Hero und Footer haben eigene Hintergründe. */
-  body.page-home { background-color: var(--brown-deep); }
-  .page-home main { background-color: var(--cream); }
+     statt Creme übernimmt. Der sichtbare Inhalt (main) bleibt creme, Hero und Footer haben eigene Hintergründe.
+     Die Bücherseite braucht das auch, weil Safari während des Cover-Übergangs die body-Farbe für die Statusleiste nimmt. */
+  body.page-home,
+  body.page-buecher { background-color: var(--brown-deep); }
+  .page-home main,
+  .page-buecher main { background-color: var(--cream); }
 
   ::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
 
@@ -2339,13 +2342,8 @@
   /* Nur während des Cover-Übergangs: Die Lücke bekommt ihre Seitenfarbe in der Übergangsebene.
      Der html-Hintergrund bleibt dunkel (iOS-Statusleiste), sonst blitzt dort die Farbe um. */
   html.vt-buch::view-transition { background-color: var(--cream); }
-  /* Die Navigation bleibt als eigene Gruppe stehen und liegt über dem fliegenden Cover.
-     Der Schatten füllt unter iOS den Statusleisten-Streifen über der Navigation dunkel,
-     weil die Übergangsebene bis unter die Statusleiste reicht (Versatz = Spread: endet an der Unterkante). */
-  html.vt-buch::view-transition-group(site-nav) {
-    z-index: 1;
-    box-shadow: 0 -100px 0 100px var(--brown-deep);
-  }
+  /* Die Navigation bleibt als eigene Gruppe stehen und liegt über dem fliegenden Cover. */
+  html.vt-buch::view-transition-group(site-nav) { z-index: 1; }
   html.vt-buch::view-transition-old(root) {
     animation-duration: 100ms;
     animation-timing-function: ease-out;
