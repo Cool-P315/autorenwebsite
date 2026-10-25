@@ -245,7 +245,6 @@
     line-height: 1.85;
     font-kerning: normal;
     color: var(--brown-dark);
-    background-color: var(--cream);
 
     /* Papierkörnung über der ganzen Seite */
     &::after {
@@ -266,13 +265,11 @@
     }
   }
 
-  /* Startseite: body dunkel, damit Safari bei scrollY 0 (Statusleiste, untere Leiste) die Nav-Farbe
-     statt Creme übernimmt. Der sichtbare Inhalt (main) bleibt creme, Hero und Footer haben eigene Hintergründe.
-     Die Bücherseite braucht das auch, weil Safari während des Cover-Übergangs die body-Farbe für die Statusleiste nimmt. */
-  body.page-home,
-  body.page-buecher { background-color: var(--brown-deep); }
-  .page-home main,
-  .page-buecher main { background-color: var(--cream); }
+  /* Auf allen Seiten: body dunkel, main creme. Safari färbt die iOS-Statusleiste (und bei scrollY 0 die untere Leiste)
+     nach der body-Hintergrundfarbe, auch während eines Seitenwechsels. Wäre body creme, wird der Streifen dabei kurz creme.
+     Der sichtbare Inhalt liegt in main, Navigation und Footer haben eigene Hintergründe. */
+  body { background-color: var(--brown-deep); }
+  main { background-color: var(--cream); }
 
   ::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
 
