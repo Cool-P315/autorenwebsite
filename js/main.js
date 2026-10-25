@@ -229,6 +229,13 @@ document.querySelectorAll('.footer__amazon-link').forEach(link => {
   });
 });
 
+// Goodreads-Autorenprofil im Footer: eigene Kategorie, gleiches Muster wie Amazon.
+document.querySelectorAll('.footer__goodreads-link').forEach(link => {
+  link.addEventListener('click', () => {
+    gcEvent('autorenseite/goodreads-footer-' + pageSlug, 'Goodreads-Profil: Footer ' + pageSlug);
+  });
+});
+
 // Kontaktformular absenden
 const contactForm = document.querySelector('.form');
 if (contactForm) {

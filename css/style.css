@@ -1632,7 +1632,9 @@
     justify-content: center;
   }
 
-  .footer__amazon-link {
+  /* Symbol-Links im Footer (Amazon, Goodreads, später weitere): gleiche Darstellung */
+  .footer__amazon-link,
+  .footer__goodreads-link {
     display: flex;
     align-items: center;
 
