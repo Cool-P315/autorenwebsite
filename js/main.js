@@ -245,6 +245,13 @@ document.querySelectorAll('.footer__goodreads-link').forEach(link => {
   });
 });
 
+// LovelyBooks-Autorenprofil im Footer: gleiches Muster wie Goodreads.
+document.querySelectorAll('.footer__lovelybooks-link').forEach(link => {
+  link.addEventListener('click', () => {
+    gcEvent('autorenseite/lovelybooks-footer-' + pageSlug, 'LovelyBooks-Profil: Footer ' + pageSlug);
+  });
+});
+
 // Kontaktformular absenden
 const contactForm = document.querySelector('.form');
 if (contactForm) {

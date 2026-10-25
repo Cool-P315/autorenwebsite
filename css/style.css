@@ -1630,15 +1630,28 @@
     align-items: center;
     gap: 1.5rem;
     justify-content: center;
+
+    @media (max-width: 480px) {
+      flex-wrap: wrap;
+      row-gap: 0.9rem;
+    }
   }
 
-  /* Symbol-Links im Footer (Amazon, Goodreads, später LovelyBooks): eigene Gruppe,
+  /* Symbol-Links im Footer (Amazon, Goodreads, LovelyBooks): eigene Gruppe,
      enger beieinander und etwas weiter weg von Impressum/Datenschutz */
   .footer__icons {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-left: 1rem; /* zusammen mit dem Gruppenabstand 2,5rem bis „Datenschutz“ */
+
+    /* Handy: drei Symbole passen nicht mehr neben Impressum/Datenschutz,
+       die Gruppe bekommt eine eigene, zentrierte Zeile */
+    @media (max-width: 480px) {
+      flex-basis: 100%;
+      justify-content: center;
+      margin-left: 0;
+    }
   }
 
   .footer__icons a {
