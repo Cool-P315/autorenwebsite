@@ -811,6 +811,14 @@
     }
   }
 
+  /* Fußnoten-Sternchen am Taschenbuch-Button (Hinweis Holzschliffpapier). Nur per CSS, damit
+     textContent unverändert bleibt: GoatCounter nimmt ihn als Formatname (amazon-kauf/<buch>/<format>).
+     Alternativtext leer, damit Screenreader kein „Stern“ vorlesen. */
+  .btn--fussnote::after {
+    content: '*';
+    content: '*' / '';
+  }
+
   /* Umlaufender Lichtrand: ein Lichtpunkt wandert um den Rahmen (Buttons bei Hover/Fokus,
      Leseprobe zweimal beim Öffnen). Der Verlauf liegt auf einem Ring, die Maske schneidet
      das Innere aus. */
