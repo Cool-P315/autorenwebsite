@@ -58,6 +58,8 @@
       "isbn": "9798258887832",
       "url": "https://www.amazon.de/dp/B0GYQMR2WS",
       "offers": [
+        { "@type": "Offer", "price": "12.99", "priceCurrency": "EUR", "name": "Taschenbuch",
+          "url": "https://www.amazon.de/dp/B0HP9TMFHB", "availability": "https://schema.org/InStock" },
         { "@type": "Offer", "price": "19.99", "priceCurrency": "EUR", "name": "Hardcover",
           "url": "https://www.amazon.de/dp/B0GYQMR2WS", "availability": "https://schema.org/InStock" },
         { "@type": "Offer", "price": "3.99",  "priceCurrency": "EUR", "name": "eBook",
@@ -69,7 +71,7 @@
   <link rel="preload" href="/assets/fonts/eb-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/eb-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/style.css?v=202610251804">
+  <link rel="stylesheet" href="/css/style.css?v=202610261046">
   <!-- Seitenübergang Startseite → Bücher: Cover gleitet an seinen Platz (Chrome, Safari 18.2+).
        Rendern wartet, bis #main geparst ist; der Ziel-Eintrag wird sofort sichtbar gesetzt.
        Bei normaler Navigation (nicht Zurück/Vor) springt die Seite vor dem ersten Frame ohne Animation
@@ -232,11 +234,15 @@
         </div>
       </div>
       <div class="book-entry__text-col">
-        <p class="book-entry__format">Hardcover &middot; eBook</p>
+        <p class="book-entry__format">Taschenbuch &middot; Hardcover &middot; eBook</p>
         <h2 class="book-entry__title">Der Wind erinnert sich</h2>
         <p class="book-entry__subtitle">Vierundzwanzig Momente. Eine Stimme, die alles berührt und nichts festhält.</p>
         <p class="book-entry__desc">„Ich habe keinen Namen. Aber alles, was je gezittert hat, kennt mich.“ — <em>Der Wind erinnert sich</em> ist eine poetische Prosaerzählung in vierundzwanzig Momenten. Ein Lachen vor einem Haus im Sommer. Ein Weinen aus einem Fenster in der Nacht. Die Wärme einer Hand, die eine andere hält, weil sie Angst hat loszulassen. Ein Buch, das man einatmet.</p>
         <div class="book-entry__prices">
+          <div class="price-item">
+            <p class="price-item__format">Taschenbuch</p>
+            <p class="price-item__amount">€&thinsp;12,99</p>
+          </div>
           <div class="price-item">
             <p class="price-item__format">Hardcover</p>
             <p class="price-item__amount">€&thinsp;19,99</p>
@@ -247,6 +253,7 @@
           </div>
         </div>
         <div class="book-entry__links">
+          <a href="https://www.amazon.de/dp/B0HP9TMFHB" class="btn" target="_blank" rel="noopener noreferrer">Taschenbuch bei Amazon</a>
           <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Hardcover bei Amazon</a>
           <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
         </div>
@@ -398,6 +405,7 @@
           <div class="modal__footer">
             <span class="modal__end-mark">— Leseprobe endet hier —</span>
             <div class="modal__footer-actions">
+              <a href="https://www.amazon.de/dp/B0HP9TMFHB" class="btn" target="_blank" rel="noopener noreferrer">Taschenbuch bei Amazon</a>
               <a href="https://www.amazon.de/dp/B0GYQMR2WS" class="btn" target="_blank" rel="noopener noreferrer">Hardcover bei Amazon</a>
               <a href="https://www.amazon.de/dp/B0GYT1FB84" class="btn" target="_blank" rel="noopener noreferrer">eBook bei Amazon</a>
             </div>
@@ -407,7 +415,7 @@
     </div>
   </dialog>
 
-  <script src="/js/main.js?v=202610251804"></script>
+  <script src="/js/main.js?v=202610261046"></script>
   <script data-goatcounter="https://coolp315.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
