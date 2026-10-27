@@ -242,9 +242,7 @@
     --paper-shade-2:    rgba(0, 0, 0, 0.45);
     --paper-drop:       rgba(0, 0, 0, 0.85);
     --paper-hero-shade: rgba(0, 0, 0, 0.3);
-    --rim-glow:  0px;    /* dunkel: Ring innen auf dem Blatt wie bisher */
-    --rim-fade:  0px;
-    --rim-blur:  0px;
+
   }
 
   @media (max-width: 480px) {
@@ -1991,23 +1989,15 @@
     /* Lichtrand: läuft beim Öffnen einmal um die Seite und verlischt.
        Hell läuft er außen um das Blatt, dunkel innen (Tokens --rim-* oben). */
     &::before {
-      inset: calc(-1 * var(--rim-glow));
+      inset: 0;
       z-index: 3;
-      padding: max(var(--rim-glow), 3px);
+      padding: 3px;
       background: conic-gradient(from var(--rim-angle),
         transparent 0deg 230deg,
         var(--rim-soft) 285deg,
         var(--rim-core) 322deg,
         var(--rim-hot) 344deg,
         transparent 360deg);
-      filter: blur(var(--rim-blur));
-      /* Ring ohne Inneres (content-box), nach außen weich auslaufend (--rim-fade) */
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(to right, transparent, #000 var(--rim-fade), #000 calc(100% - var(--rim-fade)), transparent),
-        linear-gradient(to bottom, transparent, #000 var(--rim-fade), #000 calc(100% - var(--rim-fade)), transparent);
-      -webkit-mask-composite: xor, source-in;
-              mask-composite: exclude, intersect;
     }
 
     /* Lesezeichen-Band: hängt oben in die Seite, gleitet beim Öffnen herab; Farbe je Buch */
@@ -2032,6 +2022,21 @@
 
       &::after { left: 0.55rem; width: 11px; height: 3.6rem; }
     }
+  }
+
+  /* Heller Modus: Licht außen um das Blatt (über dem dunklen Backdrop), nach außen weich
+     auslaufend. Nur hell, der Dunkelmodus behält den Ring innen (iPhone zeigte ihn sonst nicht). */
+  html:not([data-theme="dark"]) .modal::before {
+    inset: calc(-1 * var(--rim-glow));
+    padding: var(--rim-glow);
+    filter: blur(var(--rim-blur));
+    /* Ring ohne Inneres (content-box), nach außen weich auslaufend (--rim-fade) */
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(to right, transparent, #000 var(--rim-fade), #000 calc(100% - var(--rim-fade)), transparent),
+      linear-gradient(to bottom, transparent, #000 var(--rim-fade), #000 calc(100% - var(--rim-fade)), transparent);
+    -webkit-mask-composite: xor, source-in;
+            mask-composite: exclude, intersect;
   }
 
   .modal-dialog[open] .modal {
