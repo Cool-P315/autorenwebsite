@@ -184,6 +184,12 @@
     --paper-drop:       rgba(26, 15, 10, 0.65);
     --paper-hero-shade: rgba(26, 15, 10, 0.22);
 
+    /* Lichtrand der Leseprobe: auf Creme kräftiger und dunkler, sonst geht er unten unter */
+    --rim-width: 4px;
+    --rim-soft:  rgba(168, 120, 44, 0.6);
+    --rim-core:  #A57528;
+    --rim-hot:   #C8902E;
+
     /* In beiden Themes gleich */
     --gold:        #C9A96E;
     --gold-light:  #DFC092;
@@ -233,6 +239,10 @@
     --paper-shade-2:    rgba(0, 0, 0, 0.45);
     --paper-drop:       rgba(0, 0, 0, 0.85);
     --paper-hero-shade: rgba(0, 0, 0, 0.3);
+    --rim-width: 3px;
+    --rim-soft:  rgba(201, 169, 110, 0.45);
+    --rim-core:  #C9A96E;
+    --rim-hot:   #F6DDA8;
   }
 
   @media (max-width: 480px) {
@@ -1981,12 +1991,12 @@
     &::before {
       inset: 0;
       z-index: 3;
-      padding: 3px;
+      padding: var(--rim-width);
       background: conic-gradient(from var(--rim-angle),
         transparent 0deg 230deg,
-        rgba(201, 169, 110, 0.45) 285deg,
-        var(--gold) 322deg,
-        #F6DDA8 344deg,
+        var(--rim-soft) 285deg,
+        var(--rim-core) 322deg,
+        var(--rim-hot) 344deg,
         transparent 360deg);
     }
 
