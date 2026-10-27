@@ -184,12 +184,14 @@
     --paper-drop:       rgba(26, 15, 10, 0.65);
     --paper-hero-shade: rgba(26, 15, 10, 0.22);
 
-    /* Lichtrand der Leseprobe: auf Creme kräftiger und dunkler, sonst geht er unten unter */
-    --rim-width: 4px;
-    --rim-soft:  rgba(168, 120, 44, 0.6);
-    --rim-core:  #A57528;
-    --rim-hot:   #C8902E;
-    --rim-bed:   rgba(70, 42, 16, 0.32);  /* dunkelt den Ring ab, solange das Licht läuft */
+    /* Lichtrand der Leseprobe: auf Creme fehlt der Kontrast, deshalb läuft er hier außen
+       um das Blatt (über dem dunklen Hintergrund) und strahlt weich nach außen ab */
+    --rim-glow:  14px;   /* Breite des Rings außerhalb des Blatts */
+    --rim-fade:  10px;   /* davon weich auslaufend, der Rest (4px) voll */
+    --rim-blur:  1px;
+    --rim-soft:  rgba(201, 169, 110, 0.45);
+    --rim-core:  #C9A96E;
+    --rim-hot:   #F6DDA8;
 
     /* In beiden Themes gleich */
     --gold:        #C9A96E;
@@ -240,11 +242,9 @@
     --paper-shade-2:    rgba(0, 0, 0, 0.45);
     --paper-drop:       rgba(0, 0, 0, 0.85);
     --paper-hero-shade: rgba(0, 0, 0, 0.3);
-    --rim-width: 3px;
-    --rim-soft:  rgba(201, 169, 110, 0.45);
-    --rim-core:  #C9A96E;
-    --rim-hot:   #F6DDA8;
-    --rim-bed:   transparent;
+    --rim-glow:  0px;    /* dunkel: Ring innen auf dem Blatt wie bisher */
+    --rim-fade:  0px;
+    --rim-blur:  0px;
   }
 
   @media (max-width: 480px) {
@@ -1989,18 +1989,25 @@
     transition: transform 0.4s var(--ease-smooth);
 
     /* Lichtrand: läuft beim Öffnen einmal um die Seite und verlischt.
-       Auf Creme braucht es sattes Gold und etwas Breite, sonst verschwindet er. */
+       Hell läuft er außen um das Blatt, dunkel innen (Tokens --rim-* oben). */
     &::before {
-      inset: 0;
+      inset: calc(-1 * var(--rim-glow));
       z-index: 3;
-      padding: var(--rim-width);
+      padding: max(var(--rim-glow), 3px);
       background: conic-gradient(from var(--rim-angle),
         transparent 0deg 230deg,
         var(--rim-soft) 285deg,
         var(--rim-core) 322deg,
         var(--rim-hot) 344deg,
-        transparent 360deg),
-        linear-gradient(var(--rim-bed), var(--rim-bed));
+        transparent 360deg);
+      filter: blur(var(--rim-blur));
+      /* Ring ohne Inneres (content-box), nach außen weich auslaufend (--rim-fade) */
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(to right, transparent, #000 var(--rim-fade), #000 calc(100% - var(--rim-fade)), transparent),
+        linear-gradient(to bottom, transparent, #000 var(--rim-fade), #000 calc(100% - var(--rim-fade)), transparent);
+      -webkit-mask-composite: xor, source-in;
+              mask-composite: exclude, intersect;
     }
 
     /* Lesezeichen-Band: hängt oben in die Seite, gleitet beim Öffnen herab; Farbe je Buch */
