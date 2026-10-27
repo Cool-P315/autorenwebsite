@@ -189,6 +189,7 @@
     --rim-soft:  rgba(168, 120, 44, 0.6);
     --rim-core:  #A57528;
     --rim-hot:   #C8902E;
+    --rim-bed:   rgba(70, 42, 16, 0.32);  /* dunkelt den Ring ab, solange das Licht läuft */
 
     /* In beiden Themes gleich */
     --gold:        #C9A96E;
@@ -243,6 +244,7 @@
     --rim-soft:  rgba(201, 169, 110, 0.45);
     --rim-core:  #C9A96E;
     --rim-hot:   #F6DDA8;
+    --rim-bed:   transparent;
   }
 
   @media (max-width: 480px) {
@@ -1997,7 +1999,8 @@
         var(--rim-soft) 285deg,
         var(--rim-core) 322deg,
         var(--rim-hot) 344deg,
-        transparent 360deg);
+        transparent 360deg),
+        linear-gradient(var(--rim-bed), var(--rim-bed));
     }
 
     /* Lesezeichen-Band: hängt oben in die Seite, gleitet beim Öffnen herab; Farbe je Buch */
