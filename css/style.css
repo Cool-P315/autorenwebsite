@@ -159,6 +159,13 @@
     --brown-mid:   #5A4530;
     --brown-light: #7A6045;
     --accent:      #6B5026;  /* Gold-Pendant fuer Creme-Flaechen (Dark Mode: = Gold) */
+
+    /* Lesefortschritt: auf Creme dunkles Gold-Braun, sonst verschwindet das helle Gold (1,6:1).
+       Fuellung gilt fuer den Balken im Leseproben-Modal; der Seitenbalken liegt auf der immer
+       dunklen Navigation und bleibt Gold. Hoehe und Kante gelten fuer beide. */
+    --progress-fill:   linear-gradient(to right, var(--accent), #8A6630);
+    --progress-height: 3px;
+    --progress-edge:   0 1px 0 var(--brown-deep);
     --eco:         #1C601C;
     --eco-border:  rgba(28, 96, 28, 0.6);
     --eco-bg:      rgba(28, 96, 28, 0.08);
@@ -219,6 +226,11 @@
     --brown-mid:   #AD9A87;
     --brown-light: #8A7466;
     --accent:      #C9A96E;
+
+    /* Lesefortschritt: unveraendert (Gold auf dunklem Grund) */
+    --progress-fill:   linear-gradient(to right, var(--gold), var(--gold-light));
+    --progress-height: 2px;
+    --progress-edge:   none;
     --eco:         #80B880;
     --eco-border:  rgba(128, 184, 128, 0.38);
     --eco-bg:      transparent;
@@ -2152,8 +2164,8 @@
       left: 0;
       right: 0;
       bottom: -1px;
-      height: 2px;
-      background: linear-gradient(to right, var(--gold), var(--gold-light));
+      height: var(--progress-height);
+      background: var(--progress-fill);
       transform: scaleX(0);
       transform-origin: left center;
       pointer-events: none;
@@ -2314,9 +2326,10 @@
   #scroll-progress {
     position: absolute;
     bottom: 0; left: 0;
-    height: 2px;
+    height: var(--progress-height);
     width: 100%;
     background: linear-gradient(to right, var(--gold), var(--gold-light));
+    box-shadow: var(--progress-edge);
     transform: scaleX(0);
     transform-origin: left center;
     z-index: 1;
