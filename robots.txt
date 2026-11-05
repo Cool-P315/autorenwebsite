@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
+# Cover- und Atmosphaeren-Videos sind reine Dekoration, keine Wiedergabeseiten.
+# Sperre verhindert die Search-Console-Meldung "Video befindet sich nicht auf
+# einer Wiedergabeseite" (Entscheidung 2026-11-05).
+Disallow: /assets/video/
 
 # KI-Trainings-Crawler ausgeschlossen (Entscheidung 2026-07-14):
 # Die Texte dieser Website — insbesondere die Leseproben — sind
