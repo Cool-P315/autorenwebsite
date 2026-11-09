@@ -238,6 +238,13 @@ document.querySelectorAll('.amazon-cta__pair a').forEach(link => {
   });
 });
 
+// Über mich: Eintrag der Stadt Klagenfurt am Ende der Biografie, gleiches Muster.
+document.querySelectorAll('.about-bio__link').forEach(link => {
+  link.addEventListener('click', () => {
+    gcEvent('autorenseite/klagenfurt-eintrag-' + pageSlug, 'Stadt Klagenfurt: Künstlereintrag ' + pageSlug);
+  });
+});
+
 // Goodreads-Autorenprofil im Footer: eigene Kategorie, gleiches Muster wie Amazon.
 document.querySelectorAll('.footer__goodreads-link').forEach(link => {
   link.addEventListener('click', () => {

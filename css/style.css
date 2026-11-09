@@ -1603,6 +1603,7 @@
   /* Links im Fließtext: feine Unterstreichung, die bei Hover kräftiger wird und näher an die Schrift rückt */
   .impressum-wrap a,
   .form-privacy a,
+  .about-bio__link,
   .contact-email__link,
   .book-entry__review-link {
     text-decoration-line: underline;
