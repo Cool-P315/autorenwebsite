@@ -57,6 +57,17 @@ if (navToggle && navLinks) {
     }
   });
 
+  // Gerät bei offenem Menü gedreht: Über 768 px gibt es kein Menü-Symbol mehr.
+  // Menü schließen und Scroll-Sperre lösen; die Fokus-Falle unten greift nur bei
+  // gesetzter Klasse 'open' und ist damit ebenfalls beendet. Fokus bleibt unberührt.
+  window.matchMedia('(max-width: 768px)').addEventListener('change', e => {
+    if (!e.matches && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+      unlockBodyScroll();
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
   // Fokus-Falle: Tab bleibt im geöffneten Vollbild-Menü (analog zum Leseprobe-Modal)
   document.addEventListener('keydown', e => {
     if (e.key !== 'Tab' || !navLinks.classList.contains('open')) return;
@@ -345,7 +356,8 @@ const themeToggle = document.getElementById('theme-toggle');
 
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('mp-theme', theme);
+  // Gesperrter Speicher (strenge Datenschutz-Einstellung) darf das Umschalten nicht stoppen
+  try { localStorage.setItem('mp-theme', theme); } catch (e) { /* Wahl gilt nur für diese Seite */ }
   if (themeToggle) {
     themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Heller Modus' : 'Dunkler Modus');
   }
@@ -388,7 +400,9 @@ function switchTheme(theme) {
 
 // OS-Präferenz live mitlesen (nur ohne manuelle Speicherung)
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-  if (!localStorage.getItem('mp-theme')) {
+  let gespeichert = null;
+  try { gespeichert = localStorage.getItem('mp-theme'); } catch (err) { /* zählt wie nichts gespeichert */ }
+  if (!gespeichert) {
     document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
   }
 });

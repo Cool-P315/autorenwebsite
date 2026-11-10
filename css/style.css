@@ -896,14 +896,19 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    opacity: 0;
-    transform: translateY(30px);
     transition:
       opacity   0.85s var(--ease-smooth),
       transform 0.85s var(--ease-smooth);
 
     &.visible            { opacity: 1; transform: translateY(0); }
     &:nth-child(2)       { transition-delay: 0.18s; }
+  }
+
+  /* Versteckter Start nur mit laufendem Skript (html.js, gesetzt im Seitenkopf) und
+     nur in Browsern mit CSS-Nesting, denn &.visible steht verschachtelt. Sonst ist der
+     Inhalt sofort da. :where() hält die Spezifität bei (0,1,0), damit .visible gewinnt. */
+  @supports selector(&) {
+    :where(html.js) .book-teaser { opacity: 0; transform: translateY(30px); }
   }
 
   .book-teaser__cover-wrap {
@@ -2396,13 +2401,16 @@
 
   /* Einblenden beim Scrollen (JS setzt .visible), Rückfall für .scroll-reveal */
   .fade-in {
-    opacity: 0;
-    transform: translateY(26px);
     transition:
       opacity   0.9s var(--ease-smooth),
       transform 0.9s var(--ease-smooth);
 
     &.visible { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Wie bei .book-teaser: versteckter Start nur mit Skript und Nesting */
+  @supports selector(&) {
+    :where(html.js) .fade-in { opacity: 0; transform: translateY(26px); }
   }
 
   .fade-in-delay-1.visible    { transition-delay: 0.12s; }
